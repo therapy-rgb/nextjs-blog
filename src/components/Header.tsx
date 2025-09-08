@@ -9,9 +9,9 @@ export default function Header() {
   const pathname = usePathname()
 
   const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
+    { name: 'Home', href: '/' as const },
+    { name: 'About', href: '/about' as const },
+    { name: 'Contact', href: '/contact' as const },
   ]
 
   return (
