@@ -6,6 +6,4 @@ node_modules
 .vscode
 .idea
 coverage
-sanity-studio/node_modules
-sanity-studio/.env.local
-sanity-studio/dist
+sanity-studio/
