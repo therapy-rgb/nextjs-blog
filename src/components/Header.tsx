@@ -12,6 +12,7 @@ export default function Header() {
     { name: 'Home', href: '/' as const },
     { name: 'Junk Drawer', href: '/junk-drawer' as const },
     { name: 'Puttering', href: '/puttering' as const },
+    { name: 'La Familia', href: '/la-familia' as const },
   ]
 
   return (
