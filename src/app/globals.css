@@ -1,7 +1,25 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Cooper';
+  src: url('/fonts/cooper_medium.woff2') format('woff2'),
+       url('/fonts/cooper_medium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cooper';
+  src: url('/fonts/cooper_bold.woff2') format('woff2'),
+       url('/fonts/cooper_bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --background: #f3e6e1;
+  --background: #FFF1E6;
   --foreground: #0F172A;
 }
 

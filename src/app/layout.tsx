@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import "../styles/fonts.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -40,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable}`}>
-      <body className="font-body antialiased min-h-screen flex flex-col bg-sdm-background text-sdm-text">
+      <body className="font-body antialiased min-h-screen flex flex-col text-sdm-text" style={{backgroundColor: '#FFF1E6'}}>
         <Header />
         <main className="flex-grow">
           {children}
