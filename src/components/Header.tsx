@@ -15,7 +15,7 @@ export default function Header() {
   ]
 
   return (
-    <header className="bg-sdm-card border-b border-warm-gray-200 shadow-sm">
+    <header className="border-b border-warm-gray-200 shadow-sm" style={{backgroundColor: '#FFFFFF'}}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
