@@ -46,10 +46,13 @@ export default function PhotoGallery({ photos }: PhotoGalleryProps) {
             className="group relative cursor-pointer overflow-hidden rounded-lg bg-warm-gray-100 aspect-square"
             onClick={() => openLightbox(index)}
           >
-            <img
+            <Image
               src={photo.src}
               alt={photo.alt}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              unoptimized
             />
             <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300" />
             
