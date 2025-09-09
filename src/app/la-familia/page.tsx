@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+
 export default function LaFamilia() {
   const photos = [
     '133398442_45eyckutaz.jpg',
@@ -31,11 +33,12 @@ export default function LaFamilia() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {photos.map((photo, index) => (
             <div key={index} className="relative aspect-square overflow-hidden rounded-lg bg-warm-gray-100">
-              <img
+              <Image
                 src={`/familia-photos/${photo}`}
                 alt={`Family photo ${index + 1}`}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                loading="lazy"
+                fill
+                className="object-cover hover:scale-105 transition-transform duration-300"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
             </div>
           ))}

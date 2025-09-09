@@ -1,0 +1,71 @@
+# MARCUS - Project Context Instructions
+
+## Quick Context Setup for Claude Code
+
+When starting a new session, give Claude this information to understand your projects:
+
+### Primary Project: nextjs-blog
+**Location:** `/Users/marcusberley/nextjs-blog/`
+**GitHub:** https://github.com/therapy-rgb/nextjs-blog
+**Description:** Personal blog built with Next.js 14, TypeScript, Tailwind CSS
+**Deployment:** Vercel (therapy-rgb project)
+**Key Features:**
+- La Familia photo gallery page (`/la-familia`)
+- SEO-optimized blog structure
+- Custom styling with Tailwind CSS
+
+### Secondary Project: my-blog
+**Location:** `/Users/marcusberley/my-blog/` (if exists)
+**Description:** [Add description when project is active]
+
+## Context Prompt for Claude Code
+
+Copy and paste this when starting a new session:
+
+```
+I have two blog projects:
+
+1. **nextjs-blog** at /Users/marcusberley/nextjs-blog/
+   - Next.js 14 personal blog with TypeScript and Tailwind
+   - Deployed on Vercel, backed up to GitHub: therapy-rgb/nextjs-blog
+   - Has a photo gallery at /la-familia page
+   - Fixed recent client component metadata issue
+
+2. **my-blog** at /Users/marcusberley/my-blog/ (secondary project)
+
+Current working directory should be: /Users/marcusberley/nextjs-blog/
+
+Please help me work on these projects.
+```
+
+## Common Tasks & Commands
+
+### Backup Workflow
+```bash
+git add .
+git commit -m "Description of changes"
+git push
+```
+
+### Development
+```bash
+npm run dev        # Start development server
+npm run build      # Test production build
+npm run lint       # Check for issues
+```
+
+### Deployment Issues
+- Check Vercel dashboard for build errors
+- Common fix: ensure client components don't export metadata
+- Layout files handle metadata for client component pages
+
+## Recent Fixes Applied
+- ✅ Fixed la-familia page client component metadata error
+- ✅ Set up GitHub backup repository
+- ✅ Updated project documentation
+
+## File Structure Notes
+- `/src/app/la-familia/` - Photo gallery with layout.tsx for metadata
+- `/public/familia-photos/` - Family photo assets
+- Client components need 'use client' directive
+- Server components handle metadata exports
