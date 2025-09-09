@@ -1,5 +1,3 @@
-'use client'
-
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -41,9 +39,8 @@ export default function LaFamilia() {
               <img
                 src={`/familia-photos/${photo}`}
                 alt={`Family photo ${index + 1}`}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                 loading="lazy"
-                onClick={() => window.open(`/familia-photos/${photo}`, '_blank')}
               />
             </div>
           ))}
