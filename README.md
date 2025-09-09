@@ -157,9 +157,27 @@ export default {
 }
 ```
 
+## Repository & Backup
+
+This project is backed up on GitHub: **https://github.com/therapy-rgb/nextjs-blog**
+
+### Regular Backup Workflow
+```bash
+git add .
+git commit -m "Your commit message"
+git push
+```
+
+### Clone Repository (if needed)
+```bash
+git clone https://github.com/therapy-rgb/nextjs-blog.git
+cd nextjs-blog
+npm install
+```
+
 ## Deploy to Vercel
 
-1. Push your code to GitHub
+1. Push your code to GitHub (already set up ✓)
 2. Connect your repository to Vercel
 3. Add your environment variables in Vercel dashboard
 4. Deploy!
