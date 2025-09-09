@@ -12,10 +12,11 @@ export default function Puttering() {
           <Image
             src="/quick-sheets.png"
             alt="Quick Sheets"
-            width={800}
-            height={600}
+            width={600}
+            height={450}
             className="mx-auto rounded-lg shadow-lg"
             priority
+            quality={95}
           />
         </div>
       </div>

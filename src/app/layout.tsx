@@ -39,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable}`}>
-      <body className="font-body antialiased min-h-screen flex flex-col text-sdm-text" style={{backgroundColor: '#FFF1E6'}}>
+      <body className="font-cooper antialiased min-h-screen flex flex-col text-sdm-text" style={{backgroundColor: '#FFF1E6'}}>
         <Header />
         <main className="flex-grow">
           {children}
