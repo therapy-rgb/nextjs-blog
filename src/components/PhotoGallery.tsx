@@ -52,6 +52,7 @@ export default function PhotoGallery({ photos }: PhotoGalleryProps) {
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
+              unoptimized
             />
             <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300" />
             
@@ -115,6 +116,7 @@ export default function PhotoGallery({ photos }: PhotoGalleryProps) {
                 sizes="100vw"
                 className="object-contain"
                 priority
+                unoptimized
               />
             </div>
 
