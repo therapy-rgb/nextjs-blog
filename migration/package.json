@@ -1,0 +1,31 @@
+{
+  "name": "wordpress-to-sanity-migration",
+  "version": "1.0.0",
+  "description": "Migration tools for WordPress to Sanity",
+  "main": "scripts/parse-wordpress.js",
+  "scripts": {
+    "parse": "node scripts/parse-wordpress.js",
+    "download-images": "node scripts/download-images.js",
+    "import-sanity": "node scripts/import-to-sanity.js",
+    "generate-redirects": "node scripts/generate-redirects.js",
+    "migrate": "npm run parse && npm run download-images && npm run import-sanity && npm run generate-redirects"
+  },
+  "dependencies": {
+    "xml2js": "^0.6.2",
+    "jsdom": "^22.1.0",
+    "@sanity/client": "^6.4.9",
+    "axios": "^1.5.0",
+    "sharp": "^0.32.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "wordpress",
+    "sanity",
+    "migration",
+    "cms"
+  ],
+  "author": "Suburban Dad Mode",
+  "license": "MIT"
+}

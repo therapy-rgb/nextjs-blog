@@ -1,0 +1,10 @@
+[
+  {
+    "_id": "author-1",
+    "_type": "author",
+    "name": "therapy@marcusberley.com",
+    "email": "therapy@marcusberley.com",
+    "slug": "therapy-marcusberley-com",
+    "bio": null
+  }
+]

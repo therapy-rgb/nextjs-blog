@@ -1,3 +1,5 @@
+import { PortableTextBlock } from '@portabletext/react'
+
 export interface SanityImage {
   _type: 'image'
   asset: {
@@ -14,7 +16,7 @@ export interface Author {
     current: string
   }
   image?: SanityImage
-  bio?: any[] // Portable Text - keeping as any for Sanity's rich text format
+  bio?: PortableTextBlock[]
 }
 
 export interface Category {
@@ -35,7 +37,7 @@ export interface Post {
   publishedAt: string
   excerpt?: string
   mainImage?: SanityImage
-  body: any[] // Portable Text - keeping as any for Sanity's rich text format
+  body: PortableTextBlock[]
   author: Author
   categories?: Category[]
 }

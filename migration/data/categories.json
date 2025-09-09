@@ -1,0 +1,74 @@
+[
+  {
+    "_id": "category-10",
+    "_type": "category",
+    "title": "Finances",
+    "slug": {
+      "current": "finances"
+    },
+    "description": null
+  },
+  {
+    "_id": "category-9",
+    "_type": "category",
+    "title": "Junk Drawer",
+    "slug": {
+      "current": "junk-drawer"
+    },
+    "description": null
+  },
+  {
+    "_id": "category-8",
+    "_type": "category",
+    "title": "La Familia",
+    "slug": {
+      "current": "la-familia"
+    },
+    "description": null
+  },
+  {
+    "_id": "category-11",
+    "_type": "category",
+    "title": "Music",
+    "slug": {
+      "current": "music"
+    },
+    "description": null
+  },
+  {
+    "_id": "category-12",
+    "_type": "category",
+    "title": "News",
+    "slug": {
+      "current": "news"
+    },
+    "description": null
+  },
+  {
+    "_id": "category-6",
+    "_type": "category",
+    "title": "Today",
+    "slug": {
+      "current": "today"
+    },
+    "description": null
+  },
+  {
+    "_id": "category-1",
+    "_type": "category",
+    "title": "Uncategorized",
+    "slug": {
+      "current": "uncategorized"
+    },
+    "description": null
+  },
+  {
+    "_id": "category-7",
+    "_type": "category",
+    "title": "Wisdom",
+    "slug": {
+      "current": "wisdom"
+    },
+    "description": null
+  }
+]

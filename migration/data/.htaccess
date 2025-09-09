@@ -1,0 +1,58 @@
+# WordPress to Next.js Migration Redirects
+# Generated automatically by migration script
+
+# Enable rewrite engine
+RewriteEngine On
+
+# WordPress post redirects
+# Category: Finances
+RewriteRule ^category/finances$ /categories/finances [R=301,L]
+
+# Category pagination: Finances
+RewriteRule ^category/finances/page/(.+)$ /categories/finances?page=$page [R=301,L]
+
+# Category: Junk Drawer
+RewriteRule ^category/junk-drawer$ /categories/junk-drawer [R=301,L]
+
+# Category pagination: Junk Drawer
+RewriteRule ^category/junk-drawer/page/(.+)$ /categories/junk-drawer?page=$page [R=301,L]
+
+# Category: La Familia
+RewriteRule ^category/la-familia$ /categories/la-familia [R=301,L]
+
+# Category pagination: La Familia
+RewriteRule ^category/la-familia/page/(.+)$ /categories/la-familia?page=$page [R=301,L]
+
+# Category: Music
+RewriteRule ^category/music$ /categories/music [R=301,L]
+
+# Category pagination: Music
+RewriteRule ^category/music/page/(.+)$ /categories/music?page=$page [R=301,L]
+
+# Category: News
+RewriteRule ^category/news$ /categories/news [R=301,L]
+
+# Category pagination: News
+RewriteRule ^category/news/page/(.+)$ /categories/news?page=$page [R=301,L]
+
+# Category: Today
+RewriteRule ^category/today$ /categories/today [R=301,L]
+
+# Category pagination: Today
+RewriteRule ^category/today/page/(.+)$ /categories/today?page=$page [R=301,L]
+
+# Category: Uncategorized
+RewriteRule ^category/uncategorized$ /categories/uncategorized [R=301,L]
+
+# Category pagination: Uncategorized
+RewriteRule ^category/uncategorized/page/(.+)$ /categories/uncategorized?page=$page [R=301,L]
+
+# Category: Wisdom
+RewriteRule ^category/wisdom$ /categories/wisdom [R=301,L]
+
+# Category pagination: Wisdom
+RewriteRule ^category/wisdom/page/(.+)$ /categories/wisdom?page=$page [R=301,L]
+
+# Generic category redirect
+RewriteRule ^category/(.+)*$ /categories/$slug* [R=301,L]
+

@@ -1,0 +1,218 @@
+{
+  "posts": [],
+  "categories": [
+    {
+      "source": "/category/finances",
+      "destination": "/categories/finances",
+      "permanent": true,
+      "description": "Category: Finances"
+    },
+    {
+      "source": "/category/finances/page/:page",
+      "destination": "/categories/finances?page=:page",
+      "permanent": true,
+      "description": "Category pagination: Finances"
+    },
+    {
+      "source": "/category/junk-drawer",
+      "destination": "/categories/junk-drawer",
+      "permanent": true,
+      "description": "Category: Junk Drawer"
+    },
+    {
+      "source": "/category/junk-drawer/page/:page",
+      "destination": "/categories/junk-drawer?page=:page",
+      "permanent": true,
+      "description": "Category pagination: Junk Drawer"
+    },
+    {
+      "source": "/category/la-familia",
+      "destination": "/categories/la-familia",
+      "permanent": true,
+      "description": "Category: La Familia"
+    },
+    {
+      "source": "/category/la-familia/page/:page",
+      "destination": "/categories/la-familia?page=:page",
+      "permanent": true,
+      "description": "Category pagination: La Familia"
+    },
+    {
+      "source": "/category/music",
+      "destination": "/categories/music",
+      "permanent": true,
+      "description": "Category: Music"
+    },
+    {
+      "source": "/category/music/page/:page",
+      "destination": "/categories/music?page=:page",
+      "permanent": true,
+      "description": "Category pagination: Music"
+    },
+    {
+      "source": "/category/news",
+      "destination": "/categories/news",
+      "permanent": true,
+      "description": "Category: News"
+    },
+    {
+      "source": "/category/news/page/:page",
+      "destination": "/categories/news?page=:page",
+      "permanent": true,
+      "description": "Category pagination: News"
+    },
+    {
+      "source": "/category/today",
+      "destination": "/categories/today",
+      "permanent": true,
+      "description": "Category: Today"
+    },
+    {
+      "source": "/category/today/page/:page",
+      "destination": "/categories/today?page=:page",
+      "permanent": true,
+      "description": "Category pagination: Today"
+    },
+    {
+      "source": "/category/uncategorized",
+      "destination": "/categories/uncategorized",
+      "permanent": true,
+      "description": "Category: Uncategorized"
+    },
+    {
+      "source": "/category/uncategorized/page/:page",
+      "destination": "/categories/uncategorized?page=:page",
+      "permanent": true,
+      "description": "Category pagination: Uncategorized"
+    },
+    {
+      "source": "/category/wisdom",
+      "destination": "/categories/wisdom",
+      "permanent": true,
+      "description": "Category: Wisdom"
+    },
+    {
+      "source": "/category/wisdom/page/:page",
+      "destination": "/categories/wisdom?page=:page",
+      "permanent": true,
+      "description": "Category pagination: Wisdom"
+    },
+    {
+      "source": "/category/:slug*",
+      "destination": "/categories/:slug*",
+      "permanent": true,
+      "description": "Generic category redirect"
+    }
+  ],
+  "images": [],
+  "combined": [
+    {
+      "source": "/category/finances",
+      "destination": "/categories/finances",
+      "permanent": true,
+      "description": "Category: Finances"
+    },
+    {
+      "source": "/category/finances/page/:page",
+      "destination": "/categories/finances?page=:page",
+      "permanent": true,
+      "description": "Category pagination: Finances"
+    },
+    {
+      "source": "/category/junk-drawer",
+      "destination": "/categories/junk-drawer",
+      "permanent": true,
+      "description": "Category: Junk Drawer"
+    },
+    {
+      "source": "/category/junk-drawer/page/:page",
+      "destination": "/categories/junk-drawer?page=:page",
+      "permanent": true,
+      "description": "Category pagination: Junk Drawer"
+    },
+    {
+      "source": "/category/la-familia",
+      "destination": "/categories/la-familia",
+      "permanent": true,
+      "description": "Category: La Familia"
+    },
+    {
+      "source": "/category/la-familia/page/:page",
+      "destination": "/categories/la-familia?page=:page",
+      "permanent": true,
+      "description": "Category pagination: La Familia"
+    },
+    {
+      "source": "/category/music",
+      "destination": "/categories/music",
+      "permanent": true,
+      "description": "Category: Music"
+    },
+    {
+      "source": "/category/music/page/:page",
+      "destination": "/categories/music?page=:page",
+      "permanent": true,
+      "description": "Category pagination: Music"
+    },
+    {
+      "source": "/category/news",
+      "destination": "/categories/news",
+      "permanent": true,
+      "description": "Category: News"
+    },
+    {
+      "source": "/category/news/page/:page",
+      "destination": "/categories/news?page=:page",
+      "permanent": true,
+      "description": "Category pagination: News"
+    },
+    {
+      "source": "/category/today",
+      "destination": "/categories/today",
+      "permanent": true,
+      "description": "Category: Today"
+    },
+    {
+      "source": "/category/today/page/:page",
+      "destination": "/categories/today?page=:page",
+      "permanent": true,
+      "description": "Category pagination: Today"
+    },
+    {
+      "source": "/category/uncategorized",
+      "destination": "/categories/uncategorized",
+      "permanent": true,
+      "description": "Category: Uncategorized"
+    },
+    {
+      "source": "/category/uncategorized/page/:page",
+      "destination": "/categories/uncategorized?page=:page",
+      "permanent": true,
+      "description": "Category pagination: Uncategorized"
+    },
+    {
+      "source": "/category/wisdom",
+      "destination": "/categories/wisdom",
+      "permanent": true,
+      "description": "Category: Wisdom"
+    },
+    {
+      "source": "/category/wisdom/page/:page",
+      "destination": "/categories/wisdom?page=:page",
+      "permanent": true,
+      "description": "Category pagination: Wisdom"
+    },
+    {
+      "source": "/category/:slug*",
+      "destination": "/categories/:slug*",
+      "permanent": true,
+      "description": "Generic category redirect"
+    }
+  ],
+  "summary": {
+    "totalRedirects": 17,
+    "postRedirects": 0,
+    "categoryRedirects": 17,
+    "imageRedirects": 0
+  }
+}

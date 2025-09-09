@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import "../styles/fonts.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -10,12 +11,6 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "600", "700"],
-  variable: "--font-playfair",
-});
 
 export const metadata: Metadata = {
   title: "Suburban Dad Mode",
@@ -44,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="en" className={`${inter.variable}`}>
       <body className="font-body antialiased min-h-screen flex flex-col bg-sdm-background text-sdm-text">
         <Header />
         <main className="flex-grow">

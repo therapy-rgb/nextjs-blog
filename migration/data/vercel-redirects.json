@@ -1,0 +1,89 @@
+{
+  "redirects": [
+    {
+      "source": "/category/finances",
+      "destination": "/categories/finances",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/finances/page/:page",
+      "destination": "/categories/finances?page=:page",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/junk-drawer",
+      "destination": "/categories/junk-drawer",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/junk-drawer/page/:page",
+      "destination": "/categories/junk-drawer?page=:page",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/la-familia",
+      "destination": "/categories/la-familia",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/la-familia/page/:page",
+      "destination": "/categories/la-familia?page=:page",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/music",
+      "destination": "/categories/music",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/music/page/:page",
+      "destination": "/categories/music?page=:page",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/news",
+      "destination": "/categories/news",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/news/page/:page",
+      "destination": "/categories/news?page=:page",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/today",
+      "destination": "/categories/today",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/today/page/:page",
+      "destination": "/categories/today?page=:page",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/uncategorized",
+      "destination": "/categories/uncategorized",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/uncategorized/page/:page",
+      "destination": "/categories/uncategorized?page=:page",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/wisdom",
+      "destination": "/categories/wisdom",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/wisdom/page/:page",
+      "destination": "/categories/wisdom?page=:page",
+      "statusCode": 301
+    },
+    {
+      "source": "/category/:slug*",
+      "destination": "/categories/:slug*",
+      "statusCode": 301
+    }
+  ]
+}

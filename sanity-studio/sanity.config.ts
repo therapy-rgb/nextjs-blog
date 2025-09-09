@@ -8,10 +8,10 @@ import {schemaTypes} from './schemaTypes'
 import {structure} from './structure'
 
 export default defineConfig({
-  name: 'personal-blog',
-  title: 'Personal Blog',
+  name: 'suburban-dad-mode',
+  title: 'Suburban Dad Mode',
 
-  projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'your-project-id',
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID || '4qp7h589',
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
 
   plugins: [

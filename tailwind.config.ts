@@ -15,7 +15,7 @@ const config: Config = {
         'sdm': {
           primary: '#6528F7',    // Primary purple
           accent: '#5511F8',     // Deeper purple accent
-          background: '#f3e6e1', // Soft peachy-pink background
+          background: '#FFF1E6', // Financial Times pink background
           text: '#0F172A',       // Dark navy text
           'text-light': '#64748B', // Light gray text
           'card': '#FFFFFF',     // White card background
@@ -36,10 +36,10 @@ const config: Config = {
       },
       fontFamily: {
         'body': ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        'cooper': ['var(--font-playfair)', 'serif'],
-        'display': ['var(--font-playfair)', 'serif'],
+        'cooper': ['Cooper', 'serif'],
+        'display': ['Cooper', 'serif'],
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-playfair)', 'serif'],
+        serif: ['Cooper', 'serif'],
       },
       fontSize: {
         // Match the larger base font size from the reference site
