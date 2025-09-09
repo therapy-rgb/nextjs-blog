@@ -1,9 +1,4 @@
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'La Familia | Suburban Dad Mode',
-  description: 'A gallery of precious family moments and memories from our suburban adventures.',
-}
+'use client'
 
 export default function LaFamilia() {
   const photos = [
