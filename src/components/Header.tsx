@@ -10,8 +10,8 @@ export default function Header() {
 
   const navigation = [
     { name: 'Home', href: '/' as const },
-    { name: 'About', href: '/about' as const },
-    { name: 'Contact', href: '/contact' as const },
+    { name: 'Junk Drawer', href: '/junk-drawer' as const },
+    { name: 'Puttering', href: '/puttering' as const },
   ]
 
   return (

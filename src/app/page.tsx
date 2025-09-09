@@ -1,6 +1,7 @@
 import { client, postsQuery } from "@/lib/sanity";
 import { Post } from "@/types/sanity";
 import PostList from "@/components/PostList";
+import Image from "next/image";
 
 export const revalidate = 60; // Revalidate every minute
 
@@ -20,6 +21,16 @@ export default async function Home() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       {/* Hero Section */}
       <div className="text-center mb-20">
+        <div className="mb-8">
+          <Image
+            src="/image.png"
+            alt="Suburban Dad Mode"
+            width={300}
+            height={300}
+            className="mx-auto rounded-lg shadow-lg"
+            priority
+          />
+        </div>
         <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-sdm-text mb-6 leading-tight">
           Welcome to<br />
           <span className="text-sdm-primary">Suburban Dad Mode</span>
