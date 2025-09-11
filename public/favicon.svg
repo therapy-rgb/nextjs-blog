@@ -1,4 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" rx="6" fill="#4A5568"/>
-  <text x="16" y="22" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="white">SD</text>
+  <rect width="32" height="32" rx="4" fill="#FF7F00"/>
+  <g transform="translate(6, 4) scale(0.8)">
+    <!-- Golf club -->
+    <path d="M2 20 C2 18, 4 16, 6 16 C8 16, 10 18, 10 20 L10 21 L14 10 L12 2 L14 1 L16 9 L12 21 C10 23, 8 24, 6 24 C4 24, 2 22, 2 20 Z" fill="white"/>
+    <!-- Golf ball -->
+    <circle cx="18" cy="18" r="5" fill="white"/>
+    <circle cx="16.5" cy="16.5" r="0.8" fill="#FF7F00"/>
+    <circle cx="19.5" cy="16.5" r="0.8" fill="#FF7F00"/>
+    <circle cx="16.5" cy="19.5" r="0.8" fill="#FF7F00"/>
+    <circle cx="19.5" cy="19.5" r="0.8" fill="#FF7F00"/>
+    <circle cx="18" cy="18" r="0.8" fill="#FF7F00"/>
+  </g>
 </svg>
