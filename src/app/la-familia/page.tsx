@@ -30,15 +30,15 @@ export default function LaFamilia() {
       </div>
       
       <div className="bg-sdm-card rounded-lg p-6 sm:p-8 shadow-sm border border-warm-gray-200">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-4">
           {photos.map((photo, index) => (
-            <div key={index} className="relative aspect-square overflow-hidden rounded-lg bg-warm-gray-100">
+            <div key={index} className="relative flex-shrink-0 w-48 h-48 sm:w-56 sm:h-56 overflow-hidden rounded-lg bg-warm-gray-100">
               <Image
                 src={`/familia-photos/${photo}`}
                 alt={`Family photo ${index + 1}`}
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-300"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                sizes="(max-width: 640px) 192px, 224px"
               />
             </div>
           ))}
