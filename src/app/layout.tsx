@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   description: "Life, parenting, and everything in between from the suburbs",
   keywords: ["suburban", "dad", "family", "parenting", "lifestyle", "blog"],
   authors: [{ name: "Suburban Dad" }],
+  manifest: "/manifest.json",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -30,6 +31,14 @@ export const metadata: Metadata = {
     description: "Life, parenting, and everything in between from the suburbs",
     creator: "@suburbandadmode",
   },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#FF7F00",
+  colorScheme: "light",
 };
 
 export default function RootLayout({
