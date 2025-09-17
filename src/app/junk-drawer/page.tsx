@@ -7,6 +7,19 @@ export default function JunkDrawer() {
         </h1>
       </div>
 
+      {/* YouTube Video Section */}
+      <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <div className="aspect-video">
+          <iframe 
+            className="w-full h-full rounded-lg"
+            src="https://www.youtube.com/embed/2FpUrWEbr3w"
+            title="YouTube video player" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowFullScreen
+          ></iframe>
+        </div>
+      </div>
+
       <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
         <div className="text-center mb-8">
           <h2 className="font-display text-3xl font-bold text-sdm-text mb-2">
