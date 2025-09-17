@@ -5,9 +5,6 @@ export default function JunkDrawer() {
         <h1 className="font-display text-4xl sm:text-5xl font-bold text-sdm-text mb-4">
           Junk Drawer
         </h1>
-        <p className="font-cooper text-xl text-sdm-text-light">
-          Random useful things, like that one drawer everyone has
-        </p>
       </div>
 
       <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
