@@ -21,7 +21,7 @@ export default function Puttering() {
 
   // Keyboard navigation
   useEffect(() => {
-    const handleKeyPress = (e) => {
+    const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {
         setCurrentPage(prev => prev > 0 ? prev - 1 : poems.length - 1);
       } else if (e.key === 'ArrowRight') {
