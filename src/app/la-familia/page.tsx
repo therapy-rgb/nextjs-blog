@@ -32,13 +32,13 @@ export default function LaFamilia() {
       <div className="bg-sdm-card rounded-lg p-6 sm:p-8 shadow-sm border border-warm-gray-200">
         <div className="flex flex-col gap-4 sm:gap-6">
           {photos.map((photo, index) => (
-            <div key={index} className="relative w-full max-w-md mx-auto h-48 sm:h-56 overflow-hidden rounded-lg bg-warm-gray-100">
+            <div key={index} className="w-full max-w-md mx-auto rounded-lg overflow-hidden bg-warm-gray-100">
               <Image
                 src={`/familia-photos/${photo}`}
                 alt={`Family photo ${index + 1}`}
-                fill
-                className="object-cover hover:scale-105 transition-transform duration-300"
-                sizes="(max-width: 640px) 192px, 224px"
+                width={400}
+                height={300}
+                className="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
               />
             </div>
           ))}
