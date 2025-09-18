@@ -215,13 +215,6 @@ export default function Puttering() {
             </div>
           </div>
 
-          {/* Page Title */}
-          <h2 className="font-display text-2xl font-bold text-sdm-text mb-2">
-            {poems[currentPage].title}
-          </h2>
-          <p className="text-sdm-text-light font-cooper mb-6">
-            {poems[currentPage].description}
-          </p>
 
           {/* Navigation Controls */}
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
