@@ -179,88 +179,72 @@ export default function Puttering() {
                 alt={poems[currentPage].alt}
                 width={800}
                 height={600}
-                className="mx-auto rounded-lg"
+                className="mx-auto rounded-lg w-full max-w-4xl"
                 priority
                 quality={95}
                 style={{ 
-                  width: 'auto', 
+                  width: '100%', 
                   height: 'auto',
-                  maxWidth: '100%',
-                  maxHeight: '70vh'
+                  maxHeight: '70vh',
+                  objectFit: 'contain'
                 }}
               />
-              
-              {/* Always Visible Navigation Arrows - Desktop and Mobile */}
-              <>
-                {/* Left Arrow */}
-                <div 
-                  onClick={(e) => { e.stopPropagation(); prevPage(); }}
-                  className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-black text-white w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-2xl cursor-pointer active:bg-gray-800 z-20 transition-all duration-200 border-2 border-white"
-                >
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                
-                {/* Right Arrow */}
-                <div 
-                  onClick={(e) => { e.stopPropagation(); nextPage(); }}
-                  className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-black text-white w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-2xl cursor-pointer active:bg-gray-800 z-20 transition-all duration-200 border-2 border-white"
-                >
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-              </>
             </div>
           </div>
 
 
           {/* Navigation Controls */}
-          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
-            {/* Previous Button */}
-            <button
-              onClick={prevPage}
-              disabled={isTransitioning}
-              className="flex items-center px-6 py-3 bg-sdm-primary text-white rounded-lg hover:bg-sdm-accent active:bg-sdm-accent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg active:shadow-md font-cooper min-w-[140px] justify-center"
-            >
-              <span className="mr-2">📖</span>
-              Previous
-            </button>
-
-            {/* Page Indicators */}
-            <div className="flex items-center gap-3">
-              {poems.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToPage(index)}
-                  disabled={isTransitioning}
-                  className={`${isMobile ? 'w-4 h-4' : 'w-3 h-3'} rounded-full transition-all duration-200 ${
-                    index === currentPage 
-                      ? 'bg-sdm-primary scale-125' 
-                      : 'bg-warm-gray-300 hover:bg-warm-gray-400 active:bg-warm-gray-500'
-                  } disabled:cursor-not-allowed`}
-                  aria-label={`Go to page ${index + 1}`}
-                />
-              ))}
+          <div className="flex flex-col items-center gap-6">
+            {/* Navigation Arrows */}
+            <div className="flex items-center justify-center gap-8 sm:gap-12">
+              {/* Left Arrow */}
+              <button
+                onClick={prevPage}
+                disabled={isTransitioning}
+                className="bg-black hover:bg-gray-800 text-white w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-lg cursor-pointer active:bg-gray-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed border border-white/20"
+                aria-label="Previous page"
+              >
+                <svg className="w-5 h-5 sm:w-7 sm:h-7" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </button>
+              
+              {/* Page Indicators */}
+              <div className="flex items-center gap-3">
+                {poems.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToPage(index)}
+                    disabled={isTransitioning}
+                    className={`${isMobile ? 'w-4 h-4' : 'w-3 h-3'} rounded-full transition-all duration-200 ${
+                      index === currentPage 
+                        ? 'bg-sdm-primary scale-125' 
+                        : 'bg-warm-gray-300 hover:bg-warm-gray-400 active:bg-warm-gray-500'
+                    } disabled:cursor-not-allowed`}
+                    aria-label={`Go to page ${index + 1}`}
+                  />
+                ))}
+              </div>
+              
+              {/* Right Arrow */}
+              <button
+                onClick={nextPage}
+                disabled={isTransitioning}
+                className="bg-black hover:bg-gray-800 text-white w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-lg cursor-pointer active:bg-gray-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed border border-white/20"
+                aria-label="Next page"
+              >
+                <svg className="w-5 h-5 sm:w-7 sm:h-7" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                </svg>
+              </button>
             </div>
             
             {/* Page Counter */}
-            <div className="font-cooper text-sdm-text-light text-center sm:min-w-0">
+            <div className="font-cooper text-sdm-text-light text-center">
               <div className="text-lg font-semibold">
                 {currentPage + 1} / {poems.length}
               </div>
             </div>
-
-            {/* Next Button */}
-            <button
-              onClick={nextPage}
-              disabled={isTransitioning}
-              className="flex items-center px-6 py-3 bg-sdm-primary text-white rounded-lg hover:bg-sdm-accent active:bg-sdm-accent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg active:shadow-md font-cooper min-w-[140px] justify-center"
-            >
-              Next
-              <span className="ml-2">📖</span>
-            </button>
           </div>
 
         </div>
