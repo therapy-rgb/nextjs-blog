@@ -86,33 +86,59 @@ export default function Puttering() {
   }, [nextPage, prevPage, goToPage]);
 
   // Touch/swipe support for mobile
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [touchStart, setTouchStart] = useState<{x: number, y: number} | null>(null);
+  const [touchEnd, setTouchEnd] = useState<{x: number, y: number} | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect if user is on mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
+    setTouchStart({
+      x: e.targetTouches[0].clientX,
+      y: e.targetTouches[0].clientY
+    });
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
+    setTouchEnd({
+      x: e.targetTouches[0].clientX,
+      y: e.targetTouches[0].clientY
+    });
   };
 
   const handleTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-
-    if (isLeftSwipe) {
-      nextPage();
-    } else if (isRightSwipe) {
-      prevPage();
+    
+    const deltaX = touchStart.x - touchEnd.x;
+    const deltaY = touchStart.y - touchEnd.y;
+    const minSwipeDistance = 50;
+    
+    // Only register horizontal swipes if they're more horizontal than vertical
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+      if (deltaX > 0) {
+        nextPage(); // Swipe left = next page
+      } else {
+        prevPage(); // Swipe right = previous page
+      }
     }
   };
 
   // Click to navigate (click left side = previous, right side = next)
+  // Only enable click navigation on desktop to avoid conflicts with touch
   const handleImageClick = (e: React.MouseEvent) => {
+    // Skip click navigation on mobile to prevent conflicts with touch events
+    if (isMobile) return;
+    
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const width = rect.width;
@@ -135,7 +161,7 @@ export default function Puttering() {
         <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 mb-6 border border-warm-gray-200">
           {/* Current Page with Book-like Presentation */}
           <div 
-            className="relative mb-6 cursor-pointer group"
+            className={`relative mb-6 group ${isMobile ? 'cursor-default' : 'cursor-pointer'}`}
             onClick={handleImageClick}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -164,14 +190,32 @@ export default function Puttering() {
                 }}
               />
               
-              {/* Hover Overlay Instructions */}
-              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-between px-8 rounded-lg">
-                <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm font-semibold bg-black bg-opacity-50 px-3 py-1 rounded">
-                  ← Previous
+              {/* Always Visible Navigation Arrows - Desktop and Mobile */}
+              <>
+                {/* Left Arrow */}
+                <div 
+                  onClick={(e) => { e.stopPropagation(); prevPage(); }}
+                  className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white border-2 border-gray-300 text-gray-700 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow-lg cursor-pointer active:bg-gray-100 z-10 transition-all duration-200"
+                >
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
                 </div>
-                <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm font-semibold bg-black bg-opacity-50 px-3 py-1 rounded">
-                  Next →
+                
+                {/* Right Arrow */}
+                <div 
+                  onClick={(e) => { e.stopPropagation(); nextPage(); }}
+                  className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white border-2 border-gray-300 text-gray-700 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow-lg cursor-pointer active:bg-gray-100 z-10 transition-all duration-200"
+                >
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                  </svg>
                 </div>
+              </>
+              
+              {/* Navigation Hint - Always visible at bottom */}
+              <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-70 text-white px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
+                {isMobile ? '👆 Tap arrows or swipe' : '👆 Click arrows or use ← → keys'}
               </div>
             </div>
           </div>
@@ -185,28 +229,28 @@ export default function Puttering() {
           </p>
 
           {/* Navigation Controls */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
             {/* Previous Button */}
             <button
               onClick={prevPage}
               disabled={isTransitioning}
-              className="flex items-center px-6 py-3 bg-sdm-primary text-white rounded-lg hover:bg-sdm-accent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg font-cooper"
+              className="flex items-center px-6 py-3 bg-sdm-primary text-white rounded-lg hover:bg-sdm-accent active:bg-sdm-accent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg active:shadow-md font-cooper min-w-[140px] justify-center"
             >
               <span className="mr-2">📖</span>
-              Previous Page
+              Previous
             </button>
 
             {/* Page Indicators */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               {poems.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => goToPage(index)}
                   disabled={isTransitioning}
-                  className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                  className={`${isMobile ? 'w-4 h-4' : 'w-3 h-3'} rounded-full transition-all duration-200 ${
                     index === currentPage 
                       ? 'bg-sdm-primary scale-125' 
-                      : 'bg-warm-gray-300 hover:bg-warm-gray-400'
+                      : 'bg-warm-gray-300 hover:bg-warm-gray-400 active:bg-warm-gray-500'
                   } disabled:cursor-not-allowed`}
                   aria-label={`Go to page ${index + 1}`}
                 />
@@ -224,9 +268,9 @@ export default function Puttering() {
             <button
               onClick={nextPage}
               disabled={isTransitioning}
-              className="flex items-center px-6 py-3 bg-sdm-primary text-white rounded-lg hover:bg-sdm-accent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg font-cooper"
+              className="flex items-center px-6 py-3 bg-sdm-primary text-white rounded-lg hover:bg-sdm-accent active:bg-sdm-accent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg active:shadow-md font-cooper min-w-[140px] justify-center"
             >
-              Next Page
+              Next
               <span className="ml-2">📖</span>
             </button>
           </div>
@@ -235,21 +279,29 @@ export default function Puttering() {
           <div className="mt-8 p-4 bg-warm-gray-50 rounded-lg">
             <h3 className="font-display text-lg font-semibold text-sdm-text mb-2">How to Navigate</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-sdm-text-light font-cooper">
+              {!isMobile && (
+                <>
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold">🖱️ Click:</span>
+                    <span>Left side = Previous, Right side = Next</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold">⌨️ Keys:</span>
+                    <span>Arrow keys, A/D keys, or 1-9 for specific pages</span>
+                  </div>
+                </>
+              )}
               <div className="flex items-center gap-2">
-                <span className="font-semibold">🖱️ Click:</span>
-                <span>Left side = Previous, Right side = Next</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold">⌨️ Keys:</span>
-                <span>Arrow keys, A/D keys, or 1-9 for specific pages</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold">📱 Mobile:</span>
+                <span className="font-semibold">{isMobile ? '👆' : '📱'} {isMobile ? 'Touch' : 'Mobile'}:</span>
                 <span>Swipe left/right to turn pages</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-semibold">🎯 Dots:</span>
-                <span>Click page indicators to jump to any page</span>
+                <span>{isMobile ? 'Tap' : 'Click'} page indicators to jump to any page</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-semibold">🔘 Buttons:</span>
+                <span>Use Previous/Next buttons for navigation</span>
               </div>
             </div>
           </div>
