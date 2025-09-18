@@ -195,9 +195,9 @@ export default function Puttering() {
                 {/* Left Arrow */}
                 <div 
                   onClick={(e) => { e.stopPropagation(); prevPage(); }}
-                  className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white border-2 border-gray-300 text-gray-700 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow-lg cursor-pointer active:bg-gray-100 z-10 transition-all duration-200"
+                  className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-black text-white w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-2xl cursor-pointer active:bg-gray-800 z-20 transition-all duration-200 border-2 border-white"
                 >
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                 </div>
@@ -205,9 +205,9 @@ export default function Puttering() {
                 {/* Right Arrow */}
                 <div 
                   onClick={(e) => { e.stopPropagation(); nextPage(); }}
-                  className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white border-2 border-gray-300 text-gray-700 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow-lg cursor-pointer active:bg-gray-100 z-10 transition-all duration-200"
+                  className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-black text-white w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-2xl cursor-pointer active:bg-gray-800 z-20 transition-all duration-200 border-2 border-white"
                 >
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                   </svg>
                 </div>
