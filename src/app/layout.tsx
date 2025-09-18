@@ -11,22 +11,30 @@ const inter = Inter({
 });
 
 
+// Cache busting version for favicons - update this to force mobile cache refresh
+const FAVICON_VERSION = "v20250918b";
+
 export const metadata: Metadata = {
   title: "Suburban Dad Mode",
   description: "Life, parenting, and everything in between from the suburbs",
   keywords: ["suburban", "dad", "family", "parenting", "lifestyle", "blog"],
   authors: [{ name: "Suburban Dad" }],
-  manifest: "/site.webmanifest",
+  manifest: `/site.webmanifest?${FAVICON_VERSION}`,
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "32x32" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: `/favicon.ico?${FAVICON_VERSION}`, sizes: "32x32" },
+      { url: `/favicon-16x16.png?${FAVICON_VERSION}`, sizes: "16x16", type: "image/png" },
+      { url: `/favicon-32x32.png?${FAVICON_VERSION}`, sizes: "32x32", type: "image/png" },
     ],
     apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: `/apple-touch-icon.png?${FAVICON_VERSION}`, sizes: "180x180", type: "image/png" },
     ],
-    shortcut: "/favicon.ico",
+    shortcut: `/favicon.ico?${FAVICON_VERSION}`,
+    other: [
+      // Additional mobile-specific icons for better compatibility
+      { url: `/icon-192.png?${FAVICON_VERSION}`, sizes: "192x192", type: "image/png" },
+      { url: `/icon-512.png?${FAVICON_VERSION}`, sizes: "512x512", type: "image/png" },
+    ],
   },
   openGraph: {
     type: "website",
@@ -52,6 +60,7 @@ export const viewport = {
   colorScheme: "light",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -59,6 +68,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable}`}>
+      <head>
+        {/* Explicit favicon links for aggressive mobile cache busting */}
+        <link rel="icon" type="image/x-icon" href={`/favicon.ico?${FAVICON_VERSION}`} />
+        <link rel="icon" type="image/png" sizes="16x16" href={`/favicon-16x16.png?${FAVICON_VERSION}`} />
+        <link rel="icon" type="image/png" sizes="32x32" href={`/favicon-32x32.png?${FAVICON_VERSION}`} />
+        <link rel="apple-touch-icon" sizes="180x180" href={`/apple-touch-icon.png?${FAVICON_VERSION}`} />
+        <link rel="manifest" href={`/site.webmanifest?${FAVICON_VERSION}`} />
+        <meta name="theme-color" content="#FF7F00" />
+        <meta name="msapplication-TileColor" content="#FF7F00" />
+      </head>
       <body className="font-cooper antialiased min-h-screen flex flex-col text-sdm-text" style={{backgroundColor: '#FFF1E6'}}>
         <Header />
         <main className="flex-grow">
