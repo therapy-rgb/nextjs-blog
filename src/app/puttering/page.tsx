@@ -179,7 +179,7 @@ export default function Puttering() {
                 alt={poems[currentPage].alt}
                 width={800}
                 height={600}
-                className="mx-auto rounded-lg transition-transform duration-300 group-hover:scale-105"
+                className="mx-auto rounded-lg"
                 priority
                 quality={95}
                 style={{ 
@@ -212,11 +212,6 @@ export default function Puttering() {
                   </svg>
                 </div>
               </>
-              
-              {/* Navigation Hint - Always visible at bottom */}
-              <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-70 text-white px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
-                {isMobile ? '👆 Tap arrows or swipe' : '👆 Click arrows or use ← → keys'}
-              </div>
             </div>
           </div>
 
@@ -275,36 +270,6 @@ export default function Puttering() {
             </button>
           </div>
 
-          {/* Instructions */}
-          <div className="mt-8 p-4 bg-warm-gray-50 rounded-lg">
-            <h3 className="font-display text-lg font-semibold text-sdm-text mb-2">How to Navigate</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-sdm-text-light font-cooper">
-              {!isMobile && (
-                <>
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold">🖱️ Click:</span>
-                    <span>Left side = Previous, Right side = Next</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold">⌨️ Keys:</span>
-                    <span>Arrow keys, A/D keys, or 1-9 for specific pages</span>
-                  </div>
-                </>
-              )}
-              <div className="flex items-center gap-2">
-                <span className="font-semibold">{isMobile ? '👆' : '📱'} {isMobile ? 'Touch' : 'Mobile'}:</span>
-                <span>Swipe left/right to turn pages</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold">🎯 Dots:</span>
-                <span>{isMobile ? 'Tap' : 'Click'} page indicators to jump to any page</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold">🔘 Buttons:</span>
-                <span>Use Previous/Next buttons for navigation</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
