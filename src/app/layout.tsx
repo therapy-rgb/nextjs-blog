@@ -75,8 +75,8 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href={`/favicon-32x32.png?${FAVICON_VERSION}`} />
         <link rel="apple-touch-icon" sizes="180x180" href={`/apple-touch-icon.png?${FAVICON_VERSION}`} />
         <link rel="manifest" href={`/site.webmanifest?${FAVICON_VERSION}`} />
-        <meta name="theme-color" content="#FF7F00" />
-        <meta name="msapplication-TileColor" content="#FF7F00" />
+        <meta name="theme-color" content="#FFF1E6" />
+        <meta name="msapplication-TileColor" content="#FFF1E6" />
       </head>
       <body className="font-cooper antialiased min-h-screen flex flex-col text-sdm-text" style={{backgroundColor: '#FFF1E6'}}>
         <Header />
