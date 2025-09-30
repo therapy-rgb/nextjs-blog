@@ -19,6 +19,36 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Favicon cache busting for mobile browsers
+      {
+        source: '/:path(favicon.ico|favicon-16x16.png|favicon-32x32.png|apple-touch-icon.png|icon-192.png|icon-512.png)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: process.env.NODE_ENV === 'development'
+              ? 'no-cache, no-store, must-revalidate'
+              : 'public, max-age=3600, must-revalidate',
+          },
+          {
+            key: 'Pragma',
+            value: 'no-cache',
+          },
+          {
+            key: 'Expires',
+            value: '0',
+          },
+        ],
+      },
+      // Site manifest cache control
+      {
+        source: '/site.webmanifest',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, must-revalidate',
+          },
+        ],
+      },
     ];
   },
   async redirects() {
