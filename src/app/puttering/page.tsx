@@ -16,6 +16,24 @@ const poems = [
     alt: "Quick Sheets - Page 2",
     title: "Quick Sheets",
     description: "Second page of Quick Sheets"
+  },
+  {
+    src: "/poems-page-3.png",
+    alt: "Poems - Page 3",
+    title: "Poems",
+    description: "Third page of Poems"
+  },
+  {
+    src: "/poems-page-4.png",
+    alt: "Poems - Page 4",
+    title: "Poems",
+    description: "Fourth page of Poems"
+  },
+  {
+    src: "/generated-image.png",
+    alt: "Generated Image",
+    title: "Generated Image",
+    description: "Generated artwork"
   }
   // To add more poems, simply add new objects here:
   // {

@@ -4,21 +4,27 @@ import Image from 'next/image'
 
 export default function LaFamilia() {
   const photos = [
-    '133398442_45eyckutaz.jpg',
-    '133398442_t035lzatoz.jpg', 
-    '133398442_ukku9dpp4l.jpg',
-    '133398442_y3pva1zxxb.jpg',
     '133398442_zw2ypx3k75.jpg',
-    'IMG_0002.JPG',
-    'IMG_2482.jpg',
     'IMG_2576.jpg',
-    'IMG_2615.jpg',
     'IMG_2697.jpg',
-    'IMG_2709.JPEG',
-    'IMG_2710.jpg',
+    'IMG_2724.jpg',
     'IMG_2726.jpg',
-    'IMG_5176.jpg',
-    'IMG_5497.jpeg'
+    'IMG_2731.jpg',
+    'IMG_2766.jpg',
+    'IMG_2772.jpg',
+    'IMG_2773.jpg',
+    'IMG_2775.jpg',
+    'IMG_5073.jpg',
+    'IMG_5075.jpg',
+    'IMG_5149.jpg',
+    'IMG_5190.jpg',
+    'IMG_5230.jpg',
+    'IMG_5244.jpg',
+    'IMG_5269.jpg',
+    'IMG_5304.jpg',
+    'IMG_5312.jpg',
+    'IMG_5489.jpg',
+    'IMG_5495.jpg'
   ]
 
   return (
