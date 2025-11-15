@@ -30,6 +30,12 @@ const poems = [
     description: "Fourth page of Poems"
   },
   {
+    src: "/poems-page-5.jpg",
+    alt: "Poems - Page 5",
+    title: "Poems",
+    description: "Fifth page of Poems"
+  },
+  {
     src: "/generated-image.png",
     alt: "Generated Image",
     title: "Generated Image",
