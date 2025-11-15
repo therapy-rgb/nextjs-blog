@@ -23,6 +23,7 @@ export default function LaFamilia() {
     'IMG_5269.jpg',
     'IMG_5304.jpg',
     'IMG_5312.jpg',
+    'IMG_5478.jpg',
     'IMG_5489.jpg',
     'IMG_5495.jpg'
   ]
