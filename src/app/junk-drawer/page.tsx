@@ -1,4 +1,51 @@
-export default function JunkDrawer() {
+import Link from 'next/link'
+import { client, journalEntriesQuery } from '@/lib/sanity'
+import { JournalEntry } from '@/types/sanity'
+
+async function getJournalEntries(): Promise<JournalEntry[]> {
+  try {
+    const entries = await client.fetch(journalEntriesQuery)
+    return entries || []
+  } catch (error) {
+    console.error('Error fetching journal entries:', error)
+    return []
+  }
+}
+
+// Helper function to get excerpt
+function getExcerpt(entry: JournalEntry): string {
+  if (entry.excerpt) {
+    return entry.excerpt
+  }
+
+  // Try to extract from body if no excerpt
+  if (entry.body && entry.body.length > 0) {
+    const firstBlock = entry.body[0]
+    if (firstBlock && 'children' in firstBlock && Array.isArray(firstBlock.children)) {
+      const text = firstBlock.children
+        .filter((child: any) => child._type === 'span' && child.text)
+        .map((child: any) => child.text)
+        .join('')
+      return text.slice(0, 150) + (text.length > 150 ? '...' : '')
+    }
+  }
+
+  return 'Read more...'
+}
+
+// Helper function to format date
+function formatDate(dateString: string): string {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}
+
+export default async function JunkDrawer() {
+  const journalEntries = await getJournalEntries()
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="text-center mb-12">
@@ -162,6 +209,48 @@ export default function JunkDrawer() {
           </p>
         </div>
       </div>
+
+      {/* Journal Section */}
+      {journalEntries.length > 0 && (
+        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+          <div className="text-center mb-8">
+            <h2 className="font-display text-3xl font-bold text-sdm-text mb-2">
+              Journal
+            </h2>
+            <p className="font-cooper text-lg text-sdm-text-light">
+              Reflections, Essays & Thoughts
+            </p>
+          </div>
+
+          <div className="grid gap-6">
+            {journalEntries.map((entry) => (
+              <Link
+                key={entry._id}
+                href={`/junk-drawer/${entry.slug.current}`}
+                className="block p-6 bg-warm-gray-50 rounded-lg border-l-4 border-sdm-primary hover:bg-warm-gray-100 transition-colors duration-200"
+              >
+                <div className="mb-2">
+                  <time className="text-sm font-semibold text-sdm-primary uppercase tracking-wide">
+                    {formatDate(entry.publishedAt)}
+                  </time>
+                </div>
+                <h3 className="font-display text-2xl font-bold text-sdm-text mb-3">
+                  {entry.title}
+                </h3>
+                <p className="font-cooper text-lg text-sdm-text-light leading-relaxed mb-4">
+                  {getExcerpt(entry)}
+                </p>
+                <div className="flex items-center text-sdm-primary font-cooper font-semibold">
+                  Read More
+                  <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

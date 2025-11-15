@@ -45,3 +45,22 @@ export const authorQuery = `*[_type == "author" && slug.current == $slug][0] {
   image,
   bio
 }`
+
+// Journal entry queries
+export const journalEntriesQuery = `*[_type == "journalEntry"] | order(publishedAt desc) {
+  _id,
+  title,
+  slug,
+  publishedAt,
+  excerpt,
+  body
+}`
+
+export const journalEntryQuery = `*[_type == "journalEntry" && slug.current == $slug][0] {
+  _id,
+  title,
+  slug,
+  publishedAt,
+  excerpt,
+  body
+}`

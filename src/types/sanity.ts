@@ -41,3 +41,14 @@ export interface Post {
   author: Author
   categories?: Category[]
 }
+
+export interface JournalEntry {
+  _id: string
+  title: string
+  slug: {
+    current: string
+  }
+  publishedAt: string
+  excerpt?: string
+  body: PortableTextBlock[]
+}
