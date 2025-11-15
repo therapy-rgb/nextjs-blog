@@ -13,8 +13,9 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const entry: JournalEntry = await client.fetch(journalEntryQuery, { slug: params.slug })
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const entry: JournalEntry = await client.fetch(journalEntryQuery, { slug })
 
   if (!entry) {
     return {
@@ -38,8 +39,9 @@ function formatDate(dateString: string): string {
   })
 }
 
-export default async function JournalEntryPage({ params }: { params: { slug: string } }) {
-  const entry: JournalEntry = await client.fetch(journalEntryQuery, { slug: params.slug })
+export default async function JournalEntryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const entry: JournalEntry = await client.fetch(journalEntryQuery, { slug })
 
   if (!entry) {
     notFound()

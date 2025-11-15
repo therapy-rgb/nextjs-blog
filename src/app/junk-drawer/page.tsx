@@ -23,8 +23,8 @@ function getExcerpt(entry: JournalEntry): string {
     const firstBlock = entry.body[0]
     if (firstBlock && 'children' in firstBlock && Array.isArray(firstBlock.children)) {
       const text = firstBlock.children
-        .filter((child: any) => child._type === 'span' && child.text)
-        .map((child: any) => child.text)
+        .filter((child) => typeof child === 'object' && child !== null && 'text' in child && '_type' in child && child._type === 'span')
+        .map((child) => typeof child === 'object' && child !== null && 'text' in child ? String(child.text) : '')
         .join('')
       return text.slice(0, 150) + (text.length > 150 ? '...' : '')
     }
