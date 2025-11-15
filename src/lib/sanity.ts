@@ -2,12 +2,16 @@ import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 import { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
-export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '4qp7h589',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '4qp7h589'
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
+
+// Only create client if we have valid credentials
+export const client = projectId && dataset ? createClient({
+  projectId,
+  dataset,
   apiVersion: '2023-05-03',
   useCdn: process.env.NODE_ENV === 'production',
-})
+}) : null as any
 
 const builder = imageUrlBuilder(client)
 

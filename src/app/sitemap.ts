@@ -8,6 +8,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   
   // Only try to fetch posts if Sanity is properly configured
   try {
+    if (!client) {
+      console.warn('Sanity client not configured, skipping dynamic sitemap entries')
+      return [...staticPages]
+    }
+
     const posts = await client.fetch(`
       *[_type == "post" && defined(slug.current)] {
         "slug": slug.current,
