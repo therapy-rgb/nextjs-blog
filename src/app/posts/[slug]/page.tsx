@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { formatDistanceToNow } from 'date-fns'
-import { client, postQuery } from '@/lib/sanity'
+import { client, postQuery, defaultAuthor } from '@/lib/sanity'
 import { Post } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
 import PortableText from '@/components/PortableText'
@@ -18,7 +18,14 @@ export const revalidate = 3600 // Revalidate every hour
 
 async function getPost(slug: string): Promise<Post | null> {
   try {
-    return await client.fetch(postQuery, { slug })
+    const entry = await client.fetch(postQuery, { slug })
+    if (!entry) return null
+    // Add default author to journal entry
+    return {
+      ...entry,
+      author: defaultAuthor,
+      categories: []
+    }
   } catch (error) {
     console.error('Error fetching post:', error)
     return null
@@ -108,7 +115,7 @@ export default async function PostPage({ params }: PostPageProps) {
         </h1>
         
         <div className="flex items-center gap-4 text-gray-600 mb-6">
-          {post.author.image && (
+          {post.author?.image && (
             <div className="relative w-12 h-12 rounded-full overflow-hidden">
               <Image
                 src={urlFor(post.author.image).width(48).height(48).url()}
@@ -118,8 +125,15 @@ export default async function PostPage({ params }: PostPageProps) {
               />
             </div>
           )}
+          {!post.author?.image && (
+            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-sdm-primary/20 flex items-center justify-center">
+              <span className="text-sdm-primary font-bold text-lg">
+                {post.author?.name?.charAt(0) || 'M'}
+              </span>
+            </div>
+          )}
           <div>
-            <p className="font-semibold text-gray-900">{post.author.name}</p>
+            <p className="font-semibold text-gray-900">{post.author?.name || 'Marcus Berley'}</p>
             <time dateTime={post.publishedAt} className="text-sm">
               {formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true })}
             </time>

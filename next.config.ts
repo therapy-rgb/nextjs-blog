@@ -8,6 +8,16 @@ const nextConfig: NextConfig = {
   eslint: {
     dirs: ['src'],
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+        port: '',
+        pathname: '/images/**',
+      },
+    ],
+  },
   async headers() {
     return [
       {

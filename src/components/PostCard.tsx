@@ -27,7 +27,7 @@ export default function PostCard({ post }: PostCardProps) {
       
       <div className="p-6">
         <div className="flex items-center gap-2 text-sm text-sdm-text-light mb-4">
-          {post.author.image && (
+          {post.author?.image && (
             <div className="relative w-8 h-8 rounded-full overflow-hidden">
               <Image
                 src={urlFor(post.author.image).width(32).height(32).url()}
@@ -37,7 +37,14 @@ export default function PostCard({ post }: PostCardProps) {
               />
             </div>
           )}
-          <span className="font-cooper">{post.author.name}</span>
+          {!post.author?.image && (
+            <div className="relative w-8 h-8 rounded-full overflow-hidden bg-sdm-primary/20 flex items-center justify-center">
+              <span className="text-sdm-primary font-bold text-sm">
+                {post.author?.name?.charAt(0) || 'M'}
+              </span>
+            </div>
+          )}
+          <span className="font-cooper">{post.author?.name || 'Marcus Berley'}</span>
           <span>•</span>
           <time dateTime={post.publishedAt} className="font-cooper">
             {formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true })}

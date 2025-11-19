@@ -19,15 +19,24 @@ export function urlFor(source: SanityImageSource) {
   return builder.image(source)
 }
 
-// GROQ queries
-export const postsQuery = `*[_type == "journalEntry"] | order(publishedAt desc) {
+// Default author for journal entries
+export const defaultAuthor = {
+  _id: 'default-author',
+  name: 'Marcus Berley',
+  slug: { current: 'marcus-berley' },
+  image: undefined,
+  bio: undefined
+}
+
+// GROQ queries for journal entries
+export const postsQuery = `*[_type == "journalEntry" && defined(slug) && defined(publishedAt)] | order(publishedAt desc) {
   _id,
   title,
   slug,
   publishedAt,
   excerpt,
-  mainImage,
-  "author": author->{name, image}
+  body,
+  "mainImage": body[_type == "image"][0]
 }`
 
 export const postQuery = `*[_type == "journalEntry" && slug.current == $slug][0] {
@@ -36,10 +45,8 @@ export const postQuery = `*[_type == "journalEntry" && slug.current == $slug][0]
   slug,
   publishedAt,
   excerpt,
-  mainImage,
   body,
-  "author": author->{name, image, bio},
-  "categories": categories[]->{title, slug}
+  "mainImage": body[_type == "image"][0]
 }`
 
 export const authorQuery = `*[_type == "author" && slug.current == $slug][0] {
@@ -48,23 +55,4 @@ export const authorQuery = `*[_type == "author" && slug.current == $slug][0] {
   slug,
   image,
   bio
-}`
-
-// Journal entry queries
-export const journalEntriesQuery = `*[_type == "journalEntry"] | order(publishedAt desc) {
-  _id,
-  title,
-  slug,
-  publishedAt,
-  excerpt,
-  body
-}`
-
-export const journalEntryQuery = `*[_type == "journalEntry" && slug.current == $slug][0] {
-  _id,
-  title,
-  slug,
-  publishedAt,
-  excerpt,
-  body
 }`
