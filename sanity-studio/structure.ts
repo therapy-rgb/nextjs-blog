@@ -40,7 +40,25 @@ export const structure: StructureResolver = (S) =>
             .title('Draft Posts')
             .filter('_type == "post" && !defined(publishedAt)')
         ),
-      
+
+      S.divider(),
+
+      // Journal Entries
+      S.listItem()
+        .title('Journal Entries')
+        .icon(() => '📔')
+        .child(
+          S.documentTypeList('journalEntry')
+            .title('All Journal Entries')
+            .filter('_type == "journalEntry"')
+            .defaultOrdering([{field: 'publishedAt', direction: 'desc'}])
+            .child((documentId) =>
+              S.document()
+                .documentId(documentId)
+                .schemaType('journalEntry')
+            )
+        ),
+
       S.divider(),
       
       // Authors

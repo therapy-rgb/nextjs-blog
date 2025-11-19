@@ -2,6 +2,7 @@ import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {colorInput} from '@sanity/color-input'
+import {codeInput} from '@sanity/code-input'
 import {imageHotspotArrayPlugin} from 'sanity-plugin-hotspot-array'
 
 import {schemaTypes} from './schemaTypes'
@@ -18,6 +19,7 @@ export default defineConfig({
     structureTool({structure}),
     visionTool(),
     colorInput(),
+    codeInput(),
     imageHotspotArrayPlugin(),
   ],
 
