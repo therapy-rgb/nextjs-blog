@@ -34,12 +34,6 @@ const poems = [
     alt: "Poems - Page 5",
     title: "Poems",
     description: "Fifth page of Poems"
-  },
-  {
-    src: "/generated-image.png",
-    alt: "Generated Image",
-    title: "Generated Image",
-    description: "Generated artwork"
   }
   // To add more poems, simply add new objects here:
   // {
