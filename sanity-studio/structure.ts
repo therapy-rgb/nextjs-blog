@@ -4,6 +4,24 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title('Content')
     .items([
+      // Journal Entries
+      S.listItem()
+        .title('Journal Entries')
+        .icon(() => '📔')
+        .child(
+          S.documentTypeList('journalEntry')
+            .title('All Journal Entries')
+            .filter('_type == "journalEntry"')
+            .defaultOrdering([{field: 'date', direction: 'desc'}])
+            .child((documentId) =>
+              S.document()
+                .documentId(documentId)
+                .schemaType('journalEntry')
+            )
+        ),
+
+      S.divider(),
+
       // Posts
       S.listItem()
         .title('Posts')

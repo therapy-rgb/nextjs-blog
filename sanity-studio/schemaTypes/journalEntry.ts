@@ -13,71 +13,93 @@ export default defineType({
       validation: (rule) => rule.required().max(100),
     }),
     defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      options: {
-        source: 'title',
-        maxLength: 96,
-        slugify: (input) =>
-          input
-            .toLowerCase()
-            .replace(/\s+/g, '-')
-            .replace(/[^\w-]+/g, ''),
-      },
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'publishedAt',
-      title: 'Published at',
+      name: 'date',
+      title: 'Date',
       type: 'datetime',
       initialValue: () => new Date().toISOString(),
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'excerpt',
-      title: 'Excerpt',
-      type: 'text',
-      rows: 4,
-      description: 'A brief description of the entry for previews (optional)',
-      validation: (rule) => rule.max(200),
+      name: 'mood',
+      title: 'Mood',
+      type: 'string',
+      options: {
+        list: [
+          {title: '😊 Happy', value: 'happy'},
+          {title: '😌 Calm', value: 'calm'},
+          {title: '🤔 Thoughtful', value: 'thoughtful'},
+          {title: '😔 Sad', value: 'sad'},
+          {title: '😤 Frustrated', value: 'frustrated'},
+          {title: '😴 Tired', value: 'tired'},
+          {title: '🎉 Excited', value: 'excited'},
+          {title: '😰 Anxious', value: 'anxious'},
+        ],
+        layout: 'dropdown',
+      },
     }),
     defineField({
-      name: 'body',
-      title: 'Body',
+      name: 'content',
+      title: 'Content',
       type: 'blockContent',
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [{type: 'string'}],
+      options: {
+        layout: 'tags',
+      },
+    }),
+    defineField({
+      name: 'private',
+      title: 'Private',
+      type: 'boolean',
+      description: 'Keep this entry private (not visible on public blog)',
+      initialValue: true,
     }),
   ],
   preview: {
     select: {
       title: 'title',
-      publishedAt: 'publishedAt',
+      date: 'date',
+      mood: 'mood',
     },
     prepare(selection) {
-      const {title, publishedAt} = selection
-      const date = publishedAt ? new Date(publishedAt).toLocaleDateString() : 'No date'
+      const {title, date, mood} = selection
+      const dateStr = date ? new Date(date).toLocaleDateString() : 'No date'
+      const moodEmoji = mood ? getMoodEmoji(mood) : ''
       return {
         title,
-        subtitle: date,
+        subtitle: `${moodEmoji} ${dateStr}`,
       }
     },
   },
   orderings: [
     {
-      title: 'Published Date, New',
-      name: 'publishedAtDesc',
-      by: [{field: 'publishedAt', direction: 'desc'}],
+      title: 'Date, New',
+      name: 'dateDesc',
+      by: [{field: 'date', direction: 'desc'}],
     },
     {
-      title: 'Published Date, Old',
-      name: 'publishedAtAsc',
-      by: [{field: 'publishedAt', direction: 'asc'}],
-    },
-    {
-      title: 'Title A-Z',
-      name: 'titleAsc',
-      by: [{field: 'title', direction: 'asc'}],
+      title: 'Date, Old',
+      name: 'dateAsc',
+      by: [{field: 'date', direction: 'asc'}],
     },
   ],
 })
+
+function getMoodEmoji(mood: string): string {
+  const moodMap: Record<string, string> = {
+    happy: '😊',
+    calm: '😌',
+    thoughtful: '🤔',
+    sad: '😔',
+    frustrated: '😤',
+    tired: '😴',
+    excited: '🎉',
+    anxious: '😰',
+  }
+  return moodMap[mood] || ''
+}
