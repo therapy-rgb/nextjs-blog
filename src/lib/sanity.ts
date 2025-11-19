@@ -20,7 +20,7 @@ export function urlFor(source: SanityImageSource) {
 }
 
 // GROQ queries
-export const postsQuery = `*[_type == "post"] | order(publishedAt desc) {
+export const postsQuery = `*[_type == "journalEntry"] | order(publishedAt desc) {
   _id,
   title,
   slug,
@@ -30,7 +30,7 @@ export const postsQuery = `*[_type == "post"] | order(publishedAt desc) {
   "author": author->{name, image}
 }`
 
-export const postQuery = `*[_type == "post" && slug.current == $slug][0] {
+export const postQuery = `*[_type == "journalEntry" && slug.current == $slug][0] {
   _id,
   title,
   slug,
