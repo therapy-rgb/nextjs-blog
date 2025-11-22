@@ -5,9 +5,5 @@ interface PortableTextProps {
 }
 
 export default function PortableText({ content }: PortableTextProps) {
-  return (
-    <div className="prose prose-lg max-w-none">
-      <BasePortableText value={content} />
-    </div>
-  )
+  return <BasePortableText value={content} />
 }

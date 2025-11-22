@@ -65,3 +65,17 @@ html {
   outline: 2px solid #6528F7;
   outline-offset: 2px;
 }
+
+/* Prose paragraph spacing */
+.prose p {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+
+.prose p:first-child {
+  margin-top: 0;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}

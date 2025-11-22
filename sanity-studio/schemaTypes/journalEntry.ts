@@ -13,11 +13,29 @@ export default defineType({
       validation: (rule) => rule.required().max(100),
     }),
     defineField({
-      name: 'date',
-      title: 'Date',
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      description: 'URL-friendly version of the title',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'publishedAt',
+      title: 'Published At',
       type: 'datetime',
       initialValue: () => new Date().toISOString(),
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'excerpt',
+      title: 'Excerpt',
+      type: 'text',
+      description: 'Short preview text (optional)',
+      rows: 3,
     }),
     defineField({
       name: 'mood',
@@ -38,8 +56,8 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'content',
-      title: 'Content',
+      name: 'body',
+      title: 'Body',
       type: 'blockContent',
       validation: (rule) => rule.required(),
     }),
@@ -63,7 +81,7 @@ export default defineType({
   preview: {
     select: {
       title: 'title',
-      date: 'date',
+      date: 'publishedAt',
       mood: 'mood',
     },
     prepare(selection) {
@@ -80,12 +98,12 @@ export default defineType({
     {
       title: 'Date, New',
       name: 'dateDesc',
-      by: [{field: 'date', direction: 'desc'}],
+      by: [{field: 'publishedAt', direction: 'desc'}],
     },
     {
       title: 'Date, Old',
       name: 'dateAsc',
-      by: [{field: 'date', direction: 'asc'}],
+      by: [{field: 'publishedAt', direction: 'asc'}],
     },
   ],
 })

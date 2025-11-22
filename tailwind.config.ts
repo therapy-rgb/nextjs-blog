@@ -56,6 +56,10 @@ const config: Config = {
           css: {
             maxWidth: 'none',
             color: 'inherit',
+            p: {
+              marginTop: '1.25em',
+              marginBottom: '1.25em',
+            },
             a: {
               color: 'inherit',
               textDecoration: 'underline',
