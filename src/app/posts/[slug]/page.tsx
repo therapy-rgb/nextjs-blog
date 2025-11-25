@@ -116,7 +116,7 @@ export default async function PostPage({ params }: PostPageProps) {
         
         <div className="mb-6">
           <time dateTime={post.publishedAt} className="text-sm text-gray-600">
-            {format(new Date(post.publishedAt), 'dd/MM/yyyy')}
+            {format(new Date(post.publishedAt), 'MM/dd/yyyy')}
           </time>
         </div>
 
