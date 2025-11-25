@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { formatDistanceToNow } from 'date-fns'
+import { format } from 'date-fns'
 import { client, postQuery, defaultAuthor } from '@/lib/sanity'
 import { Post } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
@@ -114,30 +114,10 @@ export default async function PostPage({ params }: PostPageProps) {
           {post.title}
         </h1>
         
-        <div className="flex items-center gap-4 text-gray-600 mb-6">
-          {post.author?.image && (
-            <div className="relative w-12 h-12 rounded-full overflow-hidden">
-              <Image
-                src={urlFor(post.author.image).width(48).height(48).url()}
-                alt={post.author.name}
-                fill
-                className="object-cover"
-              />
-            </div>
-          )}
-          {!post.author?.image && (
-            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-sdm-primary/20 flex items-center justify-center">
-              <span className="text-sdm-primary font-bold text-lg">
-                {post.author?.name?.charAt(0) || 'M'}
-              </span>
-            </div>
-          )}
-          <div>
-            <p className="font-semibold text-gray-900">{post.author?.name || 'Marcus Berley'}</p>
-            <time dateTime={post.publishedAt} className="text-sm">
-              {formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true })}
-            </time>
-          </div>
+        <div className="mb-6">
+          <time dateTime={post.publishedAt} className="text-sm text-gray-600">
+            {format(new Date(post.publishedAt), 'dd/MM/yyyy')}
+          </time>
         </div>
 
         {post.mainImage && (

@@ -40,7 +40,7 @@ export default async function Journal() {
                   dateTime={post.publishedAt}
                   className="font-cooper text-sm text-sdm-text-light block mb-3"
                 >
-                  {format(new Date(post.publishedAt), 'MMMM d, yyyy')}
+                  {format(new Date(post.publishedAt), 'dd/MM/yyyy')}
                 </time>
                 <h2 className="font-display text-3xl font-bold text-sdm-text mb-4 hover:text-sdm-primary transition-colors duration-200">
                   {post.title}
