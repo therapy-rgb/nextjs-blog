@@ -12,7 +12,7 @@ export const structure: StructureResolver = (S) =>
           S.documentTypeList('journalEntry')
             .title('All Journal Entries')
             .filter('_type == "journalEntry"')
-            .defaultOrdering([{field: 'date', direction: 'desc'}])
+            .defaultOrdering([{field: 'publishedAt', direction: 'desc'}])
             .child((documentId) =>
               S.document()
                 .documentId(documentId)

@@ -29,7 +29,7 @@ export const defaultAuthor = {
 }
 
 // GROQ queries for journal entries
-export const postsQuery = `*[_type == "journalEntry" && defined(slug) && defined(publishedAt)] | order(publishedAt desc) {
+export const postsQuery = `*[_type == "journalEntry" && defined(slug) && defined(publishedAt) && private != true] | order(publishedAt desc) {
   _id,
   title,
   slug,
@@ -39,7 +39,7 @@ export const postsQuery = `*[_type == "journalEntry" && defined(slug) && defined
   "mainImage": body[_type == "image"][0]
 }`
 
-export const postQuery = `*[_type == "journalEntry" && slug.current == $slug][0] {
+export const postQuery = `*[_type == "journalEntry" && slug.current == $slug && private != true][0] {
   _id,
   title,
   slug,

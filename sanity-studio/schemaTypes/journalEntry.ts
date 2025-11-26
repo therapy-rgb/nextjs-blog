@@ -38,24 +38,6 @@ export default defineType({
       rows: 3,
     }),
     defineField({
-      name: 'mood',
-      title: 'Mood',
-      type: 'string',
-      options: {
-        list: [
-          {title: '😊 Happy', value: 'happy'},
-          {title: '😌 Calm', value: 'calm'},
-          {title: '🤔 Thoughtful', value: 'thoughtful'},
-          {title: '😔 Sad', value: 'sad'},
-          {title: '😤 Frustrated', value: 'frustrated'},
-          {title: '😴 Tired', value: 'tired'},
-          {title: '🎉 Excited', value: 'excited'},
-          {title: '😰 Anxious', value: 'anxious'},
-        ],
-        layout: 'dropdown',
-      },
-    }),
-    defineField({
       name: 'body',
       title: 'Body',
       type: 'blockContent',
@@ -75,22 +57,20 @@ export default defineType({
       title: 'Private',
       type: 'boolean',
       description: 'Keep this entry private (not visible on public blog)',
-      initialValue: true,
+      initialValue: false,
     }),
   ],
   preview: {
     select: {
       title: 'title',
       date: 'publishedAt',
-      mood: 'mood',
     },
     prepare(selection) {
-      const {title, date, mood} = selection
+      const {title, date} = selection
       const dateStr = date ? new Date(date).toLocaleDateString() : 'No date'
-      const moodEmoji = mood ? getMoodEmoji(mood) : ''
       return {
         title,
-        subtitle: `${moodEmoji} ${dateStr}`,
+        subtitle: dateStr,
       }
     },
   },
@@ -107,17 +87,3 @@ export default defineType({
     },
   ],
 })
-
-function getMoodEmoji(mood: string): string {
-  const moodMap: Record<string, string> = {
-    happy: '😊',
-    calm: '😌',
-    thoughtful: '🤔',
-    sad: '😔',
-    frustrated: '😤',
-    tired: '😴',
-    excited: '🎉',
-    anxious: '😰',
-  }
-  return moodMap[mood] || ''
-}

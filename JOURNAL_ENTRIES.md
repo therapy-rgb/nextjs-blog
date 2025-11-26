@@ -2,7 +2,7 @@
 
 ## Overview
 
-Journal entries are published to the **Junk Drawer** section of the website at `/junk-drawer/[slug]`.
+Journal entries are published to the **Journal** section of the website at `/journal` (listing) and `/posts/[slug]` (individual entries).
 
 ## Creating a New Journal Entry
 
@@ -29,19 +29,22 @@ This will start Sanity Studio at http://localhost:3333/
 Required fields:
 - **Title**: The title of your journal entry
 - **Slug**: Auto-generates from title (e.g., "my-journal-entry")
-- **Published At**: Date and time for the entry
+- **Published At**: Date and time for the entry (auto-fills with current time)
 - **Body**: Your journal content (supports rich text formatting)
 
 Optional fields:
-- **Excerpt**: Short preview text (max 200 chars) for the listing page
+- **Excerpt**: Short preview text for the listing page
+- **Tags**: Optional tags for categorization
+- **Private**: Keep entry private (defaults to unchecked/public)
 
 ### 4. Publish
 
 1. Review your entry
 2. Click **"Publish"** in the top-right corner
-3. Your entry will appear at:
-   - List: https://suburbandadmode.com/junk-drawer
-   - Individual: https://suburbandadmode.com/junk-drawer/[your-slug]
+3. Deploy to Vercel to make it live
+4. Your entry will appear at:
+   - List: https://suburbandadmode.com/journal
+   - Individual: https://suburbandadmode.com/posts/[your-slug]
 
 ## Content Features
 
@@ -80,13 +83,14 @@ If you see a SchemaError when loading Sanity Studio, verify:
 If published entries don't show on the website:
 
 1. Check the entry has a `publishedAt` date set
-2. Verify the Sanity project ID in `.env.local`:
+2. Verify the `private` field is set to `false` (unchecked)
+3. Verify the Sanity project ID in `.env.local`:
    ```
    NEXT_PUBLIC_SANITY_PROJECT_ID=4qp7h589
    NEXT_PUBLIC_SANITY_DATASET=production
    ```
 
-3. Rebuild and redeploy:
+4. Rebuild and redeploy:
    ```bash
    npm run build
    npx vercel --prod
@@ -99,17 +103,17 @@ If published entries don't show on the website:
 Journal entries use the following schema:
 - Type: `journalEntry`
 - Location in Sanity Studio: Content → Journal Entries
-- Website routes: `/junk-drawer/[slug]`
+- Website routes: `/journal` (list) and `/posts/[slug]` (individual)
+- Fields: title, slug, publishedAt, excerpt, body, tags, private
+- Private entries (private: true) are filtered out from public queries
 
-### Files Modified
+### Key Files
 
 - `sanity-studio/schemaTypes/journalEntry.ts` - Journal entry schema definition
-- `sanity-studio/schemaTypes/index.ts` - Schema exports
 - `sanity-studio/structure.ts` - Sanity Studio sidebar structure
-- `sanity-studio/sanity.config.ts` - Sanity configuration with plugins
-- `src/lib/sanity.ts` - Frontend queries for journal entries
-- `src/app/junk-drawer/[slug]/page.tsx` - Journal entry display page
-- `src/app/junk-drawer/page.tsx` - Journal entries listing page
+- `src/lib/sanity.ts` - Frontend queries for journal entries (filters out private entries)
+- `src/app/journal/page.tsx` - Journal entries listing page
+- `src/app/posts/[slug]/page.tsx` - Individual journal entry display page
 
 ### Required Plugins
 
