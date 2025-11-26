@@ -41,10 +41,12 @@ Optional fields:
 
 1. Review your entry
 2. Click **"Publish"** in the top-right corner
-3. Deploy to Vercel to make it live
+3. Wait ~60 seconds for automatic update (ISR revalidation)
 4. Your entry will appear at:
    - List: https://suburbandadmode.com/journal
    - Individual: https://suburbandadmode.com/posts/[your-slug]
+
+**Note**: No manual deployment needed! The site uses Next.js ISR and automatically checks for new content every 60 seconds.
 
 ## Content Features
 
@@ -82,19 +84,19 @@ If you see a SchemaError when loading Sanity Studio, verify:
 
 If published entries don't show on the website:
 
-1. Check the entry has a `publishedAt` date set
-2. Verify the `private` field is set to `false` (unchecked)
-3. Verify the Sanity project ID in `.env.local`:
+1. **Wait for ISR revalidation**: The page updates every 60 seconds. Wait 1-2 minutes after publishing.
+2. **Check the entry has a `publishedAt` date set**: Required field must be filled.
+3. **Verify the `private` field is set to `false`**: Unchecked in Sanity Studio.
+4. **Check slug is generated**: Must have a valid slug.
+5. **Verify Sanity project ID** in `.env.local`:
    ```
    NEXT_PUBLIC_SANITY_PROJECT_ID=4qp7h589
    NEXT_PUBLIC_SANITY_DATASET=production
    ```
 
-4. Rebuild and redeploy:
-   ```bash
-   npm run build
-   npx vercel --prod
-   ```
+6. **Hard refresh browser**: Press Cmd+Shift+R (Mac) or Ctrl+Shift+R (Windows).
+
+Note: Manual deployment is rarely needed. ISR handles content updates automatically.
 
 ## Technical Details
 

@@ -1,212 +1,178 @@
 # Personal Blog with Next.js and Sanity
 
-A modern, fast, and SEO-optimized personal blog built with Next.js 14, TypeScript, Tailwind CSS, and Sanity CMS.
+A modern, fast, and SEO-optimized personal blog built with Next.js 15, TypeScript, Tailwind CSS, and Sanity CMS.
+
+**Live Site**: [suburbandadmode.com](https://suburbandadmode.com)
+**GitHub**: [therapy-rgb/nextjs-blog](https://github.com/therapy-rgb/nextjs-blog)
 
 ## Features
 
-- **Next.js 14+** with App Router and TypeScript
-- **Sanity CMS** for content management
-- **Tailwind CSS** for responsive design
+- **Next.js 15** with App Router and TypeScript
+- **Sanity CMS** for headless content management
+- **ISR (Incremental Static Regeneration)** - Content updates automatically without manual deploys
+- **Tailwind CSS v4** for responsive design
 - **SEO-optimized** with meta tags, Open Graph, and structured data
 - **Image optimization** with Next.js Image component
-- **Clean, modern design** optimized for personal blogging
-- **Ready for Vercel deployment**
+- **Journal entries** with rich text editor support
+- **Auto-deployment** from GitHub to Vercel
 
 ## Quick Start
 
-### 1. Set up Sanity CMS
+**For writing journal entries**: See [START_HERE.md](./START_HERE.md) or [JOURNAL_ENTRIES.md](./JOURNAL_ENTRIES.md)
 
-1. Create a new Sanity project at [sanity.io](https://sanity.io)
-2. Install Sanity CLI: `npm install -g @sanity/cli`
-3. Create a new Sanity project: `sanity init`
-4. Set up your schemas for:
-   - Post
-   - Author
-   - Category
+### 1. Clone & Install
 
-### 2. Configure Environment Variables
-
-Update `.env.local` with your Sanity project details:
-
-```bash
-NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id_here
-NEXT_PUBLIC_SANITY_DATASET=production
-SANITY_API_TOKEN=your_api_token_here
-NEXT_PUBLIC_BASE_URL=https://yourdomain.com
-```
-
-### 3. Install Dependencies and Run
-
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to see your blog.
-
-## Project Structure
-
-```
-src/
-├── app/                    # App Router pages
-│   ├── about/             # About page
-│   ├── contact/           # Contact page
-│   ├── posts/[slug]/      # Individual blog post pages
-│   ├── layout.tsx         # Root layout
-│   ├── page.tsx           # Home page
-│   ├── robots.ts          # Robots.txt
-│   └── sitemap.ts         # Sitemap generation
-├── components/            # React components
-│   ├── Footer.tsx
-│   ├── Header.tsx
-│   ├── JsonLd.tsx         # Structured data
-│   ├── PortableText.tsx   # Sanity rich text renderer
-│   ├── PostCard.tsx       # Blog post preview
-│   └── PostList.tsx       # List of blog posts
-├── lib/
-│   └── sanity.ts          # Sanity client and queries
-└── types/
-    └── sanity.ts          # TypeScript types
-```
-
-## Sanity Schema Example
-
-Create these schemas in your Sanity Studio:
-
-### Post Schema
-```javascript
-export default {
-  name: 'post',
-  title: 'Post',
-  type: 'document',
-  fields: [
-    {
-      name: 'title',
-      title: 'Title',
-      type: 'string',
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      options: {
-        source: 'title',
-        maxLength: 96,
-      },
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'author',
-      title: 'Author',
-      type: 'reference',
-      to: {type: 'author'}
-    },
-    {
-      name: 'mainImage',
-      title: 'Main image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative text',
-        }
-      ]
-    },
-    {
-      name: 'categories',
-      title: 'Categories',
-      type: 'array',
-      of: [{type: 'reference', to: {type: 'category'}}]
-    },
-    {
-      name: 'publishedAt',
-      title: 'Published at',
-      type: 'datetime',
-      validation: Rule => Rule.required()
-    },
-    {
-      name: 'excerpt',
-      title: 'Excerpt',
-      type: 'text',
-      rows: 3
-    },
-    {
-      name: 'body',
-      title: 'Body',
-      type: 'blockContent'
-    }
-  ],
-  preview: {
-    select: {
-      title: 'title',
-      author: 'author.name',
-      media: 'mainImage'
-    },
-    prepare(selection) {
-      const {author} = selection
-      return Object.assign({}, selection, {
-        subtitle: author && `by ${author}`
-      })
-    }
-  }
-}
-```
-
-## Repository & Backup
-
-This project is backed up on GitHub: **https://github.com/therapy-rgb/nextjs-blog**
-
-### Regular Backup Workflow
-```bash
-git add .
-git commit -m "Your commit message"
-git push
-```
-
-### Clone Repository (if needed)
 ```bash
 git clone https://github.com/therapy-rgb/nextjs-blog.git
 cd nextjs-blog
 npm install
 ```
 
-## Deploy to Vercel
+### 2. Environment Variables
 
-1. Push your code to GitHub (already set up ✓)
-2. Connect your repository to Vercel
-3. Add your environment variables in Vercel dashboard
-4. Deploy!
+Create `.env.local`:
 
-## Customization
+```bash
+NEXT_PUBLIC_SANITY_PROJECT_ID=4qp7h589
+NEXT_PUBLIC_SANITY_DATASET=production
+```
 
-- Update the site title, description, and social links in `src/app/layout.tsx`
-- Customize colors and fonts in `tailwind.config.ts`
-- Modify the header and footer in their respective components
-- Add new pages by creating folders in `src/app/`
+### 3. Start Development
 
-## SEO Features
+```bash
+# Start Next.js
+npm run dev
 
-- Automatic sitemap generation
-- Robots.txt
-- Open Graph meta tags
-- Twitter Card support
-- Structured data (JSON-LD)
-- Optimized meta descriptions
+# Start Sanity Studio (for writing content)
+cd sanity-studio && npm run dev
+```
+
+- Next.js: [http://localhost:3000](http://localhost:3000)
+- Sanity Studio: [http://localhost:3333](http://localhost:3333)
+
+## Project Structure
+
+```
+nextjs-blog/
+├── src/
+│   ├── app/
+│   │   ├── journal/page.tsx          # Journal listing (ISR: 60s)
+│   │   ├── posts/[slug]/page.tsx     # Individual entries (ISR: 3600s)
+│   │   ├── layout.tsx                # Root layout
+│   │   ├── page.tsx                  # Home page
+│   │   └── globals.css               # Global styles
+│   ├── components/
+│   │   ├── PortableText.tsx          # Sanity rich text renderer
+│   │   ├── Header.tsx                # Site header
+│   │   └── Footer.tsx                # Site footer
+│   ├── lib/
+│   │   └── sanity.ts                 # Sanity client & queries
+│   └── types/
+│       └── sanity.ts                 # TypeScript types
+├── sanity-studio/
+│   ├── schemaTypes/
+│   │   ├── journalEntry.ts           # Journal entry schema
+│   │   ├── blockContent.ts           # Rich text config
+│   │   └── index.ts                  # Schema exports
+│   ├── structure.ts                  # Studio sidebar config
+│   └── sanity.config.ts              # Sanity configuration
+├── START_HERE.md                     # Quick reference guide
+├── JOURNAL_ENTRIES.md                # Journal workflow guide
+└── README.md                         # This file
+```
+
+## Content Management
+
+### Journal Entry Schema
+
+Journal entries (`journalEntry`) include:
+- **title**: String (required, max 100 chars)
+- **slug**: Auto-generated from title (required)
+- **publishedAt**: DateTime (required, auto-fills)
+- **excerpt**: Text (optional preview)
+- **body**: Rich text with block content (required)
+- **tags**: Array of strings (optional)
+- **private**: Boolean (defaults to false)
+
+### Content Features
+
+The rich text editor supports:
+- Text formatting (bold, italic, inline code)
+- Headings (H1-H4)
+- Lists (bullet and numbered)
+- Blockquotes
+- Links
+- Images with alt text
+- Code blocks with syntax highlighting
+
+## How Content Updates Work
+
+### Automatic Updates via ISR
+
+This site uses **Incremental Static Regeneration (ISR)**:
+
+1. **Journal listing page** (`/journal`):
+   - Revalidates every 60 seconds
+   - New entries appear automatically within 1 minute
+
+2. **Individual entries** (`/posts/[slug]`):
+   - Revalidates every 3600 seconds (1 hour)
+   - Updates automatically without manual deployment
+
+**No webhook needed!** Content updates are handled by Next.js ISR.
+
+### Code Deployment
+
+1. Push code changes to GitHub
+2. Vercel automatically deploys (2-3 minutes)
+3. Live site updates at suburbandadmode.com
+
+## Documentation
+
+- **[START_HERE.md](./START_HERE.md)** - Comprehensive guide to the project
+- **[JOURNAL_ENTRIES.md](./JOURNAL_ENTRIES.md)** - How to write journal entries
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deployment guide (if needed)
 
 ## Development Scripts
 
 ```bash
-npm run dev          # Start development server
+npm run dev          # Start Next.js dev server
 npm run build        # Build for production
 npm run start        # Start production server
 npm run lint         # Run ESLint
+
+# Sanity Studio
+cd sanity-studio
+npm run dev          # Start Sanity Studio (localhost:3333)
 ```
 
-## License
+## Tech Stack
 
-MIT License - feel free to use this template for your personal blog!
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **CMS**: Sanity.io
+- **Deployment**: Vercel
+- **Version Control**: GitHub
+
+## Environment
+
+- **Production**: https://suburbandadmode.com
+- **Repository**: https://github.com/therapy-rgb/nextjs-blog
+- **Sanity Project**: 4qp7h589
+- **Dataset**: production
+
+## Recent Updates (Nov 26, 2025)
+
+- Fixed journal entry schema ordering
+- Added private field filtering
+- Removed mood field from schema
+- Updated documentation
+- Confirmed ISR auto-updates working
+
+## Support
+
+For questions or issues:
+1. Check [START_HERE.md](./START_HERE.md)
+2. Check [JOURNAL_ENTRIES.md](./JOURNAL_ENTRIES.md)
+3. Review troubleshooting sections

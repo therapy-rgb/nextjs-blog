@@ -1,214 +1,279 @@
-# START HERE - Journal Workflow Issues
+# START HERE - Journal Workflow Guide
 
-## Current Status (Nov 22, 2025)
-
-### What We Were Working On
-Trying to publish a new journal entry titled "clearing a path" but it's not appearing on the live website at suburbandadmode.com/journal.
-
-### Issues Identified
-
-1. **Schema Mismatch Problem**: The Sanity Studio schema for journal entries didn't match what the website query expected
-   - Schema had fields: `title`, `date`, `content`
-   - Query expected: `title`, `slug`, `publishedAt`, `body`, `excerpt`
-
-2. **Missing Slug Field**: Journal entries had no way to generate URL-friendly slugs
-
-3. **Deployment Workflow**: Changes to Sanity content require manual Vercel deployment to appear live
+**Last Updated**: November 26, 2025
+**Status**: ✅ All systems working
 
 ---
 
-## Changes Made Today
+## Quick Start - Writing a New Journal Entry
 
-### 1. Fixed Paragraph Spacing in Journal Entries
-- **File Modified**: `src/app/globals.css`
-- **Lines 69-81**: Added CSS rules for paragraph spacing in journal entries
-  ```css
-  .prose p {
-    margin-top: 1.25em;
-    margin-bottom: 1.25em;
-  }
-  ```
+### 1. Start Sanity Studio
+```bash
+cd /Users/marcusberley/Documents/Development/Projects/website/nextjs-blog/sanity-studio
+npm run dev
+```
+Opens at: http://localhost:3333/
 
-### 2. Updated Journal Entry Schema
-- **File Modified**: `sanity-studio/schemaTypes/journalEntry.ts`
-- **Changes Made**:
-  - Added `slug` field (line 16-25) - auto-generates from title
-  - Renamed `date` → `publishedAt` (line 27-31)
-  - Added `excerpt` field (line 33-39) - optional preview text
-  - Renamed `content` → `body` (line 59-62)
-  - Updated preview and ordering references to use `publishedAt`
+### 2. Create Entry
+1. Sign in to Sanity Studio
+2. Click **"Journal Entries"** 📔 in sidebar
+3. Click **"Create"** or **"+"**
+4. Fill in fields (see below)
+5. Click **"Publish"**
 
-### 3. Removed Duplicate Prose Wrapper
-- **File Modified**: `src/components/PortableText.tsx`
-- **Change**: Removed duplicate `prose` class wrapper to fix styling
+### 3. See It Live
+- Wait ~60 seconds for ISR revalidation
+- Visit: https://suburbandadmode.com/journal
+- Your entry will appear automatically!
 
-### 4. Updated Tailwind Typography Config
-- **File Modified**: `tailwind.config.ts`
-- **Lines 59-62**: Added paragraph margin configuration
+**No manual deployment needed!** The site uses Next.js ISR with 60-second revalidation.
 
 ---
 
-## Current Website Status
+## Current System Architecture
 
-✅ **Live and Working**:
-- Paragraph spacing in journal entries
-- Journal page at /journal showing 3 entries:
-  - "before the work begins" (Nov 19)
-  - "Following Up" (Nov 18)
-  - "Getting Started" (Nov 15)
-
-❌ **Not Working Yet**:
-- New entry "clearing a path" is NOT live
-- Sanity Studio was restarted but deployment was interrupted
-
----
-
-## What Needs to Happen Next
-
-### Immediate Next Steps
-
-1. **Verify Entry in Sanity Studio**
-   - Open http://localhost:3333 (you'll need to restart: `cd ~/Projects/nextjs-blog/sanity-studio && npm run dev`)
-   - Find "clearing a path" entry
-   - Ensure these fields are filled:
-     - ✓ **Title**: "clearing a path"
-     - ✓ **Slug**: Click "Generate" button → should create "clearing-a-path"
-     - ✓ **Published At**: Should have a date (Nov 22, 2025)
-     - ✓ **Body**: Your journal content
-     - ✓ **Private**: Make sure this is set to `false` (unchecked) so it appears publicly
-   - Click **Publish**
-
-2. **Deploy to Vercel**
-   ```bash
-   cd ~/Projects/nextjs-blog
-   npx vercel --prod
-   ```
-   Then alias it:
-   ```bash
-   npx vercel alias [deployment-url] suburbandadmode.com
-   ```
-
-3. **Verify It's Live**
-   - Visit https://suburbandadmode.com/journal
-   - Should see "clearing a path" at the top
-
-### Longer-Term Improvements Needed
-
-#### 1. Fix the Private Field Default
-**Problem**: Journal entries default to `private: true`, which might be preventing them from showing up.
-
-**Check the Query**: In `src/lib/sanity.ts` line 32, the query is:
-```groq
-*[_type == "journalEntry" && defined(slug) && defined(publishedAt)]
+### Content Flow
+```
+Sanity Studio (localhost:3333)
+    ↓ [Publish]
+Sanity Cloud (content stored)
+    ↓ [ISR revalidates every 60s]
+Live Website (suburbandadmode.com)
 ```
 
-Does this need to also filter `&& private != true`?
-
-**Action**: Decide if you want:
-- **Option A**: Keep private field, update query to exclude private entries
-- **Option B**: Remove private field since this is a personal blog
-- **Option C**: Default private to `false` instead of `true`
-
-#### 2. Set Up Automatic Deployments
-**Problem**: Every time you publish a Sanity entry, you need to manually deploy to Vercel.
-
-**Solution**: Set up a Sanity webhook to trigger Vercel deployments
-- Sanity Dashboard → API → Webhooks
-- Add webhook: `https://api.vercel.com/v1/integrations/deploy/[YOUR_DEPLOY_HOOK]`
-- Create deploy hook in Vercel: Project Settings → Git → Deploy Hooks
-
-#### 3. Consider Migration of Existing Entries
-**Problem**: Old journal entries might have the old schema (`date`, `content`) instead of new schema (`publishedAt`, `body`).
-
-**Action**: Check if old entries still work. If not, may need to:
-- Manually update old entries in Sanity Studio, OR
-- Write a migration script to update field names in Sanity
+### Code Deployment
+```
+Local Changes
+    ↓ [git push]
+GitHub (therapy-rgb/nextjs-blog)
+    ↓ [auto-deploy]
+Vercel
+    ↓
+Live Website (suburbandadmode.com)
+```
 
 ---
 
-## Project Structure Reference
+## Journal Entry Schema
+
+### Required Fields
+- **Title**: Entry title (max 100 chars)
+- **Slug**: Auto-generates from title
+- **Published At**: Date/time (auto-fills with current time)
+- **Body**: Rich text content (supports images, code, links, etc.)
+
+### Optional Fields
+- **Excerpt**: Preview text for listing page
+- **Tags**: Array of string tags
+- **Private**: Boolean (defaults to `false`/unchecked = public)
+
+### Important Notes
+- **Private field**: Entries with `private: true` are filtered out by queries and won't appear on the website
+- **Slug generation**: Click "Generate" button next to slug field to auto-create from title
+- **Mood field**: Removed as of Nov 26, 2025
+
+---
+
+## How Automatic Updates Work
+
+### Content Updates (No Deploy Needed)
+The journal page uses **ISR (Incremental Static Regeneration)**:
+- File: `src/app/journal/page.tsx`
+- Setting: `export const revalidate = 60`
+- Behavior: Page checks for new content every 60 seconds
+- Result: New Sanity entries appear automatically within 1 minute
+
+### Code Updates (Auto-Deploy)
+- Push to GitHub → Vercel automatically deploys
+- Typical deploy time: 2-3 minutes
+- No manual intervention needed
+
+---
+
+## Project Structure
 
 ```
 nextjs-blog/
 ├── src/
 │   ├── app/
-│   │   ├── journal/page.tsx          # Journal listing page
-│   │   ├── posts/[slug]/page.tsx     # Individual post page
-│   │   └── globals.css               # Global styles (paragraph spacing)
+│   │   ├── journal/page.tsx          # Journal listing (ISR: 60s)
+│   │   ├── posts/[slug]/page.tsx     # Individual entries (ISR: 3600s)
+│   │   └── globals.css               # Global styles
 │   ├── components/
-│   │   └── PortableText.tsx          # Renders Sanity content
+│   │   └── PortableText.tsx          # Sanity rich text renderer
 │   └── lib/
-│       └── sanity.ts                 # Sanity queries & client config
+│       └── sanity.ts                 # Queries & client config
 ├── sanity-studio/
 │   ├── schemaTypes/
-│   │   └── journalEntry.ts           # Journal entry schema (MODIFIED)
-│   ├── sanity.config.ts              # Sanity Studio config
-│   └── package.json                  # Run "npm run dev" to start
-└── tailwind.config.ts                # Tailwind config (typography)
+│   │   ├── journalEntry.ts           # Journal schema
+│   │   ├── blockContent.ts           # Rich text config
+│   │   └── index.ts                  # Schema exports
+│   ├── structure.ts                  # Studio sidebar config
+│   └── sanity.config.ts              # Sanity configuration
+└── Documentation/
+    ├── START_HERE.md                 # This file
+    ├── JOURNAL_ENTRIES.md            # Detailed journal guide
+    └── README.md                     # Project overview
 ```
 
 ---
 
-## Quick Commands Reference
+## Key Files & Their Purpose
 
-### Start Sanity Studio (for writing entries)
+### Frontend (Next.js)
+- **`src/lib/sanity.ts`**:
+  - Sanity client configuration
+  - GROQ queries for fetching entries
+  - Filters out private entries: `private != true`
+
+- **`src/app/journal/page.tsx`**:
+  - Lists all journal entries
+  - Revalidates every 60 seconds
+  - Route: `/journal`
+
+- **`src/app/posts/[slug]/page.tsx`**:
+  - Individual journal entry display
+  - Revalidates every 3600 seconds (1 hour)
+  - Route: `/posts/[slug]`
+
+### Backend (Sanity)
+- **`sanity-studio/schemaTypes/journalEntry.ts`**:
+  - Defines journal entry structure
+  - Fields: title, slug, publishedAt, excerpt, body, tags, private
+
+- **`sanity-studio/structure.ts`**:
+  - Configures Sanity Studio sidebar
+  - Orders entries by `publishedAt` (newest first)
+
+---
+
+## Recent Changes (Nov 26, 2025)
+
+### Fixed Issues
+1. ✅ **Structure.ts ordering**: Changed from `'date'` to `'publishedAt'`
+2. ✅ **Private field filtering**: Added `private != true` to GROQ queries
+3. ✅ **Private field default**: Changed from `true` to `false`
+4. ✅ **Removed mood field**: Simplified schema
+
+### Result
+- Sanity Studio loads without errors
+- Journal entries appear correctly
+- Private entries are properly filtered
+- Automatic content updates working via ISR
+
+---
+
+## Common Commands
+
+### Development
 ```bash
-cd ~/Projects/nextjs-blog/sanity-studio
+# Start Sanity Studio
+cd sanity-studio && npm run dev
+
+# Start Next.js locally
 npm run dev
-# Opens at http://localhost:3333
+
+# Run linter
+npm run lint
+
+# Build for production
+npm run build
 ```
 
-### Deploy to Production
+### Deployment
 ```bash
-cd ~/Projects/nextjs-blog
+# Manual deploy (rarely needed)
 npx vercel --prod
-# Then alias to domain:
-npx vercel alias [deployment-url] suburbandadmode.com
+
+# Check recent deployments
+npx vercel ls
+
+# View deployment details
+npx vercel inspect [deployment-url]
 ```
 
-### Local Development
+### Git Operations
 ```bash
-cd ~/Projects/nextjs-blog
-npm run dev
-# Opens at http://localhost:3000
+# Check status
+git status
+
+# Commit changes
+git add .
+git commit -m "Your message"
+
+# Push to GitHub (triggers auto-deploy)
+git push
 ```
 
 ---
 
-## Questions to Answer Next Session
+## Troubleshooting
 
-1. **Should the "private" field default to false?** Currently defaults to `true` which might be why entries don't show up.
+### Journal Entry Not Appearing
 
-2. **Do we need to filter out private entries in the query?** The current query doesn't check the `private` field.
+1. **Check Private Field**
+   - Open entry in Sanity Studio
+   - Verify "Private" is unchecked (false)
 
-3. **Should we set up automatic deployments via webhook?** This would eliminate manual deployment steps.
+2. **Check Required Fields**
+   - Title: ✓
+   - Slug: ✓ (must be generated)
+   - Published At: ✓ (must have date)
+   - Body: ✓ (must have content)
 
-4. **Do old journal entries need migration?** Check if entries created before schema changes still work.
+3. **Wait for Revalidation**
+   - ISR revalidates every 60 seconds
+   - Wait 1-2 minutes after publishing
+   - Hard refresh browser (Cmd+Shift+R)
+
+4. **Check Query**
+   - Query filters: `defined(slug) && defined(publishedAt) && private != true`
+   - Make sure all conditions are met
+
+### Sanity Studio Errors
+
+1. **"Could not fetch list items"**
+   - Check `structure.ts` ordering field matches schema
+   - Should be `publishedAt`, not `date`
+
+2. **Schema Validation Errors**
+   - Run: `npx sanity schema validate`
+   - Check for field name mismatches
+
+3. **Hot Reload Not Working**
+   - Restart studio: `npm run dev`
+   - Check for syntax errors in schema files
 
 ---
 
-## Files Modified in This Session
+## Environment Variables
 
-1. `src/app/globals.css` - Added paragraph spacing
-2. `src/components/PortableText.tsx` - Removed duplicate wrapper
-3. `tailwind.config.ts` - Added typography config
-4. `sanity-studio/schemaTypes/journalEntry.ts` - **Major schema changes**
+Located in `.env.local`:
+```bash
+NEXT_PUBLIC_SANITY_PROJECT_ID=4qp7h589
+NEXT_PUBLIC_SANITY_DATASET=production
+```
 
----
-
-## Verification Checklist for "clearing a path"
-
-When you resume:
-- [ ] Sanity Studio running at localhost:3333
-- [ ] Entry has slug: "clearing-a-path"
-- [ ] Entry has publishedAt date: Nov 22, 2025
-- [ ] Entry has body content
-- [ ] **Entry has private: false (IMPORTANT!)**
-- [ ] Entry is published (not draft)
-- [ ] Deployed to Vercel
-- [ ] Aliased to suburbandadmode.com
-- [ ] Visible at https://suburbandadmode.com/journal
+Also configured in Vercel dashboard for all environments (Development, Preview, Production).
 
 ---
 
-**Good luck! Pick up from "Immediate Next Steps" above.**
+## Live URLs
+
+- **Production Site**: https://suburbandadmode.com
+- **Journal List**: https://suburbandadmode.com/journal
+- **Individual Entry**: https://suburbandadmode.com/posts/[slug]
+- **Sanity Studio (Local)**: http://localhost:3333/
+- **GitHub Repository**: https://github.com/therapy-rgb/nextjs-blog
+
+---
+
+## For Future Sessions
+
+When returning to this project:
+1. Read this file first for current status
+2. Start Sanity Studio if writing content
+3. Check JOURNAL_ENTRIES.md for detailed workflow
+4. All systems are working - no setup needed!
+
+**Current Status**: All issues resolved. System is production-ready and functioning as expected.
