@@ -14,6 +14,7 @@ export default function LaFamilia() {
     'IMG_2772.jpg',
     'IMG_2773.jpg',
     'IMG_2775.jpg',
+    'IMG_2902.jpg',
     'IMG_5073.jpg',
     'IMG_5075.jpg',
     'IMG_5149.jpg',
@@ -25,7 +26,9 @@ export default function LaFamilia() {
     'IMG_5312.jpg',
     'IMG_5478.jpg',
     'IMG_5489.jpg',
-    'IMG_5495.jpg'
+    'IMG_5495.jpg',
+    'IMG_5668.jpg',
+    'travel babu.jpg'
   ]
 
   return (
