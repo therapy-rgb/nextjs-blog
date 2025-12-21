@@ -5,9 +5,6 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  eslint: {
-    dirs: ['src'],
-  },
   images: {
     remotePatterns: [
       {
