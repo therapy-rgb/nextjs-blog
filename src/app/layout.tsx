@@ -69,6 +69,21 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable}`}>
       <head>
+        {/* Preload custom fonts for better LCP and reduced CLS */}
+        <link
+          rel="preload"
+          href="/fonts/cooper_medium.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/cooper_bold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         {/* Explicit favicon links for aggressive mobile cache busting */}
         <link rel="icon" type="image/x-icon" href={`/favicon.ico?${FAVICON_VERSION}`} />
         <link rel="icon" type="image/png" sizes="16x16" href={`/favicon-16x16.png?${FAVICON_VERSION}`} />

@@ -48,6 +48,8 @@ export default function LaFamilia() {
                 alt={`Family photo ${index + 1}`}
                 width={400}
                 height={300}
+                loading={index < 2 ? "eager" : "lazy"}
+                sizes="(max-width: 768px) 100vw, 400px"
                 className="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
               />
             </div>

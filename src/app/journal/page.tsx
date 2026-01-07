@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { client, postsQuery, defaultAuthor } from "@/lib/sanity";
 import { Post } from "@/types/sanity";
 
-export const revalidate = 60; // Revalidate every minute
+export const revalidate = 3600; // Revalidate every hour (sufficient for personal blog)
 
 async function getPosts(): Promise<Post[]> {
   try {

@@ -16,6 +16,16 @@ interface PostPageProps {
 
 export const revalidate = 3600 // Revalidate every hour
 
+// Pre-generate all existing posts at build time for better LCP
+export async function generateStaticParams() {
+  const posts = await client.fetch(
+    `*[_type == "journalEntry" && defined(slug) && private != true]{ "slug": slug.current }`
+  )
+  return posts.map((post: { slug: string }) => ({
+    slug: post.slug,
+  }))
+}
+
 async function getPost(slug: string): Promise<Post | null> {
   try {
     const entry = await client.fetch(postQuery, { slug })
@@ -126,6 +136,7 @@ export default async function PostPage({ params }: PostPageProps) {
               src={urlFor(post.mainImage).width(1200).height(600).url()}
               alt={post.mainImage.alt || post.title}
               fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
               className="object-cover"
               priority
             />

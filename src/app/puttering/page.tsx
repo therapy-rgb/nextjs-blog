@@ -198,10 +198,12 @@ export default function Puttering() {
                 width={800}
                 height={600}
                 className="mx-auto rounded-lg w-full max-w-4xl"
-                priority
-                quality={95}
-                style={{ 
-                  width: '100%', 
+                priority={currentPage === 0}
+                loading={currentPage === 0 ? "eager" : "lazy"}
+                quality={85}
+                sizes="(max-width: 768px) 100vw, 800px"
+                style={{
+                  width: '100%',
                   height: 'auto',
                   maxHeight: '70vh',
                   objectFit: 'contain'
