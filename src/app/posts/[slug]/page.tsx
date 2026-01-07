@@ -88,7 +88,7 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound()
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yourdomain.com'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://suburbandadmode.com'
   
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -103,7 +103,7 @@ export default async function PostPage({ params }: PostPageProps) {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'My Personal Blog',
+      name: 'Suburban Dad Mode',
       logo: {
         '@type': 'ImageObject',
         url: `${baseUrl}/logo.png`,
