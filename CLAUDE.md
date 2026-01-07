@@ -72,3 +72,52 @@ These must be set on Vercel for production.
 - Never hardcode credentials in source files
 - Escape user/CMS content in `dangerouslySetInnerHTML`
 - Keep `.env*.local` files gitignored
+
+## Deployment
+
+### Vercel (Production)
+- **Project**: `nextjs-blog` (suburbandadmode.com)
+- **Auto-deploys** from `main` branch on push
+- **Preview deployments** created for pull requests
+- Environment variables must be configured in Vercel dashboard
+
+```bash
+# Manual deployment (if needed)
+vercel --prod
+```
+
+### Sanity Studio
+```bash
+cd sanity-studio && npx sanity deploy
+```
+
+## Pre-Push Checklist
+
+1. Run lint: `npm run lint`
+2. Test build: `npm run build`
+3. Check for console errors in dev: `npm run dev`
+4. Verify environment variables are not hardcoded
+
+## Common Issues
+
+### Build Failures
+- **Missing env vars**: Ensure `NEXT_PUBLIC_SANITY_*` vars are set in Vercel
+- **Sanity query errors**: Check GROQ syntax in `src/lib/sanity.ts`
+- **Type errors**: Run `npm run build` locally first to catch issues
+- **Turbopack issues**: Try `next build` without `--turbopack` flag if dev works but build fails
+
+### Content Not Updating
+- ISR revalidates: journal pages every 60s, posts every 1hr
+- For immediate updates, redeploy or use Vercel's "Redeploy" button
+- Check `revalidate` values in page components if timing seems off
+
+### Sanity Studio Issues
+- Studio is a separate app in `sanity-studio/` directory
+- Run `cd sanity-studio && npm install` if dependencies are missing
+- Schema changes require Studio restart
+
+## Repository
+
+- **GitHub**: https://github.com/therapy-rgb/nextjs-blog
+- **Live site**: suburbandadmode.com
+- **Branch strategy**: Direct commits to `main` for this project
