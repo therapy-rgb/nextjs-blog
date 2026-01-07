@@ -2,9 +2,12 @@ import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 import { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
-// Hard-coded values - environment variables not working on Vercel
-const projectId = '4qp7h589'
-const dataset = 'production'
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
+
+if (!projectId || !dataset) {
+  throw new Error('Missing Sanity credentials: NEXT_PUBLIC_SANITY_PROJECT_ID and NEXT_PUBLIC_SANITY_DATASET must be set')
+}
 
 export const client = createClient({
   projectId,
