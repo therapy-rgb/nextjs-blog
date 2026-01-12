@@ -5,7 +5,7 @@ export default async function Home() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="text-center">
         <Image
-          src="/image.png"
+          src="/image.webp"
           alt="Suburban Dad Mode"
           width={600}
           height={600}

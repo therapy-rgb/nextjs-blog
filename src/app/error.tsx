@@ -10,7 +10,11 @@ export default function Error({
   reset: () => void
 }) {
   useEffect(() => {
-    console.error(error)
+    // Only log errors in development to prevent information disclosure
+    if (process.env.NODE_ENV === 'development') {
+      console.error(error)
+    }
+    // In production, consider sending to an error tracking service like Sentry
   }, [error])
 
   return (

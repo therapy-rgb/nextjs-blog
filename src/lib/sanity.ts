@@ -12,7 +12,7 @@ if (!projectId || !dataset) {
 export const client = createClient({
   projectId,
   dataset,
-  apiVersion: '2023-05-03',
+  apiVersion: '2025-01-12',
   useCdn: process.env.NODE_ENV === 'production',
 })
 
@@ -32,6 +32,18 @@ export const defaultAuthor = {
 }
 
 // GROQ queries for journal entries
+
+// Lightweight query for listing pages - excludes full body content
+export const postsListQuery = `*[_type == "journalEntry" && defined(slug) && defined(publishedAt) && private != true] | order(publishedAt desc) {
+  _id,
+  title,
+  slug,
+  publishedAt,
+  excerpt,
+  "mainImage": body[_type == "image"][0]
+}`
+
+// Full query for backwards compatibility (deprecated - use postsListQuery for listings)
 export const postsQuery = `*[_type == "journalEntry" && defined(slug) && defined(publishedAt) && private != true] | order(publishedAt desc) {
   _id,
   title,
@@ -42,6 +54,7 @@ export const postsQuery = `*[_type == "journalEntry" && defined(slug) && defined
   "mainImage": body[_type == "image"][0]
 }`
 
+// Full query for individual post detail pages
 export const postQuery = `*[_type == "journalEntry" && slug.current == $slug && private != true][0] {
   _id,
   title,
