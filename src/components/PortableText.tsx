@@ -2,23 +2,15 @@ import { PortableText as BasePortableText, PortableTextBlock } from '@portablete
 import Image from 'next/image'
 import { urlFor } from '@/lib/sanity'
 import { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import { SanityImage } from '@/types/sanity'
 
 interface PortableTextProps {
   content: PortableTextBlock[]
 }
 
-interface ImageValue {
-  _type: 'image'
-  asset: {
-    _ref: string
-    _type: 'reference'
-  }
-  alt?: string
-}
-
 const components = {
   types: {
-    image: ({ value }: { value: ImageValue }) => {
+    image: ({ value }: { value: SanityImage }) => {
       if (!value?.asset?._ref) {
         return null
       }
@@ -33,7 +25,7 @@ const components = {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
           />
           {value.alt && (
-            <figcaption className="text-center text-sm text-gray-500 mt-2">
+            <figcaption className="text-center text-sm text-sdm-text-light mt-2">
               {value.alt}
             </figcaption>
           )}

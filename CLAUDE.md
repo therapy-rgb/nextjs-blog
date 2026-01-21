@@ -30,7 +30,7 @@ cd sanity-studio && npm run dev  # localhost:3333
 ```
 src/
 ├── app/           # Next.js App Router pages
-│   ├── journal/   # Journal listing (ISR: 60s)
+│   ├── journal/   # Journal listing (ISR: 1hr)
 │   ├── posts/[slug]/  # Individual posts (ISR: 1hr)
 │   └── ...
 ├── components/    # React components
@@ -107,7 +107,7 @@ cd sanity-studio && npx sanity deploy
 - **Turbopack issues**: Try `next build` without `--turbopack` flag if dev works but build fails
 
 ### Content Not Updating
-- ISR revalidates: journal pages every 60s, posts every 1hr
+- ISR revalidates: journal pages every 1hr, posts every 1hr
 - For immediate updates, redeploy or use Vercel's "Redeploy" button
 - Check `revalidate` values in page components if timing seems off
 

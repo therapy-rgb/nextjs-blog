@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
 import { Post } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
+import AuthorAvatar from './AuthorAvatar'
+import ArrowLink from './ArrowLink'
 
 interface PostCardProps {
   post: Post
@@ -25,63 +27,39 @@ export default function PostCard({ post }: PostCardProps) {
           </div>
         </Link>
       )}
-      
+
       <div className="p-6">
         <div className="flex items-center gap-2 text-sm text-sdm-text-light mb-4">
-          {post.author?.image && (
-            <div className="relative w-8 h-8 rounded-full overflow-hidden">
-              <Image
-                src={urlFor(post.author.image).width(32).height(32).url()}
-                alt={post.author.name}
-                fill
-                sizes="32px"
-                className="object-cover"
-              />
-            </div>
-          )}
-          {!post.author?.image && (
-            <div className="relative w-8 h-8 rounded-full overflow-hidden bg-sdm-primary/20 flex items-center justify-center">
-              <span className="text-sdm-primary font-bold text-sm">
-                {post.author?.name?.charAt(0) || 'M'}
-              </span>
-            </div>
-          )}
+          <AuthorAvatar
+            name={post.author?.name || 'Marcus Berley'}
+            image={post.author?.image}
+            size={32}
+          />
           <span className="font-cooper">{post.author?.name || 'Marcus Berley'}</span>
           <span>•</span>
           <time dateTime={post.publishedAt} className="font-cooper">
             {formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true })}
           </time>
         </div>
-        
+
         <h2 className="font-display text-xl sm:text-2xl font-bold text-sdm-text mb-3 leading-tight">
-          <Link 
+          <Link
             href={`/posts/${post.slug.current}`}
             className="hover:text-sdm-primary transition-colors duration-200"
           >
             {post.title}
           </Link>
         </h2>
-        
+
         {post.excerpt && (
           <p className="text-sdm-text-light font-cooper leading-relaxed mb-6">
             {post.excerpt}
           </p>
         )}
-        
-        <Link 
-          href={`/posts/${post.slug.current}`}
-          className="inline-flex items-center gap-2 text-sdm-primary font-cooper font-semibold hover:text-sdm-accent transition-colors duration-200 group"
-        >
+
+        <ArrowLink href={`/posts/${post.slug.current}`}>
           Read more
-          <svg 
-            className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </Link>
+        </ArrowLink>
       </div>
     </article>
   )

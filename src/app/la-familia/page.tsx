@@ -1,6 +1,8 @@
 'use client'
 
 import Image from 'next/image'
+import PageContainer from '@/components/PageContainer'
+import ContentCard from '@/components/ContentCard'
 
 export default function LaFamilia() {
   const photos = [
@@ -32,14 +34,14 @@ export default function LaFamilia() {
   ]
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <PageContainer maxWidth="6xl">
       <div className="mb-12 text-center">
         <h1 className="font-display text-4xl sm:text-5xl font-bold text-sdm-text mb-6">
           La Familia
         </h1>
       </div>
-      
-      <div className="bg-sdm-card rounded-lg p-6 sm:p-8 shadow-sm border border-warm-gray-200">
+
+      <ContentCard>
         <div className="flex flex-col gap-4 sm:gap-6">
           {photos.map((photo, index) => (
             <div key={index} className="w-full max-w-md mx-auto rounded-lg overflow-hidden bg-warm-gray-100">
@@ -56,7 +58,7 @@ export default function LaFamilia() {
             </div>
           ))}
         </div>
-      </div>
-    </div>
+      </ContentCard>
+    </PageContainer>
   )
 }

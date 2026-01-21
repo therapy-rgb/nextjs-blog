@@ -1,16 +1,18 @@
 import Link from 'next/link'
 import { format } from 'date-fns'
-import { client, postsQuery, defaultAuthor } from "@/lib/sanity";
-import { Post } from "@/types/sanity";
+import { client, postsListQuery, defaultAuthor } from "@/lib/sanity";
+import { Post, PostListItem } from "@/types/sanity";
+import PageContainer from "@/components/PageContainer";
 
 export const revalidate = 3600; // Revalidate every hour (sufficient for personal blog)
 
 async function getPosts(): Promise<Post[]> {
   try {
-    const entries = await client.fetch(postsQuery);
+    const entries: PostListItem[] = await client.fetch(postsListQuery);
     // Add default author to each journal entry
-    return entries.map((entry: any) => ({
+    return entries.map((entry) => ({
       ...entry,
+      body: [], // Body not fetched for list view
       author: defaultAuthor,
       categories: []
     }));
@@ -24,7 +26,7 @@ export default async function Journal() {
   const posts = await getPosts();
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <PageContainer maxWidth="3xl" className="py-20">
       <div className="mb-16">
         <h1 className="font-display text-5xl font-bold text-sdm-text mb-2">
           Journal
@@ -59,6 +61,6 @@ export default async function Journal() {
           <p className="text-sdm-text-light font-cooper text-lg">No entries yet.</p>
         </div>
       )}
-    </div>
+    </PageContainer>
   );
 }

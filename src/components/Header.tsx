@@ -3,20 +3,14 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
+import { navigation } from '@/lib/navigation'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const pathname = usePathname()
 
-  const navigation = [
-    { name: 'Home', href: '/' as const },
-    { name: 'La Familia', href: '/la-familia' as const },
-    { name: 'Puttering', href: '/puttering' as const },
-    { name: 'Journal', href: '/journal' as const },
-  ]
-
   return (
-    <header className="border-b border-warm-gray-200 shadow-sm" style={{backgroundColor: '#FFFFFF'}}>
+    <header className="border-b border-warm-gray-200 shadow-sm bg-sdm-card">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -52,7 +46,7 @@ export default function Header() {
             type="button"
             className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-sdm-text-light hover:text-sdm-primary hover:bg-warm-gray-100 transition-colors duration-200"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-expanded="false"
+            aria-expanded={isMenuOpen}
           >
             <span className="sr-only">Open main menu</span>
             {/* Hamburger icon */}
@@ -61,6 +55,7 @@ export default function Header() {
               stroke="currentColor"
               fill="none"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
@@ -70,6 +65,7 @@ export default function Header() {
               stroke="currentColor"
               fill="none"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
             </svg>

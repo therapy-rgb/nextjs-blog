@@ -1,4 +1,7 @@
 import { Metadata } from 'next'
+import PageContainer from '@/components/PageContainer'
+import ContentCard from '@/components/ContentCard'
+import ArrowLink from '@/components/ArrowLink'
 
 export const metadata: Metadata = {
   title: 'About | Suburban Dad Mode',
@@ -7,8 +10,8 @@ export const metadata: Metadata = {
 
 export default function About() {
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div className="bg-sdm-card rounded-lg p-8 sm:p-12 shadow-sm border border-warm-gray-200">
+    <PageContainer>
+      <ContentCard padding="lg">
         <h1 className="font-display text-4xl sm:text-5xl font-bold text-sdm-text mb-8">
           About the Suburban Dad
         </h1>
@@ -74,23 +77,12 @@ export default function About() {
               I love hearing from fellow parents and suburban adventurers. Whether you want to share 
               your own story, ask a question, or just say hello, I&apos;d love to hear from you.
             </p>
-            <a 
-              href="/contact" 
-              className="inline-flex items-center gap-2 text-sdm-primary font-semibold hover:text-sdm-accent transition-colors duration-200 group"
-            >
+            <ArrowLink href="/contact">
               Get in touch
-              <svg 
-                className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
+            </ArrowLink>
           </div>
         </div>
-      </div>
-    </div>
+      </ContentCard>
+    </PageContainer>
   )
 }

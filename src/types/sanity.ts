@@ -30,6 +30,7 @@ export interface Category {
 
 export interface Post {
   _id: string
+  _updatedAt?: string
   title: string
   slug: {
     current: string
@@ -40,6 +41,18 @@ export interface Post {
   body: PortableTextBlock[]
   author: Author
   categories?: Category[]
+}
+
+/** Lightweight post type for list views - excludes full body content */
+export interface PostListItem {
+  _id: string
+  title: string
+  slug: {
+    current: string
+  }
+  publishedAt: string
+  excerpt?: string
+  mainImage?: SanityImage
 }
 
 export interface JournalEntry {

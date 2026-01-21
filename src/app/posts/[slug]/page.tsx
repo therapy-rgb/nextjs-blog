@@ -1,9 +1,11 @@
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { format } from 'date-fns'
+import { cache } from 'react'
 import { client, postQuery, defaultAuthor } from '@/lib/sanity'
 import { Post } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
+import { getBaseUrl } from '@/lib/env'
 import PortableText from '@/components/PortableText'
 import JsonLd from '@/components/JsonLd'
 import { Metadata } from 'next'
@@ -26,7 +28,8 @@ export async function generateStaticParams() {
   }))
 }
 
-async function getPost(slug: string): Promise<Post | null> {
+// Cache getPost to deduplicate calls between generateMetadata and page render
+const getPost = cache(async (slug: string): Promise<Post | null> => {
   try {
     const entry = await client.fetch(postQuery, { slug })
     if (!entry) return null
@@ -40,7 +43,7 @@ async function getPost(slug: string): Promise<Post | null> {
     console.error('Error fetching post:', error)
     return null
   }
-}
+})
 
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const { slug } = await params
@@ -88,7 +91,7 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound()
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://suburbandadmode.com'
+  const baseUrl = getBaseUrl()
   
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -120,12 +123,12 @@ export default async function PostPage({ params }: PostPageProps) {
       <JsonLd data={jsonLd} />
       <article className="container mx-auto px-4 py-8 max-w-4xl">
       <header className="mb-8">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-sdm-text mb-4">
           {post.title}
         </h1>
         
         <div className="mb-6">
-          <time dateTime={post.publishedAt} className="text-sm text-gray-600">
+          <time dateTime={post.publishedAt} className="text-sm text-sdm-text-light">
             {format(new Date(post.publishedAt), 'MM/dd/yyyy')}
           </time>
         </div>
@@ -149,13 +152,13 @@ export default async function PostPage({ params }: PostPageProps) {
       </div>
 
       {post.categories && post.categories.length > 0 && (
-        <div className="mt-8 pt-8 border-t border-gray-200">
-          <h3 className="text-sm font-semibold text-gray-900 mb-2">Categories</h3>
+        <div className="mt-8 pt-8 border-t border-warm-gray-200">
+          <h3 className="text-sm font-semibold text-sdm-text mb-2">Categories</h3>
           <div className="flex flex-wrap gap-2">
             {post.categories.map((category) => (
               <span
                 key={category._id}
-                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
+                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-warm-gray-100 text-sdm-text"
               >
                 {category.title}
               </span>
