@@ -45,16 +45,15 @@ export default function LaFamilia() {
         <div className="flex flex-col gap-4 sm:gap-6">
           {photos.map((photo, index) => (
             <div key={index} className="w-full max-w-md mx-auto rounded-lg overflow-hidden bg-warm-gray-100">
-              <div style={{ aspectRatio: '4/3', position: 'relative' }}>
-                <Image
-                  src={`/familia-photos/${photo.replace(/\.(jpg|jpeg)$/i, '.webp')}`}
-                  alt={`Family photo ${index + 1}`}
-                  fill
-                  loading={index < 2 ? "eager" : "lazy"}
-                  sizes="(max-width: 768px) 100vw, 400px"
-                  className="object-cover hover:scale-105 transition-transform duration-300"
-                />
-              </div>
+              <Image
+                src={`/familia-photos/${photo.replace(/\.(jpg|jpeg)$/i, '.webp')}`}
+                alt={`Family photo ${index + 1}`}
+                width={400}
+                height={0}
+                loading={index < 2 ? "eager" : "lazy"}
+                sizes="(max-width: 768px) 100vw, 400px"
+                className="w-full h-auto hover:scale-105 transition-transform duration-300"
+              />
             </div>
           ))}
         </div>

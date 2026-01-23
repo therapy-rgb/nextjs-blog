@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-left">
           <p className="text-sdm-text font-cooper text-base sm:text-lg italic text-center">
-            Never half-ass two things, whole-ass one thing. - Ron Swanson
+            "Never half-ass two things, whole-ass one thing." Ron Swanson
           </p>
         </div>
       </div>
