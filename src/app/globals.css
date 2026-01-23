@@ -49,9 +49,11 @@
   background: #5511F8;
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
+/* Smooth scrolling - respects reduced motion preference */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 /* Selection colors */
@@ -78,4 +80,16 @@ html {
 
 .prose p:last-child {
   margin-bottom: 0;
+}
+
+/* Reduced motion support for users who prefer minimal animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

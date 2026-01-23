@@ -16,7 +16,50 @@ const nextConfig: NextConfig = {
     ],
   },
   async headers() {
+    // Security headers applied to all routes
+    const securityHeaders = [
+      {
+        key: 'Content-Security-Policy',
+        value: [
+          "default-src 'self'",
+          "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+          "style-src 'self' 'unsafe-inline'",
+          "img-src 'self' data: blob: https://cdn.sanity.io",
+          "font-src 'self' data:",
+          "connect-src 'self' https://*.sanity.io",
+          "frame-ancestors 'none'",
+          "base-uri 'self'",
+          "form-action 'self'",
+        ].join('; '),
+      },
+      {
+        key: 'X-Frame-Options',
+        value: 'DENY',
+      },
+      {
+        key: 'X-Content-Type-Options',
+        value: 'nosniff',
+      },
+      {
+        key: 'Strict-Transport-Security',
+        value: 'max-age=31536000; includeSubDomains; preload',
+      },
+      {
+        key: 'Referrer-Policy',
+        value: 'strict-origin-when-cross-origin',
+      },
+      {
+        key: 'Permissions-Policy',
+        value: 'camera=(), microphone=(), geolocation=()',
+      },
+    ];
+
     return [
+      // Apply security headers to all routes
+      {
+        source: '/:path*',
+        headers: securityHeaders,
+      },
       {
         source: '/manifest.json',
         headers: [

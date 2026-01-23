@@ -58,6 +58,9 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   return {
     title: post.title,
     description: post.excerpt || `Read ${post.title} by ${post.author.name}`,
+    alternates: {
+      canonical: `https://suburbandadmode.com/posts/${post.slug.current}`,
+    },
     openGraph: {
       title: post.title,
       description: post.excerpt || `Read ${post.title} by ${post.author.name}`,
@@ -118,9 +121,35 @@ export default async function PostPage({ params }: PostPageProps) {
     },
   }
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://suburbandadmode.com',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Journal',
+        item: 'https://suburbandadmode.com/journal',
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: post.title,
+        item: `https://suburbandadmode.com/posts/${post.slug.current}`,
+      },
+    ],
+  }
+
   return (
     <>
       <JsonLd data={jsonLd} />
+      <JsonLd data={breadcrumbSchema} />
       <article className="container mx-auto px-4 py-8 max-w-4xl">
       <header className="mb-8">
         <h1 className="text-4xl md:text-5xl font-bold text-sdm-text mb-4">

@@ -3,6 +3,16 @@ import { format } from 'date-fns'
 import { client, postsListQuery, defaultAuthor } from "@/lib/sanity";
 import { Post, PostListItem } from "@/types/sanity";
 import PageContainer from "@/components/PageContainer";
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Journal | Suburban Dad Mode',
+  description: 'Read stories about life, parenting, and everything in between from the suburbs.',
+  openGraph: {
+    title: 'Journal | Suburban Dad Mode',
+    description: 'Read stories about life, parenting, and everything in between from the suburbs.',
+  },
+}
 
 export const revalidate = 3600; // Revalidate every hour (sufficient for personal blog)
 

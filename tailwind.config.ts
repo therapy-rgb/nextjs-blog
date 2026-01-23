@@ -17,7 +17,7 @@ const config: Config = {
           accent: '#5511F8',     // Deeper purple accent
           background: '#FFF1E6', // Financial Times pink background
           text: '#0F172A',       // Dark navy text
-          'text-light': '#64748B', // Light gray text
+          'text-light': '#4B5563', // Light gray text (contrast ratio 5.8:1)
           'card': '#FFFFFF',     // White card background
         },
         // Custom grays to match the aesthetic

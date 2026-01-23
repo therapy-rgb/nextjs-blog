@@ -4,27 +4,28 @@ import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
 
 // Poem configuration - easily add new poems here
+// Using WebP format for better compression (original PNGs kept as fallback)
 const poems = [
   {
-    src: "/quick-sheets.png",
+    src: "/quick-sheets.webp",
     alt: "Quick Sheets - Page 1",
     title: "Quick Sheets",
     description: "First page of Quick Sheets"
   },
   {
-    src: "/quick-sheets-2.png",
+    src: "/quick-sheets-2.webp",
     alt: "Quick Sheets - Page 2",
     title: "Quick Sheets",
     description: "Second page of Quick Sheets"
   },
   {
-    src: "/poems-page-3.png",
+    src: "/poems-page-3.webp",
     alt: "Poems - Page 3",
     title: "Poems",
     description: "Third page of Poems"
   },
   {
-    src: "/poems-page-4.png",
+    src: "/poems-page-4.webp",
     alt: "Poems - Page 4",
     title: "Poems",
     description: "Fourth page of Poems"
@@ -236,12 +237,13 @@ export default function Puttering() {
                     key={index}
                     onClick={() => goToPage(index)}
                     disabled={isTransitioning}
-                    className={`${isMobile ? 'w-4 h-4' : 'w-3 h-3'} rounded-full transition-all duration-200 ${
-                      index === currentPage 
-                        ? 'bg-sdm-primary scale-125' 
+                    className={`w-6 h-6 sm:w-4 sm:h-4 rounded-full transition-all duration-200 ${
+                      index === currentPage
+                        ? 'bg-sdm-primary scale-125'
                         : 'bg-warm-gray-300 hover:bg-warm-gray-400 active:bg-warm-gray-500'
                     } disabled:cursor-not-allowed`}
                     aria-label={`Go to page ${index + 1}`}
+                    aria-current={index === currentPage ? 'true' : undefined}
                   />
                 ))}
               </div>

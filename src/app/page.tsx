@@ -3,6 +3,7 @@ import Image from "next/image";
 export default async function Home() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <h1 className="sr-only">Suburban Dad Mode - A Blog About Life in the Suburbs</h1>
       <div className="text-center">
         <Image
           src="/image.webp"

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import JsonLd from "@/components/JsonLd";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -60,6 +61,13 @@ export const viewport = {
   colorScheme: "light",
 };
 
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Suburban Dad Mode',
+  url: 'https://suburbandadmode.com',
+  description: 'A personal blog about life, parenting, and everything in between from the suburbs.',
+};
 
 export default function RootLayout({
   children,
@@ -69,6 +77,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable}`}>
       <head>
+        <JsonLd data={organizationSchema} />
         {/* Preload custom fonts for better LCP and reduced CLS */}
         <link
           rel="preload"
@@ -95,7 +104,7 @@ export default function RootLayout({
       </head>
       <body className="font-cooper antialiased min-h-screen flex flex-col text-sdm-text" style={{backgroundColor: '#FFF1E6'}}>
         <Header />
-        <main className="flex-grow">
+        <main id="main-content" className="flex-grow">
           {children}
         </main>
         <Footer />
