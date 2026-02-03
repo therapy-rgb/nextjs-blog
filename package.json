@@ -16,7 +16,7 @@
     "@sanity/vision": "^4.10.1",
     "@tailwindcss/typography": "^0.5.16",
     "date-fns": "^4.1.0",
-    "next": "^16.1.0",
+    "next": "^16.1.6",
     "next-sanity": "^10.1.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
@@ -24,12 +24,17 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@next/eslint-plugin-next": "^16.1.6",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
     "eslint": "^9",
-    "eslint-config-next": "15.5.2",
+    "eslint-config-next": "^16.1.6",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
