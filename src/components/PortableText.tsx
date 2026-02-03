@@ -1,7 +1,7 @@
 import { PortableText as BasePortableText, PortableTextBlock } from '@portabletext/react'
 import Image from 'next/image'
 import { urlFor } from '@/lib/sanity'
-import { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import { SanityImageSource } from '@sanity/image-url'
 import { SanityImage } from '@/types/sanity'
 
 interface PortableTextProps {
