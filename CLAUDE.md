@@ -48,7 +48,16 @@ public/            # Static assets
 - `src/lib/sanity.ts` - Sanity client, all GROQ queries
 - `src/components/PortableText.tsx` - Sanity rich text renderer
 - `src/app/layout.tsx` - Root layout with Header/Footer
+- `src/components/Footer.tsx` - Footer with page-specific SVG line art
+- `src/app/puttering/page.tsx` - Poem viewer with dropdown selector
 - `sanity-studio/schemaTypes/` - Content schemas
+
+## Custom Fonts
+
+- **Cooper** - Main display/body font (`font-cooper`, `font-display`)
+- **TT Disruptors** - Handwritten font for poems on Puttering page
+
+Font files located in `public/fonts/`.
 
 ## Environment Variables
 

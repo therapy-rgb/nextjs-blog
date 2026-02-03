@@ -38,6 +38,7 @@ const config: Config = {
         'body': ['var(--font-inter)', 'system-ui', 'sans-serif'],
         'cooper': ['Cooper', 'serif'],
         'display': ['Cooper', 'serif'],
+        'disruptors': ['TT Disruptors', 'cursive'],
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         serif: ['Cooper', 'serif'],
       },

@@ -18,6 +18,15 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'TT Disruptors';
+  src: url('/fonts/TT_Disruptors_Regular.woff2') format('woff2'),
+       url('/fonts/TT_Disruptors_Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: #FFF1E6;
   --foreground: #0F172A;
