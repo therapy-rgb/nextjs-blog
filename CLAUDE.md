@@ -12,14 +12,20 @@ Personal blog at **suburbandadmode.com** - a Next.js 16 + Sanity CMS site deploy
 - **React 19** with TypeScript
 - **Tailwind CSS v4** for styling
 - **Sanity CMS** for content (headless)
+- **Sentry** for error tracking
+- **Upstash Redis** for rate limiting (API security)
+- **Vitest** + React Testing Library for tests
+- **focus-trap-react** for accessible mobile menu
 - **Vercel** for deployment
 
 ## Commands
 
 ```bash
-npm run dev      # Start dev server (Turbopack)
-npm run build    # Production build
-npm run lint     # ESLint on src/
+npm run dev        # Start dev server (Turbopack)
+npm run build      # Production build
+npm run lint       # ESLint on src/
+npm run test       # Run tests once (CI)
+npm run test:watch # Run tests in watch mode
 
 # Sanity Studio (separate app)
 cd sanity-studio && npm run dev  # localhost:3333
@@ -29,28 +35,62 @@ cd sanity-studio && npm run dev  # localhost:3333
 
 ```
 src/
-├── app/           # Next.js App Router pages
-│   ├── journal/   # Journal listing (ISR: 1hr)
-│   ├── posts/[slug]/  # Individual posts (ISR: 1hr)
+├── app/              # Next.js App Router pages
+│   ├── journal/      # Journal listing (ISR: 1hr)
+│   ├── posts/[slug]/ # Individual posts (ISR: 1hr)
+│   ├── global-error.tsx  # Sentry error boundary
 │   └── ...
-├── components/    # React components
+├── components/       # React components (organized by category)
+│   ├── layout/       # Header, Footer, PageContainer
+│   ├── ui/           # ArrowLink, ContentCard
+│   ├── content/      # PortableText, PostCard, AuthorAvatar
+│   ├── seo/          # JsonLd
+│   └── index.ts      # Root barrel export
+├── hooks/            # Custom React hooks
+│   └── useMobileMenu.ts
 ├── lib/
-│   └── sanity.ts  # Sanity client & GROQ queries
-└── types/
-    └── sanity.ts  # TypeScript types for Sanity data
+│   ├── sanity.ts     # Sanity client & GROQ queries
+│   ├── constants.ts  # Centralized site config, rate limits, origins
+│   ├── env.ts        # Environment variable validation
+│   ├── validation.ts # Input validation & sanitization (XSS prevention)
+│   ├── api-security.ts # Rate limiting, origin validation, honeypot, IP extraction
+│   ├── logging.ts    # Structured JSON logging
+│   └── navigation.ts # Navigation links
+├── types/
+│   └── sanity.ts     # TypeScript types for Sanity data
+└── __tests__/        # Vitest test files
+    ├── setup.ts
+    ├── validation.test.ts
+    └── env.test.ts
 
-sanity-studio/     # Separate Sanity Studio app
-public/            # Static assets
+sanity-studio/        # Separate Sanity Studio app
+public/               # Static assets
+sentry.*.config.ts    # Sentry configuration (client, server, edge)
+vitest.config.ts      # Test configuration
 ```
 
 ## Key Files
 
 - `src/lib/sanity.ts` - Sanity client, all GROQ queries
-- `src/components/PortableText.tsx` - Sanity rich text renderer
+- `src/lib/constants.ts` - All site-wide constants and configuration
+- `src/lib/env.ts` - Environment validation (runs at startup)
+- `src/lib/validation.ts` - Shared validation/sanitization utilities
+- `src/lib/api-security.ts` - Rate limiting, CSRF protection, bot detection
+- `src/components/content/PortableText.tsx` - Sanity rich text renderer
+- `src/components/layout/Header.tsx` - Header with focus-trap mobile menu
+- `src/hooks/useMobileMenu.ts` - Mobile menu hook (escape, scroll lock, route-close)
 - `src/app/layout.tsx` - Root layout with Header/Footer
-- `src/components/Footer.tsx` - Footer with page-specific SVG line art
-- `src/app/puttering/page.tsx` - Poem viewer with dropdown selector
-- `sanity-studio/schemaTypes/` - Content schemas
+- `src/components/layout/Footer.tsx` - Footer with page-specific SVG line art
+
+## Component Imports
+
+Components are organized by category. Always import from barrel exports:
+```ts
+import { Header, Footer, PageContainer } from '@/components/layout'
+import { ArrowLink, ContentCard } from '@/components/ui'
+import { PortableText, PostCard } from '@/components/content'
+import { JsonLd } from '@/components/seo'
+```
 
 ## Custom Fonts
 
@@ -67,7 +107,15 @@ NEXT_PUBLIC_SANITY_PROJECT_ID=<project-id>
 NEXT_PUBLIC_SANITY_DATASET=production
 ```
 
-These must be set on Vercel for production.
+Optional (recommended for production):
+```
+NEXT_PUBLIC_SENTRY_DSN=<sentry-dsn>
+SENTRY_DSN=<sentry-dsn>
+SENTRY_ORG=<org-slug>
+SENTRY_PROJECT=<project-slug>
+UPSTASH_REDIS_REST_URL=<redis-url>
+UPSTASH_REDIS_REST_TOKEN=<redis-token>
+```
 
 ## Conventions
 
@@ -75,12 +123,18 @@ These must be set on Vercel for production.
 - Sanity queries use parameterized GROQ (prevent injection)
 - ISR handles content updates automatically (no webhooks)
 - Private journal entries filtered with `private != true`
+- Import components from barrel exports, not direct file paths
+- Custom hooks live in `src/hooks/` with `'use client'` directive
+- All site constants belong in `src/lib/constants.ts`
 
 ## Security Notes
 
 - Never hardcode credentials in source files
 - Escape user/CMS content in `dangerouslySetInnerHTML`
+- Use `escapeHtml()` from `lib/validation.ts` for user input
 - Keep `.env*.local` files gitignored
+- API routes should use `api-security.ts` for rate limiting and origin validation
+- Sentry tracks errors in production (disabled in dev)
 
 ## Deployment
 
@@ -102,10 +156,11 @@ cd sanity-studio && npx sanity deploy
 
 ## Pre-Push Checklist
 
-1. Run lint: `npm run lint`
-2. Test build: `npm run build`
-3. Check for console errors in dev: `npm run dev`
-4. Verify environment variables are not hardcoded
+1. Run tests: `npm run test`
+2. Run lint: `npm run lint`
+3. Test build: `npm run build`
+4. Check for console errors in dev: `npm run dev`
+5. Verify environment variables are not hardcoded
 
 ## Common Issues
 

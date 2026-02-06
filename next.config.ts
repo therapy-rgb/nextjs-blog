@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
   typedRoutes: true,
@@ -26,7 +27,7 @@ const nextConfig: NextConfig = {
           "style-src 'self' 'unsafe-inline'",
           "img-src 'self' data: blob: https://cdn.sanity.io",
           "font-src 'self' data:",
-          "connect-src 'self' https://*.sanity.io",
+          "connect-src 'self' https://*.sanity.io https://*.sentry.io https://*.ingest.sentry.io",
           "frame-ancestors 'none'",
           "base-uri 'self'",
           "form-action 'self'",
@@ -205,4 +206,9 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  silent: !process.env.CI,
+  widenClientFileUpload: true,
+});

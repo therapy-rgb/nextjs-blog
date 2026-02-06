@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import { client, postsListQuery, defaultAuthor } from "@/lib/sanity";
 import { Post, PostListItem } from "@/types/sanity";
-import PageContainer from "@/components/PageContainer";
+import { PageContainer } from "@/components/layout";
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {

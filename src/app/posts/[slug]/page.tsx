@@ -6,8 +6,8 @@ import { client, postQuery, defaultAuthor } from '@/lib/sanity'
 import { Post } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
 import { getBaseUrl } from '@/lib/env'
-import PortableText from '@/components/PortableText'
-import JsonLd from '@/components/JsonLd'
+import { PortableText } from '@/components/content'
+import { JsonLd } from '@/components/seo'
 import { Metadata } from 'next'
 
 interface PostPageProps {

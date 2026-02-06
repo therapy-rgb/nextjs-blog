@@ -4,7 +4,7 @@ import { formatDistanceToNow } from 'date-fns'
 import { Post } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
 import AuthorAvatar from './AuthorAvatar'
-import ArrowLink from './ArrowLink'
+import { ArrowLink } from '@/components/ui'
 
 interface PostCardProps {
   post: Post

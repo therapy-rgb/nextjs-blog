@@ -58,3 +58,26 @@ export const PAGINATION = {
   postsPerPage: 10,
   journalEntriesPerPage: 10,
 } as const;
+
+// Rate Limiting
+export const RATE_LIMITS = {
+  DEFAULT: {
+    MAX_REQUESTS: 10,
+    WINDOW_MS: 15 * 60 * 1000, // 15 minutes
+  },
+  MAX_REQUEST_SIZE: 10 * 1024, // 10KB
+} as const;
+
+// Allowed Origins (for CSRF protection on future API routes)
+export function getAllowedOrigins(): string[] {
+  const origins = [
+    `https://${SITE_DOMAIN}`,
+    `https://www.${SITE_DOMAIN}`,
+  ]
+
+  if (process.env.NODE_ENV === 'development') {
+    origins.push('http://localhost:3000')
+  }
+
+  return origins
+}

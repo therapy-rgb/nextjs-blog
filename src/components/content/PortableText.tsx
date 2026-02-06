@@ -17,12 +17,16 @@ const components = {
       return (
         <figure className="my-8">
           <Image
-            src={urlFor(value as SanityImageSource).width(1200).url()}
+            src={urlFor(value as SanityImageSource)
+              .width(1200)
+              .auto('format')
+              .quality(80)
+              .url()}
             alt={value.alt || ''}
             width={1200}
             height={800}
             className="rounded-lg w-full h-auto"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 90vw, (max-width: 1200px) 80vw, 800px"
           />
           {value.alt && (
             <figcaption className="text-center text-sm text-sdm-text-light mt-2">

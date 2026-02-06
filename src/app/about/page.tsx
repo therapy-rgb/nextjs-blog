@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
-import PageContainer from '@/components/PageContainer'
-import ContentCard from '@/components/ContentCard'
-import ArrowLink from '@/components/ArrowLink'
+import { PageContainer } from '@/components/layout'
+import { ContentCard, ArrowLink } from '@/components/ui'
 
 export const metadata: Metadata = {
   title: 'About | Suburban Dad Mode',

@@ -1,13 +1,16 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useRef } from 'react'
 import { usePathname } from 'next/navigation'
+import FocusTrap from 'focus-trap-react'
 import { navigation } from '@/lib/navigation'
+import { useMobileMenu } from '@/hooks/useMobileMenu'
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { isOpen, toggle, close, toggleButtonRef } = useMobileMenu()
   const pathname = usePathname()
+  const menuRef = useRef<HTMLDivElement>(null)
 
   return (
     <header className="border-b border-warm-gray-200 shadow-sm bg-sdm-card">
@@ -20,8 +23,8 @@ export default function Header() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="font-display text-3xl font-bold text-sdm-primary hover:text-sdm-accent transition-colors duration-200"
           >
             Suburban Dad Mode
@@ -50,16 +53,17 @@ export default function Header() {
 
           {/* Mobile menu button */}
           <button
+            ref={toggleButtonRef}
             type="button"
             className="md:hidden inline-flex items-center justify-center p-3 min-w-[44px] min-h-[44px] rounded-md text-sdm-text-light hover:text-sdm-primary hover:bg-warm-gray-100 transition-colors duration-200"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-expanded={isMenuOpen}
+            onClick={toggle}
+            aria-expanded={isOpen}
             aria-controls="mobile-menu"
-            aria-label={isMenuOpen ? 'Close main menu' : 'Open main menu'}
+            aria-label={isOpen ? 'Close main menu' : 'Open main menu'}
           >
             {/* Hamburger icon */}
             <svg
-              className={`${isMenuOpen ? 'hidden' : 'block'} h-6 w-6`}
+              className={`${isOpen ? 'hidden' : 'block'} h-6 w-6`}
               stroke="currentColor"
               fill="none"
               viewBox="0 0 24 24"
@@ -69,7 +73,7 @@ export default function Header() {
             </svg>
             {/* Close icon */}
             <svg
-              className={`${isMenuOpen ? 'block' : 'hidden'} h-6 w-6`}
+              className={`${isOpen ? 'block' : 'hidden'} h-6 w-6`}
               stroke="currentColor"
               fill="none"
               viewBox="0 0 24 24"
@@ -80,27 +84,36 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div id="mobile-menu" className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 border-t border-warm-gray-200">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`block px-3 py-3 min-h-[44px] rounded-md text-lg font-cooper transition-colors duration-200 ${
-                    pathname === item.href
-                      ? 'text-sdm-primary bg-warm-gray-100 font-bold'
-                      : 'text-sdm-text-light hover:text-sdm-primary hover:bg-warm-gray-100'
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                  aria-current={pathname === item.href ? 'page' : undefined}
-                >
-                  {item.name}
-                </Link>
-              ))}
+        {/* Mobile Navigation with Focus Trap */}
+        {isOpen && (
+          <FocusTrap
+            active={isOpen}
+            focusTrapOptions={{
+              allowOutsideClick: true,
+              returnFocusOnDeactivate: true,
+              initialFocus: false,
+            }}
+          >
+            <div id="mobile-menu" ref={menuRef} className="md:hidden" role="navigation" aria-label="Mobile navigation">
+              <div className="px-2 pt-2 pb-3 space-y-1 border-t border-warm-gray-200">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`block px-3 py-3 min-h-[44px] rounded-md text-lg font-cooper transition-colors duration-200 ${
+                      pathname === item.href
+                        ? 'text-sdm-primary bg-warm-gray-100 font-bold'
+                        : 'text-sdm-text-light hover:text-sdm-primary hover:bg-warm-gray-100'
+                    }`}
+                    onClick={close}
+                    aria-current={pathname === item.href ? 'page' : undefined}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
+          </FocusTrap>
         )}
       </div>
     </header>

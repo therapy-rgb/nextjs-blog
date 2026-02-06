@@ -1,8 +1,8 @@
 'use client'
 
 import Image from 'next/image'
-import PageContainer from '@/components/PageContainer'
-import ContentCard from '@/components/ContentCard'
+import { PageContainer } from '@/components/layout'
+import { ContentCard } from '@/components/ui'
 
 export default function LaFamilia() {
   const photos = [
