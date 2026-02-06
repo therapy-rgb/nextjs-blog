@@ -94,7 +94,7 @@ export default function Header() {
               initialFocus: false,
             }}
           >
-            <div id="mobile-menu" ref={menuRef} className="md:hidden" role="navigation" aria-label="Mobile navigation">
+            <nav id="mobile-menu" ref={menuRef} className="md:hidden" aria-label="Mobile navigation">
               <div className="px-2 pt-2 pb-3 space-y-1 border-t border-warm-gray-200">
                 {navigation.map((item) => (
                   <Link
@@ -112,7 +112,7 @@ export default function Header() {
                   </Link>
                 ))}
               </div>
-            </div>
+            </nav>
           </FocusTrap>
         )}
       </div>

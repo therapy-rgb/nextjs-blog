@@ -22,7 +22,7 @@ const components = {
               .auto('format')
               .quality(80)
               .url()}
-            alt={value.alt || ''}
+            alt={value.alt || 'Blog post image'}
             width={1200}
             height={800}
             className="rounded-lg w-full h-auto"

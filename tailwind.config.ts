@@ -43,14 +43,14 @@ const config: Config = {
         serif: ['Cooper', 'serif'],
       },
       fontSize: {
-        // Match the larger base font size from the reference site
-        'base': ['22px', { lineHeight: '1.7' }],
-        'lg': ['24px', { lineHeight: '1.6' }],
-        'xl': ['28px', { lineHeight: '1.5' }],
-        '2xl': ['32px', { lineHeight: '1.4' }],
-        '3xl': ['40px', { lineHeight: '1.3' }],
-        '4xl': ['48px', { lineHeight: '1.2' }],
-        '5xl': ['64px', { lineHeight: '1.1' }],
+        // Match the larger base font size from the reference site (rem for browser zoom support)
+        'base': ['1.375rem', { lineHeight: '1.7' }],   // 22px
+        'lg': ['1.5rem', { lineHeight: '1.6' }],       // 24px
+        'xl': ['1.75rem', { lineHeight: '1.5' }],      // 28px
+        '2xl': ['2rem', { lineHeight: '1.4' }],        // 32px
+        '3xl': ['2.5rem', { lineHeight: '1.3' }],      // 40px
+        '4xl': ['3rem', { lineHeight: '1.2' }],        // 48px
+        '5xl': ['4rem', { lineHeight: '1.1' }],        // 64px
       },
       typography: {
         DEFAULT: {

@@ -6,13 +6,15 @@ interface ArrowLinkProps<T extends string> {
   href: Route<T> | T
   children: ReactNode
   className?: string
+  'aria-label'?: string
 }
 
-export default function ArrowLink<T extends string>({ href, children, className = '' }: ArrowLinkProps<T>) {
+export default function ArrowLink<T extends string>({ href, children, className = '', 'aria-label': ariaLabel }: ArrowLinkProps<T>) {
   return (
     <Link
       href={href as Route<T>}
       className={`inline-flex items-center gap-2 text-sdm-primary font-cooper font-semibold hover:text-sdm-accent transition-colors duration-200 group ${className}`}
+      aria-label={ariaLabel}
     >
       {children}
       <svg

@@ -15,12 +15,12 @@ export default function GlobalError({
   }, [error])
 
   return (
-    <html>
+    <html lang="en">
       <body>
-        <div style={{ padding: '2rem', textAlign: 'center' }}>
-          <h2>Something went wrong!</h2>
+        <main style={{ padding: '2rem', textAlign: 'center' }}>
+          <h1>Something went wrong!</h1>
           <button onClick={() => reset()}>Try again</button>
-        </div>
+        </main>
       </body>
     </html>
   )

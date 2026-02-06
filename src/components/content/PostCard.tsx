@@ -57,7 +57,7 @@ export default function PostCard({ post }: PostCardProps) {
           </p>
         )}
 
-        <ArrowLink href={`/posts/${post.slug.current}`}>
+        <ArrowLink href={`/posts/${post.slug.current}`} aria-label={`Read more about ${post.title}`}>
           Read more
         </ArrowLink>
       </div>

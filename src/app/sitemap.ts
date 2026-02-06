@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { client } from '@/lib/sanity'
 import { getBaseUrl } from '@/lib/env'
+import { logWarn } from '@/lib/logging'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = getBaseUrl()
@@ -11,6 +12,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
       priority: 1,
+    },
+    {
+      url: `${baseUrl}/journal`,
+      lastModified: new Date(),
+      changeFrequency: 'daily' as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/la-familia`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/puttering`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
     },
     {
       url: `${baseUrl}/about`,
@@ -30,13 +49,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Only try to fetch posts if Sanity is properly configured
   if (!client) {
-    console.warn('Sanity client not configured, skipping dynamic sitemap entries')
+    logWarn('sanity', 'Sanity client not configured, skipping dynamic sitemap entries')
     return [...staticPages]
   }
 
   try {
     const posts = await client.fetch(`
-      *[_type == "post" && defined(slug.current)] {
+      *[_type == "journalEntry" && defined(slug.current) && private != true] {
         "slug": slug.current,
         "updatedAt": coalesce(_updatedAt, publishedAt)
       }
@@ -49,7 +68,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }))
   } catch (error) {
-    console.warn('Could not fetch posts for sitemap, using static routes only:', error)
+    logWarn('sanity', 'Could not fetch posts for sitemap, using static routes only', { error: error instanceof Error ? error.message : String(error) })
   }
 
   return [...staticPages, ...postEntries]

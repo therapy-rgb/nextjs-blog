@@ -5,6 +5,20 @@ import { ContentCard, ArrowLink } from '@/components/ui'
 export const metadata: Metadata = {
   title: 'About | Suburban Dad Mode',
   description: 'Learn more about the suburban dad behind the blog and my journey through parenthood, life, and everything in between.',
+  alternates: {
+    canonical: 'https://suburbandadmode.com/about',
+  },
+  openGraph: {
+    title: 'About | Suburban Dad Mode',
+    description: 'Learn more about the suburban dad behind the blog and my journey through parenthood, life, and everything in between.',
+    url: 'https://suburbandadmode.com/about',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'About | Suburban Dad Mode',
+    description: 'Learn more about the suburban dad behind the blog and my journey through parenthood, life, and everything in between.',
+  },
 }
 
 export default function About() {

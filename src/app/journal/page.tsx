@@ -3,12 +3,23 @@ import { format } from 'date-fns'
 import { client, postsListQuery, defaultAuthor } from "@/lib/sanity";
 import { Post, PostListItem } from "@/types/sanity";
 import { PageContainer } from "@/components/layout";
+import { logError } from "@/lib/logging";
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Journal | Suburban Dad Mode',
   description: 'Read stories about life, parenting, and everything in between from the suburbs.',
+  alternates: {
+    canonical: 'https://suburbandadmode.com/journal',
+  },
   openGraph: {
+    title: 'Journal | Suburban Dad Mode',
+    description: 'Read stories about life, parenting, and everything in between from the suburbs.',
+    url: 'https://suburbandadmode.com/journal',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
     title: 'Journal | Suburban Dad Mode',
     description: 'Read stories about life, parenting, and everything in between from the suburbs.',
   },
@@ -27,7 +38,7 @@ async function getPosts(): Promise<Post[]> {
       categories: []
     }));
   } catch (error) {
-    console.error("Error fetching posts:", error);
+    logError('sanity', 'Error fetching posts', { error: error instanceof Error ? error.message : String(error) });
     return [];
   }
 }

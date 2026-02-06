@@ -8,6 +8,7 @@ import { urlFor } from '@/lib/sanity'
 import { getBaseUrl } from '@/lib/env'
 import { PortableText } from '@/components/content'
 import { JsonLd } from '@/components/seo'
+import { logError } from '@/lib/logging'
 import { Metadata } from 'next'
 
 interface PostPageProps {
@@ -40,7 +41,7 @@ const getPost = cache(async (slug: string): Promise<Post | null> => {
       categories: []
     }
   } catch (error) {
-    console.error('Error fetching post:', error)
+    logError('sanity', 'Error fetching post', { error: error instanceof Error ? error.message : String(error) })
     return null
   }
 })
@@ -182,7 +183,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
       {post.categories && post.categories.length > 0 && (
         <div className="mt-8 pt-8 border-t border-warm-gray-200">
-          <h3 className="text-sm font-semibold text-sdm-text mb-2">Categories</h3>
+          <h2 className="text-sm font-semibold text-sdm-text mb-2">Categories</h2>
           <div className="flex flex-wrap gap-2">
             {post.categories.map((category) => (
               <span

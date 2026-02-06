@@ -85,6 +85,7 @@ function PutteringContent() {
   return (
     <div className="bg-sdm-background min-h-screen">
       <div className="max-w-4xl mx-auto px-4 py-8">
+        <h1 className="sr-only">Puttering - A Collection of Poems</h1>
         {/* Bookshelf image when no poem selected */}
         {!selectedPoem && (
           <div className="flex justify-center mb-8">
@@ -101,7 +102,9 @@ function PutteringContent() {
 
         {/* Centered dropdown */}
         <div className="flex justify-center mb-8">
+          <label htmlFor="poem-selector" className="sr-only">Select a poem to read</label>
           <select
+            id="poem-selector"
             value={selectedSlug || ''}
             onChange={(e) => {
               if (e.target.value) {
@@ -139,7 +142,7 @@ function PutteringContent() {
 
 export default function Puttering() {
   return (
-    <Suspense fallback={<div className="bg-sdm-background min-h-screen flex items-center justify-center">Loading...</div>}>
+    <Suspense fallback={<div className="bg-sdm-background min-h-screen flex items-center justify-center" role="status" aria-live="polite">Loading...</div>}>
       <PutteringContent />
     </Suspense>
   )

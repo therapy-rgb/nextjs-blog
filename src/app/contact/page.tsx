@@ -3,6 +3,20 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Contact | Suburban Dad Mode',
   description: 'Get in touch with the suburban dad behind the blog. Share your story, ask questions, or just say hello!',
+  alternates: {
+    canonical: 'https://suburbandadmode.com/contact',
+  },
+  openGraph: {
+    title: 'Contact | Suburban Dad Mode',
+    description: 'Get in touch with the suburban dad behind the blog. Share your story, ask questions, or just say hello!',
+    url: 'https://suburbandadmode.com/contact',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Contact | Suburban Dad Mode',
+    description: 'Get in touch with the suburban dad behind the blog. Share your story, ask questions, or just say hello!',
+  },
 }
 
 export default function Contact() {
@@ -28,7 +42,7 @@ export default function Contact() {
           <div className="space-y-6">
             <div className="flex items-start space-x-4">
               <div className="w-12 h-12 bg-sdm-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                <svg className="w-6 h-6 text-sdm-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-sdm-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
@@ -41,7 +55,7 @@ export default function Contact() {
             
             <div className="flex items-start space-x-4">
               <div className="w-12 h-12 bg-sdm-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                <svg className="w-6 h-6 text-sdm-primary" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-sdm-primary" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
                 </svg>
               </div>
@@ -54,7 +68,7 @@ export default function Contact() {
             
             <div className="flex items-start space-x-4">
               <div className="w-12 h-12 bg-sdm-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                <svg className="w-6 h-6 text-sdm-primary" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-sdm-primary" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path fillRule="evenodd" d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.219-5.160 1.219-5.160s-.219-.438-.219-1.085c0-1.016.219-1.775.219-1.775s.199-.438.199-1.085c0-.647-.219-1.085-.219-1.085s.219-.438.219-1.085c0-1.016.592-1.378 1.329-1.378.625 0 .927.469.927 1.031 0 .628-.399 1.569-.602 2.438-.172.729.365 1.322 1.084 1.322 1.301 0 2.301-1.375 2.301-3.35 0-1.753-1.260-2.979-3.063-2.979-2.084 0-3.313 1.563-3.313 3.181 0 .628.241 1.302.544 1.667.060.073.069.136.051.21-.055.229-.177.718-.201.818-.031.131-.099.159-.228.096-1.188-.553-1.929-2.290-1.929-3.681 0-3.007 2.186-5.768 6.302-5.768 3.312 0 5.888 2.361 5.888 5.514 0 3.290-2.073 5.935-4.95 5.935-.966 0-1.875-.504-2.187-1.106l-.595 2.268c-.215.835-.798 1.882-1.188 2.523.895.276 1.840.428 2.820.428 6.624 0 11.99-5.367 11.99-11.987C24.007 5.367 18.641.001 12.017.001z" clipRule="evenodd"/>
                 </svg>
               </div>
