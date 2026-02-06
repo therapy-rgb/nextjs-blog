@@ -180,6 +180,21 @@ cd sanity-studio && npx sanity deploy
 - Run `cd sanity-studio && npm install` if dependencies are missing
 - Schema changes require Studio restart
 
+## Auto-update README
+
+When any of the following are meaningfully changed, update `README.md` to reflect the changes:
+
+- `package.json` — update if dependencies, scripts, or tech stack versions change
+- `src/app/` — update Project Structure if pages or API routes are added/removed
+- `src/components/` — update if component categories or barrel exports change
+- `src/hooks/` — update if custom hooks are added/removed
+- `src/lib/` — update Key Files section if utility modules are added/removed
+- `src/types/` — update if type definitions are restructured
+- `sanity-studio/` — update if Sanity Studio config changes significantly
+- Environment variables — update if required env vars are added/removed
+
+Do not update the README for trivial changes (e.g. fixing a bug in an existing component, tweaking styles, updating content queries).
+
 ## Repository
 
 - **GitHub**: https://github.com/therapy-rgb/nextjs-blog
