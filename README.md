@@ -1,178 +1,190 @@
-# Personal Blog with Next.js and Sanity
+# Suburban Dad Mode
 
-A modern, fast, and SEO-optimized personal blog built with Next.js 15, TypeScript, Tailwind CSS, and Sanity CMS.
+A personal blog about family, finances, music, and suburban life.
 
-**Live Site**: [suburbandadmode.com](https://suburbandadmode.com)
-**GitHub**: [therapy-rgb/nextjs-blog](https://github.com/therapy-rgb/nextjs-blog)
+**Live site**: [suburbandadmode.com](https://suburbandadmode.com)
+**Repository**: [therapy-rgb/nextjs-blog](https://github.com/therapy-rgb/nextjs-blog)
 
-## Features
+## Tech Stack
 
-- **Next.js 15** with App Router and TypeScript
-- **Sanity CMS** for headless content management
-- **ISR (Incremental Static Regeneration)** - Content updates automatically without manual deploys
-- **Tailwind CSS v4** for responsive design
-- **SEO-optimized** with meta tags, Open Graph, and structured data
-- **Image optimization** with Next.js Image component
-- **Journal entries** with rich text editor support
-- **Auto-deployment** from GitHub to Vercel
+| Layer | Tool |
+|-------|------|
+| Framework | Next.js 16 (App Router, Turbopack) |
+| Language | TypeScript, React 19 |
+| Styling | Tailwind CSS v4 + `@tailwindcss/typography` |
+| CMS | Sanity (headless, GROQ queries) |
+| Error tracking | Sentry |
+| Rate limiting | Upstash Redis |
+| Testing | Vitest + React Testing Library |
+| Deployment | Vercel (auto-deploy from `main`) |
 
-## Quick Start
+## Pages
 
-**For writing journal entries**: See [START_HERE.md](./START_HERE.md) or [JOURNAL_ENTRIES.md](./JOURNAL_ENTRIES.md)
+| Route | Description |
+|-------|-------------|
+| `/` | Homepage -- hero image with tagline |
+| `/journal` | Blog listing, sourced from Sanity (ISR: 1 hr) |
+| `/posts/[slug]` | Individual blog posts (ISR: 1 hr) |
+| `/la-familia` | Family photo gallery (vertical scroll) |
+| `/puttering` | Poetry viewer with dropdown selector |
+| `/about` | About page |
+| `/contact` | Contact page (UI only) |
 
-### 1. Clone & Install
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm
+
+### 1. Install dependencies
 
 ```bash
-git clone https://github.com/therapy-rgb/nextjs-blog.git
-cd nextjs-blog
 npm install
 ```
 
-### 2. Environment Variables
+### 2. Set up environment variables
 
-Create `.env.local`:
+Create `.env.local` in the project root:
 
-```bash
-NEXT_PUBLIC_SANITY_PROJECT_ID=4qp7h589
+```
+NEXT_PUBLIC_SANITY_PROJECT_ID=<your-sanity-project-id>
 NEXT_PUBLIC_SANITY_DATASET=production
 ```
 
-### 3. Start Development
+Optional (recommended for production):
 
-```bash
-# Start Next.js
-npm run dev
-
-# Start Sanity Studio (for writing content)
-cd sanity-studio && npm run dev
+```
+NEXT_PUBLIC_SENTRY_DSN=<sentry-dsn>
+SENTRY_DSN=<sentry-dsn>
+SENTRY_ORG=<org-slug>
+SENTRY_PROJECT=<project-slug>
+UPSTASH_REDIS_REST_URL=<redis-url>
+UPSTASH_REDIS_REST_TOKEN=<redis-token>
 ```
 
-- Next.js: [http://localhost:3000](http://localhost:3000)
-- Sanity Studio: [http://localhost:3333](http://localhost:3333)
+### 3. Run locally
+
+```bash
+npm run dev            # Next.js dev server (Turbopack) -- localhost:3000
+cd sanity-studio && npm run dev   # Sanity Studio -- localhost:3333
+```
+
+## Scripts
+
+```bash
+npm run dev        # Dev server with Turbopack
+npm run build      # Production build
+npm run start      # Serve production build
+npm run lint       # ESLint on src/
+npm run test       # Run tests once
+npm run test:watch # Run tests in watch mode
+```
 
 ## Project Structure
 
 ```
-nextjs-blog/
-├── src/
-│   ├── app/
-│   │   ├── journal/page.tsx          # Journal listing (ISR: 60s)
-│   │   ├── posts/[slug]/page.tsx     # Individual entries (ISR: 3600s)
-│   │   ├── layout.tsx                # Root layout
-│   │   ├── page.tsx                  # Home page
-│   │   └── globals.css               # Global styles
-│   ├── components/
-│   │   ├── PortableText.tsx          # Sanity rich text renderer
-│   │   ├── Header.tsx                # Site header
-│   │   └── Footer.tsx                # Site footer
-│   ├── lib/
-│   │   └── sanity.ts                 # Sanity client & queries
-│   └── types/
-│       └── sanity.ts                 # TypeScript types
-├── sanity-studio/
-│   ├── schemaTypes/
-│   │   ├── journalEntry.ts           # Journal entry schema
-│   │   ├── blockContent.ts           # Rich text config
-│   │   └── index.ts                  # Schema exports
-│   ├── structure.ts                  # Studio sidebar config
-│   └── sanity.config.ts              # Sanity configuration
-├── START_HERE.md                     # Quick reference guide
-├── JOURNAL_ENTRIES.md                # Journal workflow guide
-└── README.md                         # This file
+src/
+├── app/                    # Next.js App Router pages
+│   ├── page.tsx            # Homepage
+│   ├── layout.tsx          # Root layout (Header + Footer)
+│   ├── journal/            # Blog listing (ISR)
+│   ├── posts/[slug]/       # Individual posts (ISR)
+│   ├── la-familia/         # Photo gallery
+│   ├── puttering/          # Poetry viewer
+│   ├── about/              # About page
+│   ├── contact/            # Contact page
+│   ├── global-error.tsx    # Sentry error boundary
+│   ├── not-found.tsx       # 404 page
+│   ├── sitemap.ts          # Auto-generated sitemap
+│   └── robots.ts           # Robots.txt
+│
+├── components/             # Organized by category, imported via barrel exports
+│   ├── layout/             # Header, Footer, PageContainer
+│   ├── ui/                 # ArrowLink, ContentCard
+│   ├── content/            # PortableText, PostCard, AuthorAvatar
+│   └── seo/                # JsonLd (structured data)
+│
+├── hooks/
+│   └── useMobileMenu.ts   # Mobile menu logic (escape, scroll lock, route-close)
+│
+├── lib/
+│   ├── sanity.ts           # Sanity client + all GROQ queries
+│   ├── constants.ts        # Site-wide config (name, URLs, cache times, rate limits)
+│   ├── env.ts              # Environment variable validation
+│   ├── validation.ts       # Input sanitization + XSS prevention
+│   ├── api-security.ts     # Rate limiting, origin validation, honeypot, IP extraction
+│   ├── logging.ts          # Structured JSON logging
+│   └── navigation.ts       # Nav link definitions
+│
+├── types/
+│   └── sanity.ts           # TypeScript types for Sanity documents
+│
+└── __tests__/              # Vitest tests
+    ├── setup.ts
+    ├── validation.test.ts
+    └── env.test.ts
+
+sanity-studio/              # Separate Sanity Studio app
+public/                     # Static assets, fonts, images
 ```
 
-## Content Management
+## Component Imports
 
-### Journal Entry Schema
+Components are grouped by category. Always use barrel exports:
 
-Journal entries (`journalEntry`) include:
-- **title**: String (required, max 100 chars)
-- **slug**: Auto-generated from title (required)
-- **publishedAt**: DateTime (required, auto-fills)
-- **excerpt**: Text (optional preview)
-- **body**: Rich text with block content (required)
-- **tags**: Array of strings (optional)
-- **private**: Boolean (defaults to false)
+```ts
+import { Header, Footer, PageContainer } from '@/components/layout'
+import { ArrowLink, ContentCard } from '@/components/ui'
+import { PortableText, PostCard, AuthorAvatar } from '@/components/content'
+import { JsonLd } from '@/components/seo'
+```
 
-### Content Features
+## How Content Works
 
-The rich text editor supports:
-- Text formatting (bold, italic, inline code)
-- Headings (H1-H4)
-- Lists (bullet and numbered)
-- Blockquotes
-- Links
-- Images with alt text
-- Code blocks with syntax highlighting
+### Blog posts (Sanity CMS)
 
-## How Content Updates Work
+1. Write and publish in Sanity Studio (locally at `localhost:3333` or deployed)
+2. Next.js fetches content via GROQ queries in `src/lib/sanity.ts`
+3. ISR revalidates every hour -- no manual redeploy needed for content changes
+4. Private entries (`private: true`) are filtered out of all public queries
 
-### Automatic Updates via ISR
+### Photo and poetry pages
 
-This site uses **Incremental Static Regeneration (ISR)**:
+La Familia and Puttering are client components with images/content stored directly in `public/`. Update the data arrays in their respective `page.tsx` files.
 
-1. **Journal listing page** (`/journal`):
-   - Revalidates every 60 seconds
-   - New entries appear automatically within 1 minute
+## Deployment
 
-2. **Individual entries** (`/posts/[slug]`):
-   - Revalidates every 3600 seconds (1 hour)
-   - Updates automatically without manual deployment
-
-**No webhook needed!** Content updates are handled by Next.js ISR.
-
-### Code Deployment
-
-1. Push code changes to GitHub
-2. Vercel automatically deploys (2-3 minutes)
-3. Live site updates at suburbandadmode.com
-
-## Documentation
-
-- **[START_HERE.md](./START_HERE.md)** - Comprehensive guide to the project
-- **[JOURNAL_ENTRIES.md](./JOURNAL_ENTRIES.md)** - How to write journal entries
-- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deployment guide (if needed)
-
-## Development Scripts
+Pushing to `main` triggers an automatic Vercel deployment. No manual steps required.
 
 ```bash
-npm run dev          # Start Next.js dev server
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run ESLint
-
-# Sanity Studio
-cd sanity-studio
-npm run dev          # Start Sanity Studio (localhost:3333)
+# Manual deploy (if needed)
+vercel --prod
 ```
 
-## Tech Stack
+### Sanity Studio
 
-- **Framework**: Next.js 15 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS v4
-- **CMS**: Sanity.io
-- **Deployment**: Vercel
-- **Version Control**: GitHub
+```bash
+cd sanity-studio && npx sanity deploy
+```
 
-## Environment
+## Custom Fonts
 
-- **Production**: https://suburbandadmode.com
-- **Repository**: https://github.com/therapy-rgb/nextjs-blog
-- **Sanity Project**: 4qp7h589
-- **Dataset**: production
+- **Cooper** -- Main display/body font (`font-cooper`, `font-display`)
+- **TT Disruptors** -- Handwritten font for poems on the Puttering page
 
-## Recent Updates (Nov 26, 2025)
+Font files are in `public/fonts/`.
 
-- Fixed journal entry schema ordering
-- Added private field filtering
-- Removed mood field from schema
-- Updated documentation
-- Confirmed ISR auto-updates working
+## Other Documentation
 
-## Support
+These files exist in the repo for specific workflows:
 
-For questions or issues:
-1. Check [START_HERE.md](./START_HERE.md)
-2. Check [JOURNAL_ENTRIES.md](./JOURNAL_ENTRIES.md)
-3. Review troubleshooting sections
+| File | Purpose |
+|------|---------|
+| `CLAUDE.md` | AI assistant instructions (project conventions, architecture) |
+| `START_HERE.md` | Quick-start guide for writing journal entries |
+| `JOURNAL_ENTRIES.md` | Detailed journal entry workflow |
+| `DEPLOYMENT.md` | Deployment troubleshooting notes |
+| `SANITY_SETUP_GUIDE.md` | Initial Sanity CMS setup walkthrough |
+| `La_Familia_Instructions.md` | How to update the photo gallery |
+| `Puttering_Instructions.md` | How to update the poetry page |

@@ -1,7 +1,7 @@
 # START HERE - Journal Workflow Guide
 
-**Last Updated**: November 26, 2025
-**Status**: ✅ All systems working
+**Last Updated**: February 2026
+**Status**: All systems working
 
 ---
 
@@ -9,24 +9,24 @@
 
 ### 1. Start Sanity Studio
 ```bash
-cd /Users/marcusberley/Documents/Development/Projects/website/nextjs-blog/sanity-studio
+cd /Users/marcusberley/Documents/Projects/nextjs-blog/sanity-studio
 npm run dev
 ```
 Opens at: http://localhost:3333/
 
 ### 2. Create Entry
 1. Sign in to Sanity Studio
-2. Click **"Journal Entries"** 📔 in sidebar
+2. Click **"Journal Entries"** in sidebar
 3. Click **"Create"** or **"+"**
 4. Fill in fields (see below)
 5. Click **"Publish"**
 
 ### 3. See It Live
-- Wait ~60 seconds for ISR revalidation
+- Wait up to 1 hour for ISR revalidation (or redeploy for immediate update)
 - Visit: https://suburbandadmode.com/journal
-- Your entry will appear automatically!
+- Your entry will appear automatically
 
-**No manual deployment needed!** The site uses Next.js ISR with 60-second revalidation.
+**No manual deployment needed!** The site uses Next.js ISR with 1-hour revalidation.
 
 ---
 
@@ -35,20 +35,20 @@ Opens at: http://localhost:3333/
 ### Content Flow
 ```
 Sanity Studio (localhost:3333)
-    ↓ [Publish]
+    | [Publish]
 Sanity Cloud (content stored)
-    ↓ [ISR revalidates every 60s]
+    | [ISR revalidates every 1 hour]
 Live Website (suburbandadmode.com)
 ```
 
 ### Code Deployment
 ```
 Local Changes
-    ↓ [git push]
+    | [git push]
 GitHub (therapy-rgb/nextjs-blog)
-    ↓ [auto-deploy]
+    | [auto-deploy]
 Vercel
-    ↓
+    |
 Live Website (suburbandadmode.com)
 ```
 
@@ -70,7 +70,6 @@ Live Website (suburbandadmode.com)
 ### Important Notes
 - **Private field**: Entries with `private: true` are filtered out by queries and won't appear on the website
 - **Slug generation**: Click "Generate" button next to slug field to auto-create from title
-- **Mood field**: Removed as of Nov 26, 2025
 
 ---
 
@@ -79,12 +78,12 @@ Live Website (suburbandadmode.com)
 ### Content Updates (No Deploy Needed)
 The journal page uses **ISR (Incremental Static Regeneration)**:
 - File: `src/app/journal/page.tsx`
-- Setting: `export const revalidate = 60`
-- Behavior: Page checks for new content every 60 seconds
-- Result: New Sanity entries appear automatically within 1 minute
+- Setting: `export const revalidate = 3600`
+- Behavior: Page checks for new content every 1 hour
+- Result: New Sanity entries appear automatically within 1 hour
 
 ### Code Updates (Auto-Deploy)
-- Push to GitHub → Vercel automatically deploys
+- Push to GitHub -> Vercel automatically deploys
 - Typical deploy time: 2-3 minutes
 - No manual intervention needed
 
@@ -96,11 +95,14 @@ The journal page uses **ISR (Incremental Static Regeneration)**:
 nextjs-blog/
 ├── src/
 │   ├── app/
-│   │   ├── journal/page.tsx          # Journal listing (ISR: 60s)
-│   │   ├── posts/[slug]/page.tsx     # Individual entries (ISR: 3600s)
+│   │   ├── journal/page.tsx          # Journal listing (ISR: 1hr)
+│   │   ├── posts/[slug]/page.tsx     # Individual entries (ISR: 1hr)
 │   │   └── globals.css               # Global styles
 │   ├── components/
-│   │   └── PortableText.tsx          # Sanity rich text renderer
+│   │   ├── layout/                   # Header, Footer, PageContainer
+│   │   ├── content/                  # PortableText, PostCard, AuthorAvatar
+│   │   ├── ui/                       # ArrowLink, ContentCard
+│   │   └── seo/                      # JsonLd
 │   └── lib/
 │       └── sanity.ts                 # Queries & client config
 ├── sanity-studio/
@@ -128,12 +130,12 @@ nextjs-blog/
 
 - **`src/app/journal/page.tsx`**:
   - Lists all journal entries
-  - Revalidates every 60 seconds
+  - Revalidates every 1 hour
   - Route: `/journal`
 
 - **`src/app/posts/[slug]/page.tsx`**:
   - Individual journal entry display
-  - Revalidates every 3600 seconds (1 hour)
+  - Revalidates every 1 hour
   - Route: `/posts/[slug]`
 
 ### Backend (Sanity)
@@ -144,22 +146,6 @@ nextjs-blog/
 - **`sanity-studio/structure.ts`**:
   - Configures Sanity Studio sidebar
   - Orders entries by `publishedAt` (newest first)
-
----
-
-## Recent Changes (Nov 26, 2025)
-
-### Fixed Issues
-1. ✅ **Structure.ts ordering**: Changed from `'date'` to `'publishedAt'`
-2. ✅ **Private field filtering**: Added `private != true` to GROQ queries
-3. ✅ **Private field default**: Changed from `true` to `false`
-4. ✅ **Removed mood field**: Simplified schema
-
-### Result
-- Sanity Studio loads without errors
-- Journal entries appear correctly
-- Private entries are properly filtered
-- Automatic content updates working via ISR
 
 ---
 
@@ -178,6 +164,9 @@ npm run lint
 
 # Build for production
 npm run build
+
+# Run tests
+npm run test
 ```
 
 ### Deployment
@@ -187,21 +176,13 @@ npx vercel --prod
 
 # Check recent deployments
 npx vercel ls
-
-# View deployment details
-npx vercel inspect [deployment-url]
 ```
 
 ### Git Operations
 ```bash
-# Check status
-git status
-
-# Commit changes
+# Push to GitHub (triggers auto-deploy)
 git add .
 git commit -m "Your message"
-
-# Push to GitHub (triggers auto-deploy)
 git push
 ```
 
@@ -216,15 +197,12 @@ git push
    - Verify "Private" is unchecked (false)
 
 2. **Check Required Fields**
-   - Title: ✓
-   - Slug: ✓ (must be generated)
-   - Published At: ✓ (must have date)
-   - Body: ✓ (must have content)
+   - Title, Slug (must be generated), Published At (must have date), Body (must have content)
 
 3. **Wait for Revalidation**
-   - ISR revalidates every 60 seconds
-   - Wait 1-2 minutes after publishing
+   - ISR revalidates every 1 hour
    - Hard refresh browser (Cmd+Shift+R)
+   - For immediate updates, redeploy via Vercel
 
 4. **Check Query**
    - Query filters: `defined(slug) && defined(publishedAt) && private != true`
@@ -249,8 +227,8 @@ git push
 ## Environment Variables
 
 Located in `.env.local`:
-```bash
-NEXT_PUBLIC_SANITY_PROJECT_ID=4qp7h589
+```
+NEXT_PUBLIC_SANITY_PROJECT_ID=<your-project-id>
 NEXT_PUBLIC_SANITY_DATASET=production
 ```
 
@@ -274,6 +252,4 @@ When returning to this project:
 1. Read this file first for current status
 2. Start Sanity Studio if writing content
 3. Check JOURNAL_ENTRIES.md for detailed workflow
-4. All systems are working - no setup needed!
-
-**Current Status**: All issues resolved. System is production-ready and functioning as expected.
+4. All systems are working - no setup needed

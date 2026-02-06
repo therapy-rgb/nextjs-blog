@@ -5,7 +5,7 @@
 I've set up the complete Sanity CMS structure for your blog. Here's what's ready:
 
 ✅ **Sanity Studio configured** in `/sanity-studio/`
-✅ **Complete schema** for posts, authors, categories
+✅ **Complete schema** for journal entries, posts, authors, categories
 ✅ **Rich text editor** with images and code blocks
 ✅ **SEO optimization** built into content types
 ✅ **Next.js integration** ready to connect
@@ -63,12 +63,17 @@ The studio will be available at: **http://localhost:3333**
 
 ### Schema Structure
 
-**📝 Post Schema:**
+**📔 Journal Entry Schema** (primary content type):
+- Title, slug, publishedAt, excerpt
+- Rich text body (blockContent)
+- Tags, private flag
+- This is the schema actively used for blog content at `/journal` and `/posts/[slug]`
+
+**📝 Post Schema** (legacy):
 - Title, slug, author, featured image
 - Categories, publication date, excerpt
 - Rich text body with images/code blocks
-- Featured post option
-- SEO meta fields
+- Featured post option, SEO meta fields
 
 **👤 Author Schema:**
 - Name, slug, profile image, bio

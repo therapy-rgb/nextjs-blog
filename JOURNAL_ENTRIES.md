@@ -46,7 +46,7 @@ Optional fields:
    - List: https://suburbandadmode.com/journal
    - Individual: https://suburbandadmode.com/posts/[your-slug]
 
-**Note**: No manual deployment needed! The site uses Next.js ISR and automatically checks for new content every 60 seconds.
+**Note**: No manual deployment needed! The site uses Next.js ISR and automatically checks for new content every hour.
 
 ## Content Features
 
@@ -84,13 +84,13 @@ If you see a SchemaError when loading Sanity Studio, verify:
 
 If published entries don't show on the website:
 
-1. **Wait for ISR revalidation**: The page updates every 60 seconds. Wait 1-2 minutes after publishing.
+1. **Wait for ISR revalidation**: The page updates every hour. For immediate updates, redeploy via Vercel.
 2. **Check the entry has a `publishedAt` date set**: Required field must be filled.
 3. **Verify the `private` field is set to `false`**: Unchecked in Sanity Studio.
 4. **Check slug is generated**: Must have a valid slug.
 5. **Verify Sanity project ID** in `.env.local`:
    ```
-   NEXT_PUBLIC_SANITY_PROJECT_ID=4qp7h589
+   NEXT_PUBLIC_SANITY_PROJECT_ID=<your-project-id>
    NEXT_PUBLIC_SANITY_DATASET=production
    ```
 

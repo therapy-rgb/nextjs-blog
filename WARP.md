@@ -40,10 +40,10 @@ npm run generate-redirects # Generate URL redirects
 
 ## Architecture Overview
 
-This is a **Next.js 15 blog with Sanity CMS** that follows modern React patterns using the App Router architecture. The site is called "Suburban Dad Mode" and features a custom design with a Financial Times-inspired color scheme.
+This is a **Next.js 16 blog with Sanity CMS** that follows modern React patterns using the App Router architecture. The site is called "Suburban Dad Mode" and features a custom design with a Financial Times-inspired color scheme.
 
 ### Tech Stack
-- **Framework**: Next.js 15 with App Router and TypeScript
+- **Framework**: Next.js 16 with App Router and TypeScript
 - **CMS**: Sanity CMS with custom schemas
 - **Styling**: Tailwind CSS with custom design system
 - **Deployment**: Vercel-ready with environment configurations
@@ -51,7 +51,7 @@ This is a **Next.js 15 blog with Sanity CMS** that follows modern React patterns
 ### Core Architecture Patterns
 
 #### 1. Next.js App Router Structure
-- **App Directory**: `src/app/` contains all routes using Next.js 13+ App Router
+- **App Directory**: `src/app/` contains all routes using Next.js App Router
 - **Parallel Routes**: Different sections like `/la-familia`, `/junk-drawer`, `/puttering` are implemented as separate route groups
 - **Dynamic Routes**: Blog posts use `[slug]` dynamic routing in `posts/[slug]/page.tsx`
 - **Metadata**: Each route handles its own metadata via Next.js metadata API
@@ -64,8 +64,9 @@ This is a **Next.js 15 blog with Sanity CMS** that follows modern React patterns
 
 #### 3. Content Management
 - **Schemas**: Located in `sanity-studio/schemaTypes/` with structured content types:
-  - `post.ts` - Blog posts with SEO fields, categories, featured images
-  - `author.ts` - Author profiles with bio and images  
+  - `journalEntry.ts` - Journal entries (primary content type used on the site)
+  - `post.ts` - Blog posts with SEO fields, categories, featured images (legacy)
+  - `author.ts` - Author profiles with bio and images
   - `category.ts` - Post categorization
   - `blockContent.ts` - Rich text content structure
 - **Portable Text**: Custom rendering of rich text content from Sanity
@@ -74,7 +75,7 @@ This is a **Next.js 15 blog with Sanity CMS** that follows modern React patterns
 #### 4. Design System & Styling
 - **Custom Tailwind Config**: Extensive customization in `tailwind.config.ts`
 - **Color Palette**: Custom "sdm" (Suburban Dad Mode) colors with primary purple (#6528F7) and Financial Times pink background (#FFF1E6)
-- **Typography**: Cooper font family as primary display font, Inter for body text
+- **Typography**: Cooper font family as primary display/body font, TT Disruptors for handwritten poems
 - **Responsive Design**: Mobile-first approach with hamburger navigation
 
 ### Key Components Architecture
