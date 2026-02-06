@@ -38,7 +38,7 @@ export default async function Journal() {
   return (
     <PageContainer maxWidth="3xl" className="py-20">
       <div className="mb-16">
-        <h1 className="font-display text-5xl font-bold text-sdm-text mb-2">
+        <h1 className="font-display text-5xl md:text-6xl font-bold text-sdm-text mb-2">
           Journal
         </h1>
       </div>
@@ -48,17 +48,17 @@ export default async function Journal() {
           {posts.map((post) => (
             <article key={post._id} className="border-b border-warm-gray-200 pb-12 last:border-b-0">
               <Link href={`/posts/${post.slug.current}`}>
+                <h2 className="font-display text-3xl md:text-4xl font-bold text-sdm-text mb-3 hover:text-sdm-primary transition-colors duration-200">
+                  {post.title}
+                </h2>
                 <time
                   dateTime={post.publishedAt}
-                  className="font-cooper text-sm text-sdm-text-light block mb-3"
+                  className="font-cooper text-base text-sdm-text-light block mb-4"
                 >
                   {format(new Date(post.publishedAt), 'MM/dd/yyyy')}
                 </time>
-                <h2 className="font-display text-3xl font-bold text-sdm-text mb-4 hover:text-sdm-primary transition-colors duration-200">
-                  {post.title}
-                </h2>
                 {post.excerpt && (
-                  <p className="font-cooper text-lg text-sdm-text-light leading-relaxed">
+                  <p className="font-cooper text-xl text-sdm-text-light leading-relaxed">
                     {post.excerpt}
                   </p>
                 )}

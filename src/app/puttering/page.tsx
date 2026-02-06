@@ -122,9 +122,9 @@ function PutteringContent() {
         {/* Poem display with TT Disruptors font */}
         {selectedPoem && (
           <article className="flex justify-center">
-            <div className="p-8 md:p-12 rounded shadow-md" style={{ backgroundColor: '#FAF6EF' }}>
+            <div className="p-6 md:p-12 rounded shadow-md" style={{ backgroundColor: '#FAF6EF' }}>
               <div
-                className="text-left text-4xl md:text-5xl leading-tight text-sdm-text whitespace-pre-line"
+                className="text-left text-6xl md:text-7xl leading-tight text-sdm-text whitespace-pre-line"
                 style={{ fontFamily: "'TT Disruptors', cursive" }}
               >
                 {selectedPoem.text}
