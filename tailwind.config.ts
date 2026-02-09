@@ -13,11 +13,11 @@ const config: Config = {
         foreground: 'var(--foreground)',
         // Suburban Dad Mode color palette
         'sdm': {
-          primary: '#6528F7',    // Primary purple
-          accent: '#5511F8',     // Deeper purple accent
-          background: '#FFF1E6', // Financial Times pink background
-          text: '#0F172A',       // Dark navy text
-          'text-light': '#4B5563', // Light gray text (contrast ratio 5.8:1)
+          primary: '#C44569',    // Deep rose
+          accent: '#2EC4B6',     // Bright teal
+          background: '#F3EFF5', // Light lavender background
+          text: '#1D3557',       // Rich navy text
+          'text-light': '#457B9D', // Steel blue text
           'card': '#FFFFFF',     // White card background
         },
         // Custom grays to match the aesthetic

@@ -112,13 +112,13 @@ export default async function Journal() {
                   {/* Left: year + month labels */}
                   <div className="flex items-baseline gap-3 mb-4 md:mb-0 md:w-[260px] md:flex-shrink-0 md:pt-1">
                     {monthIdx === 0 ? (
-                      <span className="font-display text-3xl md:text-4xl font-bold text-sdm-text md:min-w-[7rem]">
+                      <span className="font-display text-4xl md:text-5xl font-bold text-sdm-text md:min-w-[7rem]">
                         {yearGroup.year}
                       </span>
                     ) : (
                       <span className="hidden md:inline md:min-w-[7rem]" />
                     )}
-                    <span className="font-display text-lg md:text-xl italic text-sdm-text">
+                    <span className="font-display text-xl md:text-2xl italic text-sdm-text">
                       {monthGroup.month}
                     </span>
                   </div>
@@ -134,20 +134,20 @@ export default async function Journal() {
                           <h2>
                             <Link
                               href={`/posts/${post.slug.current}`}
-                              className="font-display text-xl md:text-2xl text-sdm-text hover:text-sdm-primary transition-colors duration-200"
+                              className="font-display text-2xl md:text-3xl text-sdm-text hover:text-sdm-primary transition-colors duration-200"
                             >
                               {post.title}
                             </Link>
                           </h2>
                           <time
                             dateTime={post.publishedAt}
-                            className="font-cooper text-sm md:text-base text-sdm-text-light whitespace-nowrap"
+                            className="font-cooper text-base md:text-lg text-sdm-primary whitespace-nowrap"
                           >
-                            {format(new Date(post.publishedAt), 'MMMM d, yyyy')}
+                            {format(new Date(post.publishedAt), 'MM/dd/yyyy')}
                           </time>
                         </div>
                         {(post.excerpt || fallbackExcerpts[post.slug.current]) && (
-                          <p className="font-cooper text-base text-sdm-text-light mt-2 leading-relaxed">
+                          <p className="font-cooper text-lg text-sdm-text-light mt-2 leading-relaxed max-w-[75%]">
                             {post.excerpt || fallbackExcerpts[post.slug.current]}
                           </p>
                         )}

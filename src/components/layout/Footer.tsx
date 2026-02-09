@@ -13,11 +13,23 @@ function HomeArt() {
 }
 
 function LaFamiliaArt() {
+  const star = (cx: number, cy: number, r: number) => {
+    const points = []
+    for (let i = 0; i < 5; i++) {
+      const outerAngle = (i * 72 - 90) * (Math.PI / 180)
+      const innerAngle = ((i * 72 + 36) - 90) * (Math.PI / 180)
+      points.push(`${cx + r * Math.cos(outerAngle)},${cy + r * Math.sin(outerAngle)}`)
+      points.push(`${cx + r * 0.4 * Math.cos(innerAngle)},${cy + r * 0.4 * Math.sin(innerAngle)}`)
+    }
+    return points.join(' ')
+  }
   return (
     <svg width="200" height="40" viewBox="0 0 200 40" className="text-sdm-text-light" aria-hidden="true">
-      <line x1="10" y1="20" x2="70" y2="20" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M100 8 L108 18 L100 28 L92 18 Z" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <line x1="130" y1="20" x2="190" y2="20" stroke="currentColor" strokeWidth="1.5" />
+      <line x1="10" y1="20" x2="65" y2="20" stroke="currentColor" strokeWidth="1.5" />
+      <polygon points={star(82, 20, 7)} fill="none" stroke="currentColor" strokeWidth="1.5" />
+      <polygon points={star(100, 20, 7)} fill="none" stroke="currentColor" strokeWidth="1.5" />
+      <polygon points={star(118, 20, 7)} fill="none" stroke="currentColor" strokeWidth="1.5" />
+      <line x1="135" y1="20" x2="190" y2="20" stroke="currentColor" strokeWidth="1.5" />
     </svg>
   )
 }

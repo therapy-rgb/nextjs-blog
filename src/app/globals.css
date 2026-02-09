@@ -28,8 +28,8 @@
 }
 
 :root {
-  --background: #FFF1E6;
-  --foreground: #0F172A;
+  --background: #F3EFF5;
+  --foreground: #1D3557;
 }
 
 @theme inline {
@@ -38,6 +38,26 @@
   --font-body: var(--font-source-sans);
   --font-cooper: var(--font-crete-round);
   --font-display: var(--font-playfair);
+
+  /* Suburban Dad Mode color palette */
+  --color-sdm-primary: #C44569;
+  --color-sdm-accent: #2EC4B6;
+  --color-sdm-background: #F3EFF5;
+  --color-sdm-text: #1D3557;
+  --color-sdm-text-light: #457B9D;
+  --color-sdm-card: #FFFFFF;
+
+  /* Warm grays */
+  --color-warm-gray-50: #FAFAF9;
+  --color-warm-gray-100: #F5F5F4;
+  --color-warm-gray-200: #E7E5E4;
+  --color-warm-gray-300: #D6D3D1;
+  --color-warm-gray-400: #A8A29E;
+  --color-warm-gray-500: #78716C;
+  --color-warm-gray-600: #57534E;
+  --color-warm-gray-700: #44403C;
+  --color-warm-gray-800: #292524;
+  --color-warm-gray-900: #1C1917;
 }
 
 /* Custom scrollbar for WebKit browsers */
@@ -46,16 +66,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #E8E4EB;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #6528F7;
+  background: #C44569;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #5511F8;
+  background: #C1292E;
 }
 
 /* Smooth scrolling - respects reduced motion preference */
@@ -67,13 +87,13 @@
 
 /* Selection colors */
 ::selection {
-  background-color: #6528F7;
+  background-color: #C44569;
   color: white;
 }
 
 /* Focus styles */
 :focus-visible {
-  outline: 2px solid #6528F7;
+  outline: 2px solid #C44569;
   outline-offset: 2px;
 }
 

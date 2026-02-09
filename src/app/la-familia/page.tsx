@@ -41,23 +41,21 @@ export default function LaFamilia() {
         </h1>
       </div>
 
-      <ContentCard>
-        <div className="flex flex-col gap-4 sm:gap-6">
-          {photos.map((photo, index) => (
-            <div key={index} className="w-full max-w-md mx-auto rounded-lg overflow-hidden bg-warm-gray-100">
-              <Image
-                src={`/familia-photos/${photo.replace(/\.(jpg|jpeg)$/i, '.webp')}`}
-                alt={`Family photo ${index + 1}`}
-                width={400}
-                height={0}
-                loading={index < 2 ? "eager" : "lazy"}
-                sizes="(max-width: 768px) 100vw, 400px"
-                className="w-full h-auto hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-          ))}
-        </div>
-      </ContentCard>
+      <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 sm:gap-6">
+        {photos.map((photo, index) => (
+          <div key={index} className="mb-4 sm:mb-6 break-inside-avoid rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+            <Image
+              src={`/familia-photos/${photo.replace(/\.(jpg|jpeg)$/i, '.webp')}`}
+              alt={`Family photo ${index + 1}`}
+              width={600}
+              height={0}
+              loading={index < 3 ? "eager" : "lazy"}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="w-full h-auto hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+        ))}
+      </div>
     </PageContainer>
   )
 }

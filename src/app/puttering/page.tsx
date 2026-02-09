@@ -78,63 +78,91 @@ function PutteringContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const selectedSlug = searchParams.get('poem')
-  const selectedPoem = selectedSlug
-    ? poems.find(p => p.slug === selectedSlug)
-    : null
+  const selectedIndex = selectedSlug
+    ? poems.findIndex(p => p.slug === selectedSlug)
+    : -1
+  const selectedPoem = selectedIndex >= 0 ? poems[selectedIndex] : null
+  const prevPoem = selectedIndex > 0 ? poems[selectedIndex - 1] : null
+  const nextPoem = selectedIndex >= 0 && selectedIndex < poems.length - 1 ? poems[selectedIndex + 1] : null
 
   return (
     <div className="bg-sdm-background min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 py-8">
         <h1 className="sr-only">Puttering - A Collection of Poems</h1>
-        {/* Bookshelf image when no poem selected */}
-        {!selectedPoem && (
-          <div className="flex justify-center mb-8">
-            <Image
-              src="/puttering-bookshelf.webp"
-              alt="Bookshelf"
-              width={500}
-              height={333}
-              className="rounded-lg shadow-lg"
-              priority
-            />
-          </div>
-        )}
 
-        {/* Centered dropdown */}
-        <div className="flex justify-center mb-8">
-          <label htmlFor="poem-selector" className="sr-only">Select a poem to read</label>
-          <select
-            id="poem-selector"
-            value={selectedSlug || ''}
-            onChange={(e) => {
-              if (e.target.value) {
-                router.push(`/puttering?poem=${e.target.value}`, { scroll: false })
-              } else {
-                router.push('/puttering', { scroll: false })
-              }
-            }}
-            className="w-full max-w-xs px-4 py-3 border border-warm-gray-300 rounded bg-white text-sdm-text font-cooper font-medium text-center appearance-none cursor-pointer"
-          >
-            <option value="">Select a poem</option>
-            {poems.map(poem => (
-              <option key={poem.slug} value={poem.slug}>{poem.title}</option>
-            ))}
-          </select>
-        </div>
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Sidebar poem list */}
+          <nav className="md:w-56 shrink-0" aria-label="Poem selection">
+            <ul className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-2 md:pb-0 md:sticky md:top-24">
+              {poems.map(poem => (
+                <li key={poem.slug} className="shrink-0">
+                  <button
+                    onClick={() => router.push(`/puttering?poem=${poem.slug}`, { scroll: false })}
+                    className={`font-cooper text-lg text-left transition-colors duration-200 px-3 py-2 rounded-md whitespace-nowrap md:whitespace-normal w-full ${
+                      selectedSlug === poem.slug
+                        ? 'text-sdm-primary font-bold bg-sdm-card shadow-sm border border-warm-gray-200'
+                        : 'text-sdm-text-light hover:text-sdm-primary hover:bg-sdm-card/50'
+                    }`}
+                    aria-current={selectedSlug === poem.slug ? 'true' : undefined}
+                  >
+                    {poem.title}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-        {/* Poem display with TT Disruptors font */}
-        {selectedPoem && (
-          <article className="flex justify-center">
-            <div className="p-6 md:p-12 rounded shadow-md" style={{ backgroundColor: '#FAF6EF' }}>
-              <div
-                className="text-left text-6xl md:text-7xl leading-tight text-sdm-text whitespace-pre-line"
-                style={{ fontFamily: "'TT Disruptors', cursive" }}
-              >
-                {selectedPoem.text}
+          {/* Main content area */}
+          <div className="flex-1 min-w-0">
+            {/* Bookshelf image when no poem selected */}
+            {!selectedPoem && (
+              <div className="flex justify-center">
+                <Image
+                  src="/puttering-bookshelf.webp"
+                  alt="Bookshelf"
+                  width={500}
+                  height={333}
+                  className="rounded-lg shadow-lg"
+                  priority
+                />
               </div>
-            </div>
-          </article>
-        )}
+            )}
+
+            {/* Poem display with TT Disruptors font */}
+            {selectedPoem && (
+              <article className="flex flex-col items-center">
+                <div className="p-6 md:p-12 rounded-lg shadow-md bg-sdm-card border border-warm-gray-200">
+                  <div
+                    className="text-left text-6xl md:text-7xl leading-tight text-sdm-text whitespace-pre-line"
+                    style={{ fontFamily: "'TT Disruptors', cursive" }}
+                  >
+                    {selectedPoem.text}
+                  </div>
+                </div>
+
+                {/* Prev/Next navigation */}
+                <div className="flex items-center justify-between w-full max-w-md mt-8">
+                  {prevPoem ? (
+                    <button
+                      onClick={() => router.push(`/puttering?poem=${prevPoem.slug}`, { scroll: false })}
+                      className="font-cooper text-sdm-text-light hover:text-sdm-primary transition-colors duration-200"
+                    >
+                      &larr; {prevPoem.title}
+                    </button>
+                  ) : <span />}
+                  {nextPoem ? (
+                    <button
+                      onClick={() => router.push(`/puttering?poem=${nextPoem.slug}`, { scroll: false })}
+                      className="font-cooper text-sdm-text-light hover:text-sdm-primary transition-colors duration-200"
+                    >
+                      {nextPoem.title} &rarr;
+                    </button>
+                  ) : <span />}
+                </div>
+              </article>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   )
