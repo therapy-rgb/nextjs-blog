@@ -4,6 +4,7 @@ import {visionTool} from '@sanity/vision'
 import {colorInput} from '@sanity/color-input'
 import {codeInput} from '@sanity/code-input'
 import {imageHotspotArrayPlugin} from 'sanity-plugin-hotspot-array'
+import {media} from 'sanity-plugin-media'
 
 import {schemaTypes} from './schemaTypes'
 import {structure} from './structure'
@@ -21,6 +22,7 @@ export default defineConfig({
     colorInput(),
     codeInput(),
     imageHotspotArrayPlugin(),
+    media(),
   ],
 
   schema: {
