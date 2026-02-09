@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Typewriter } from "@/components/ui";
 
 export default async function Home() {
   return (
@@ -14,9 +15,7 @@ export default async function Home() {
           priority
         />
         <div className="flex justify-end mt-6 max-w-[600px] mx-auto">
-          <p className="text-xl text-sdm-text font-cooper">
-            always classic
-          </p>
+          <Typewriter text="always classic" className="text-xl text-sdm-text font-cooper" />
         </div>
       </div>
     </div>

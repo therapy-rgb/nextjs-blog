@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#F3EFF5"/>
+  <!-- Bold serif "D" drawn as path -->
+  <path d="
+    M 130 80
+    L 260 80
+    C 370 80, 420 140, 420 256
+    C 420 372, 370 432, 260 432
+    L 130 432
+    Z
+    M 200 150
+    L 200 362
+    L 250 362
+    C 310 362, 348 320, 348 256
+    C 348 192, 310 150, 250 150
+    Z
+  " fill="#C44569" fill-rule="evenodd"/>
+</svg>
