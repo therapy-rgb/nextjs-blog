@@ -27,13 +27,58 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600; // Revalidate every hour (sufficient for personal blog)
 
+interface MonthGroup {
+  month: string;
+  posts: Post[];
+}
+
+interface YearGroup {
+  year: string;
+  months: MonthGroup[];
+}
+
+function groupPostsByYearAndMonth(posts: Post[]): YearGroup[] {
+  const groups: YearGroup[] = [];
+
+  for (const post of posts) {
+    const date = new Date(post.publishedAt);
+    const year = format(date, 'yyyy');
+    const month = format(date, 'MMMM');
+
+    let yearGroup = groups.find(g => g.year === year);
+    if (!yearGroup) {
+      yearGroup = { year, months: [] };
+      groups.push(yearGroup);
+    }
+
+    let monthGroup = yearGroup.months.find(m => m.month === month);
+    if (!monthGroup) {
+      monthGroup = { month, posts: [] };
+      yearGroup.months.push(monthGroup);
+    }
+
+    monthGroup.posts.push(post);
+  }
+
+  return groups;
+}
+
+// Fallback excerpts for posts that don't have one set in Sanity
+const fallbackExcerpts: Record<string, string> = {
+  'florida': 'Stealing quiet moments at an oceanside condo between holiday chaos and telehealth sessions.',
+  'meetings': 'The ones you endure, the ones you enjoy, and the grudging admission that sitting down together is how people actually figure things out.',
+  'clearing-a-path': 'Fall obligations pile up. Underneath them, a question about whether attacking every task is diligence or avoidance.',
+  'before-the-work-begins': 'A coffee shop before the day closes in, and the paradox that the life a writer tries to escape is the only material worth writing about.',
+  'following-up': 'The restless urge to do and prove, and the quiet discipline of following the thread back toward stillness.',
+  'getting-started': 'Choosing to write instead of nap in the slim window between walking the dog and ordering fence stain.',
+}
+
 async function getPosts(): Promise<Post[]> {
   try {
     const entries: PostListItem[] = await client.fetch(postsListQuery);
-    // Add default author to each journal entry
     return entries.map((entry) => ({
       ...entry,
-      body: [], // Body not fetched for list view
+      body: [],
       author: defaultAuthor,
       categories: []
     }));
@@ -45,36 +90,73 @@ async function getPosts(): Promise<Post[]> {
 
 export default async function Journal() {
   const posts = await getPosts();
+  const yearGroups = groupPostsByYearAndMonth(posts);
 
   return (
-    <PageContainer maxWidth="3xl" className="py-20">
-      <div className="mb-16">
+    <PageContainer maxWidth="6xl" className="py-20">
+      <div className="mb-20">
         <h1 className="font-display text-5xl md:text-6xl font-bold text-sdm-text mb-2">
           Journal
         </h1>
       </div>
 
-      {posts.length > 0 ? (
-        <div className="space-y-12">
-          {posts.map((post) => (
-            <article key={post._id} className="border-b border-warm-gray-200 pb-12 last:border-b-0">
-              <Link href={`/posts/${post.slug.current}`}>
-                <h2 className="font-display text-3xl md:text-4xl font-bold text-sdm-text mb-3 hover:text-sdm-primary transition-colors duration-200">
-                  {post.title}
-                </h2>
-                <time
-                  dateTime={post.publishedAt}
-                  className="font-cooper text-base text-sdm-text-light block mb-4"
+      {yearGroups.length > 0 ? (
+        <div className="space-y-16">
+          {yearGroups.map((yearGroup) => (
+            <section key={yearGroup.year} className="space-y-12">
+              {yearGroup.months.map((monthGroup, monthIdx) => (
+                <div
+                  key={monthGroup.month}
+                  className="flex flex-col md:flex-row md:gap-x-8"
                 >
-                  {format(new Date(post.publishedAt), 'MM/dd/yyyy')}
-                </time>
-                {post.excerpt && (
-                  <p className="font-cooper text-xl text-sdm-text-light leading-relaxed">
-                    {post.excerpt}
-                  </p>
-                )}
-              </Link>
-            </article>
+                  {/* Left: year + month labels */}
+                  <div className="flex items-baseline gap-3 mb-4 md:mb-0 md:w-[260px] md:flex-shrink-0 md:pt-1">
+                    {monthIdx === 0 ? (
+                      <span className="font-display text-3xl md:text-4xl font-bold text-sdm-text md:min-w-[7rem]">
+                        {yearGroup.year}
+                      </span>
+                    ) : (
+                      <span className="hidden md:inline md:min-w-[7rem]" />
+                    )}
+                    <span className="font-display text-lg md:text-xl italic text-sdm-text">
+                      {monthGroup.month}
+                    </span>
+                  </div>
+
+                  {/* Right: posts */}
+                  <div className="flex-1">
+                    {monthGroup.posts.map((post) => (
+                      <article
+                        key={post._id}
+                        className="border-b border-warm-gray-200 pb-8 mb-8 last:mb-0"
+                      >
+                        <div className="flex justify-between items-baseline gap-4">
+                          <h2>
+                            <Link
+                              href={`/posts/${post.slug.current}`}
+                              className="font-display text-xl md:text-2xl text-sdm-text hover:text-sdm-primary transition-colors duration-200"
+                            >
+                              {post.title}
+                            </Link>
+                          </h2>
+                          <time
+                            dateTime={post.publishedAt}
+                            className="font-cooper text-sm md:text-base text-sdm-text-light whitespace-nowrap"
+                          >
+                            {format(new Date(post.publishedAt), 'MMMM d, yyyy')}
+                          </time>
+                        </div>
+                        {(post.excerpt || fallbackExcerpts[post.slug.current]) && (
+                          <p className="font-cooper text-base text-sdm-text-light mt-2 leading-relaxed">
+                            {post.excerpt || fallbackExcerpts[post.slug.current]}
+                          </p>
+                        )}
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </section>
           ))}
         </div>
       ) : (

@@ -8,6 +8,7 @@ import { urlFor } from '@/lib/sanity'
 import { getBaseUrl } from '@/lib/env'
 import { PortableText } from '@/components/content'
 import { JsonLd } from '@/components/seo'
+import Link from 'next/link'
 import { logError } from '@/lib/logging'
 import { Metadata } from 'next'
 
@@ -152,6 +153,17 @@ export default async function PostPage({ params }: PostPageProps) {
       <JsonLd data={jsonLd} />
       <JsonLd data={breadcrumbSchema} />
       <article className="container mx-auto px-4 py-8 max-w-4xl">
+      <nav className="mb-8">
+        <Link
+          href="/journal"
+          className="inline-flex items-center gap-2 font-cooper text-sdm-text-light hover:text-sdm-primary transition-colors duration-200"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+          </svg>
+          Journal
+        </Link>
+      </nav>
       <header className="mb-8">
         <h1 className="text-4xl md:text-5xl font-bold text-sdm-text mb-4">
           {post.title}
