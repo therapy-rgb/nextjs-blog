@@ -75,3 +75,19 @@ export interface DocumentationSection {
   content: PortableTextBlock[]
   order: number
 }
+
+export interface GalleryPhoto {
+  _key: string
+  alt: string
+  caption?: string
+  asset: {
+    _ref: string
+    _type: 'reference'
+  }
+}
+
+export interface PhotoGallery {
+  _id: string
+  title: string
+  photos: GalleryPhoto[]
+}

@@ -86,4 +86,16 @@ export const structure: StructureResolver = (S) =>
             .title('Documentation Sections')
             .defaultOrdering([{field: 'order', direction: 'asc'}])
         ),
+
+      S.divider(),
+
+      // La Familia Photo Gallery (singleton)
+      S.listItem()
+        .title('La Familia')
+        .icon(() => '📸')
+        .child(
+          S.document()
+            .documentId('photoGallery')
+            .schemaType('photoGallery')
+        ),
     ])

@@ -79,3 +79,14 @@ export const documentationSectionsQuery = `*[_type == "documentationSection"] | 
   content,
   order
 }`
+
+export const photoGalleryQuery = `*[_id == "photoGallery"][0] {
+  _id,
+  title,
+  photos[] {
+    _key,
+    alt,
+    caption,
+    asset
+  }
+}`

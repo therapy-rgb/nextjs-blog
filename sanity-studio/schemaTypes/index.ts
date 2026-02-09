@@ -4,5 +4,6 @@ import post from './post'
 import journalEntry from './journalEntry'
 import blockContent from './blockContent'
 import documentationSection from './documentationSection'
+import photoGallery from './photoGallery'
 
-export const schemaTypes = [author, category, post, journalEntry, blockContent, documentationSection]
+export const schemaTypes = [author, category, post, journalEntry, blockContent, documentationSection, photoGallery]

@@ -1,39 +1,45 @@
-'use client'
-
 import Image from 'next/image'
+import type { Metadata } from 'next'
 import { PageContainer } from '@/components/layout'
+import { client, photoGalleryQuery, urlFor } from '@/lib/sanity'
+import { PhotoGallery } from '@/types/sanity'
+import { logError } from '@/lib/logging'
 
+export const metadata: Metadata = {
+  title: 'La Familia | Suburban Dad Mode',
+  description: 'A gallery of precious family moments and memories from our suburban adventures.',
+  alternates: {
+    canonical: 'https://suburbandadmode.com/la-familia',
+  },
+  openGraph: {
+    title: 'La Familia | Suburban Dad Mode',
+    description: 'A gallery of precious family moments and memories from our suburban adventures.',
+    url: 'https://suburbandadmode.com/la-familia',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'La Familia | Suburban Dad Mode',
+    description: 'A gallery of precious family moments and memories from our suburban adventures.',
+  },
+}
 
-export default function LaFamilia() {
-  const photos = [
-    '133398442_zw2ypx3k75.jpg',
-    'IMG_2576.jpg',
-    'IMG_2697.jpg',
-    'IMG_2724.jpg',
-    'IMG_2726.jpg',
-    'IMG_2731.jpg',
-    'IMG_2766.jpg',
-    'IMG_2772.jpg',
-    'IMG_2773.jpg',
-    'IMG_2775.jpg',
-    'IMG_2902.jpg',
-    'IMG_5073.jpg',
-    'IMG_5075.jpg',
-    'IMG_5149.jpg',
-    'IMG_5190.jpg',
-    'IMG_5230.jpg',
-    'IMG_5244.jpg',
-    'IMG_5269.jpg',
-    'IMG_5304.jpg',
-    'IMG_5312.jpg',
-    'IMG_5478.jpg',
-    'IMG_5489.jpg',
-    'IMG_5495.jpg',
-    'IMG_5668.jpg',
-    'travel babu.jpg',
-    'dog-04.jpg',
-    'dog-05.jpg'
-  ]
+export const revalidate = 3600
+
+async function getGallery(): Promise<PhotoGallery | null> {
+  try {
+    return await client.fetch(photoGalleryQuery)
+  } catch (error) {
+    logError('sanity', 'Error fetching photo gallery', {
+      error: error instanceof Error ? error.message : String(error),
+    })
+    return null
+  }
+}
+
+export default async function LaFamilia() {
+  const gallery = await getGallery()
+  const photos = gallery?.photos ?? []
 
   return (
     <PageContainer maxWidth="6xl">
@@ -45,13 +51,16 @@ export default function LaFamilia() {
 
       <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 sm:gap-6">
         {photos.map((photo, index) => (
-          <div key={index} className="mb-4 sm:mb-6 break-inside-avoid rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+          <div
+            key={photo._key}
+            className="mb-4 sm:mb-6 break-inside-avoid rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
+          >
             <Image
-              src={`/familia-photos/${photo.replace(/\.(jpg|jpeg)$/i, '.webp')}`}
-              alt={`Family photo ${index + 1}`}
+              src={urlFor(photo).width(600).auto('format').url()}
+              alt={photo.alt}
               width={600}
               height={0}
-              loading={index < 3 ? "eager" : "lazy"}
+              loading={index < 3 ? 'eager' : 'lazy'}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="w-full h-auto hover:scale-105 transition-transform duration-300"
             />

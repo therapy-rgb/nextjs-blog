@@ -31,7 +31,11 @@ export default defineConfig({
   document: {
     newDocumentOptions: (prev, {creationContext}) => {
       if (creationContext.type === 'global') {
-        return prev.filter((templateItem) => templateItem.templateId !== 'settings')
+        return prev.filter(
+          (templateItem) =>
+            templateItem.templateId !== 'settings' &&
+            templateItem.templateId !== 'photoGallery'
+        )
       }
       return prev
     },
