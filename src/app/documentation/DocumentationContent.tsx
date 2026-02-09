@@ -20,7 +20,7 @@ function DocumentationInner({ sections }: DocumentationContentProps) {
     return (
       <div className="bg-sdm-background min-h-screen">
         <div className="max-w-6xl mx-auto px-4 py-8">
-          <h1 className="font-cooper text-3xl md:text-4xl text-sdm-text mb-8">Documentation</h1>
+          <h1 className="font-cooper text-3xl md:text-4xl text-sdm-text mb-8">Notes</h1>
           <p className="font-cooper text-lg text-sdm-text-light">No sections available.</p>
         </div>
       </div>
@@ -30,11 +30,11 @@ function DocumentationInner({ sections }: DocumentationContentProps) {
   return (
     <div className="bg-sdm-background min-h-screen">
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <h1 className="font-cooper text-3xl md:text-4xl text-sdm-text mb-8">Documentation</h1>
+        <h1 className="font-cooper text-3xl md:text-4xl text-sdm-text mb-8">Notes</h1>
 
         <div className="flex flex-col md:flex-row gap-8">
           {/* Sidebar menu */}
-          <nav className="md:w-56 shrink-0" aria-label="Documentation sections">
+          <nav className="md:w-56 shrink-0" aria-label="Notes sections">
             <ul className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-2 md:pb-0 md:sticky md:top-24">
               {sections.map(section => (
                 <li key={section._id} className="shrink-0">
@@ -60,7 +60,7 @@ function DocumentationInner({ sections }: DocumentationContentProps) {
               <div className="flex justify-center">
                 <Image
                   src="/documentation-hero.webp"
-                  alt="Documentation"
+                  alt="Notes"
                   width={1920}
                   height={1280}
                   className="rounded-lg shadow-md max-w-lg w-full h-auto"

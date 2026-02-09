@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 import DocumentationContent from './DocumentationContent'
 
 export const metadata: Metadata = {
-  title: 'Documentation | Suburban Dad Mode',
+  title: 'Notes | Suburban Dad Mode',
   description: 'About this site — who built it, what it runs on, and how accessibility was considered.',
   alternates: {
     canonical: 'https://suburbandadmode.com/documentation',
