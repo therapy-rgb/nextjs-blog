@@ -29,6 +29,7 @@ A personal blog about family, finances, music, and suburban life.
 | `/puttering` | Poetry viewer with dropdown selector |
 | `/about` | About page |
 | `/contact` | Contact page (UI only) |
+| `/documentation` | Site info: About Me, Now, Accessibility, Colophon |
 
 ## Getting Started
 
@@ -94,6 +95,7 @@ src/
 │   ├── puttering/          # Poetry viewer
 │   ├── about/              # About page
 │   ├── contact/            # Contact page
+│   ├── documentation/      # Site info (About, Now, Accessibility, Colophon)
 │   ├── global-error.tsx    # Sentry error boundary
 │   ├── not-found.tsx       # 404 page
 │   ├── sitemap.ts          # Auto-generated sitemap
