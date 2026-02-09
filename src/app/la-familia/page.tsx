@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { PageContainer } from '@/components/layout'
-import { ContentCard } from '@/components/ui'
+
 
 export default function LaFamilia() {
   const photos = [
@@ -30,7 +30,9 @@ export default function LaFamilia() {
     'IMG_5489.jpg',
     'IMG_5495.jpg',
     'IMG_5668.jpg',
-    'travel babu.jpg'
+    'travel babu.jpg',
+    'dog-04.jpg',
+    'dog-05.jpg'
   ]
 
   return (
