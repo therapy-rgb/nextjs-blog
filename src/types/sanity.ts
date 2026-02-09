@@ -65,3 +65,13 @@ export interface JournalEntry {
   excerpt?: string
   body: PortableTextBlock[]
 }
+
+export interface DocumentationSection {
+  _id: string
+  title: string
+  slug: {
+    current: string
+  }
+  content: PortableTextBlock[]
+  order: number
+}

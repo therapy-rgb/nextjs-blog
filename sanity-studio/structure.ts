@@ -74,4 +74,16 @@ export const structure: StructureResolver = (S) =>
         .icon(() => '🏷️')
         .schemaType('category')
         .child(S.documentTypeList('category').title('All Categories')),
+
+      S.divider(),
+
+      // Documentation Sections
+      S.listItem()
+        .title('Documentation')
+        .icon(() => '📖')
+        .child(
+          S.documentTypeList('documentationSection')
+            .title('Documentation Sections')
+            .defaultOrdering([{field: 'order', direction: 'asc'}])
+        ),
     ])

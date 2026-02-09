@@ -71,3 +71,11 @@ export const authorQuery = `*[_type == "author" && slug.current == $slug][0] {
   image,
   bio
 }`
+
+export const documentationSectionsQuery = `*[_type == "documentationSection"] | order(order asc) {
+  _id,
+  title,
+  slug,
+  content,
+  order
+}`

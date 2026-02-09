@@ -29,7 +29,7 @@ A personal blog about family, finances, music, and suburban life.
 | `/puttering` | Poetry viewer with dropdown selector |
 | `/about` | About page |
 | `/contact` | Contact page (UI only) |
-| `/documentation` | Site info: About Me, Now, Accessibility, Colophon |
+| `/documentation` | Site info from Sanity CMS: About Me, Now, Accessibility, Colophon (ISR: 1 hr) |
 
 ## Getting Started
 
@@ -150,6 +150,10 @@ import { JsonLd } from '@/components/seo'
 2. Next.js fetches content via GROQ queries in `src/lib/sanity.ts`
 3. ISR revalidates every hour -- no manual redeploy needed for content changes
 4. Private entries (`private: true`) are filtered out of all public queries
+
+### Documentation sections (Sanity CMS)
+
+The Documentation page sections (About Me, Now, Accessibility, Colophon) are `documentationSection` documents in Sanity. Edit them in Sanity Studio under the Documentation sidebar item. ISR revalidates every hour.
 
 ### Photo and poetry pages
 

@@ -13,7 +13,7 @@ Uses Next.js App Router. Pages are server components by default.
 - **/contact** - Contact page (UI only, no backend)
 - **/la-familia** - Photo gallery (client component)
 - **/puttering** - Poetry viewer with dropdown (client component)
-- **/documentation** - Site info with sidebar nav: About Me, Now, Accessibility, Colophon (client component)
+- **/documentation** - Site info with sidebar nav, content from Sanity CMS (ISR: 1hr, client component for tab switching)
 
 ## Conventions
 
