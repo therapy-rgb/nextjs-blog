@@ -1,6 +1,7 @@
 'use client'
 
 import { useSearchParams, useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Suspense } from 'react'
 
 const sections = [
@@ -74,10 +75,15 @@ function DocumentationContent() {
           {/* Main content area */}
           <div className="flex-1 min-w-0">
             {!selectedSection && (
-              <div className="p-6 md:p-12 rounded-lg shadow-md bg-sdm-card border border-warm-gray-200">
-                <p className="font-cooper text-lg text-sdm-text-light">
-                  Select a section from the menu to read more.
-                </p>
+              <div className="flex justify-center">
+                <Image
+                  src="/documentation-hero.webp"
+                  alt="Documentation"
+                  width={1920}
+                  height={1280}
+                  className="rounded-lg shadow-md max-w-lg w-full h-auto"
+                  priority
+                />
               </div>
             )}
 
