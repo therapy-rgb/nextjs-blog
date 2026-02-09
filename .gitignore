@@ -44,3 +44,8 @@ next-env.d.ts
 
 # playwright
 .playwright-mcp/
+
+# screenshots / reference images in project root
+/*.png
+/*.jpg
+/*.jpeg

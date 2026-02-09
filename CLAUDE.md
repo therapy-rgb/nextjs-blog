@@ -126,6 +126,7 @@ UPSTASH_REDIS_REST_TOKEN=<redis-token>
 - Import components from barrel exports, not direct file paths
 - Custom hooks live in `src/hooks/` with `'use client'` directive
 - All site constants belong in `src/lib/constants.ts`
+- Screenshot/reference PNGs/JPGs in the project root are gitignored — delete them when no longer needed rather than letting them accumulate
 
 ## Security Notes
 
