@@ -38,6 +38,7 @@ src/
 ├── app/              # Next.js App Router pages
 │   ├── journal/      # Journal listing (ISR: 1hr)
 │   ├── posts/[slug]/ # Individual posts (ISR: 1hr)
+│   ├── api/revalidate/   # Sanity webhook → on-demand ISR
 │   ├── global-error.tsx  # Sentry error boundary
 │   └── ...
 ├── components/       # React components (organized by category)
@@ -76,6 +77,7 @@ vitest.config.ts      # Test configuration
 - `src/lib/env.ts` - Environment validation (runs at startup)
 - `src/lib/validation.ts` - Shared validation/sanitization utilities
 - `src/lib/api-security.ts` - Rate limiting, CSRF protection, bot detection
+- `src/app/api/revalidate/route.ts` - Sanity webhook handler for on-demand ISR
 - `src/components/content/PortableText.tsx` - Sanity rich text renderer
 - `src/components/layout/Header.tsx` - Header with focus-trap mobile menu
 - `src/hooks/useMobileMenu.ts` - Mobile menu hook (escape, scroll lock, route-close)
@@ -115,13 +117,14 @@ SENTRY_ORG=<org-slug>
 SENTRY_PROJECT=<project-slug>
 UPSTASH_REDIS_REST_URL=<redis-url>
 UPSTASH_REDIS_REST_TOKEN=<redis-token>
+SANITY_REVALIDATION_SECRET=<webhook-secret>
 ```
 
 ## Conventions
 
 - Use `NEXT_PUBLIC_` prefix for client-accessible env vars
 - Sanity queries use parameterized GROQ (prevent injection)
-- ISR handles content updates automatically (no webhooks)
+- Sanity webhook triggers on-demand revalidation via `/api/revalidate`; ISR is the fallback
 - Private journal entries filtered with `private != true`
 - Import components from barrel exports, not direct file paths
 - Custom hooks live in `src/hooks/` with `'use client'` directive
@@ -172,9 +175,10 @@ cd sanity-studio && npx sanity deploy
 - **Turbopack issues**: Try `next build` without `--turbopack` flag if dev works but build fails
 
 ### Content Not Updating
-- ISR revalidates: journal pages every 1hr, posts every 1hr
-- For immediate updates, redeploy or use Vercel's "Redeploy" button
-- Check `revalidate` values in page components if timing seems off
+- Sanity webhook should trigger near-instant revalidation via `/api/revalidate`
+- If webhook isn't working, ISR still revalidates every 1hr as a fallback
+- Check `SANITY_REVALIDATION_SECRET` is set in Vercel and matches the Sanity webhook config
+- For immediate manual updates, redeploy or use Vercel's "Redeploy" button
 
 ### Sanity Studio Issues
 - Studio is a separate app in `sanity-studio/` directory

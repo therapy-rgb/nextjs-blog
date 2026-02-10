@@ -18,6 +18,9 @@ interface EnvConfig {
   // Upstash Redis (optional - only required for rate limiting)
   UPSTASH_REDIS_REST_URL: string | undefined
   UPSTASH_REDIS_REST_TOKEN: string | undefined
+
+  // Sanity webhook revalidation (optional - required for on-demand ISR)
+  SANITY_REVALIDATION_SECRET: string | undefined
 }
 
 interface ValidationResult {
@@ -46,6 +49,11 @@ export function validateEnv(): ValidationResult {
   // Optional: Rate limiting
   if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
     warnings.push('Upstash Redis not configured - rate limiting will use in-memory fallback')
+  }
+
+  // Optional: Sanity webhook revalidation
+  if (!process.env.SANITY_REVALIDATION_SECRET) {
+    warnings.push('SANITY_REVALIDATION_SECRET not set - on-demand revalidation webhook will be disabled')
   }
 
   return {
@@ -92,6 +100,7 @@ export const env: EnvConfig = {
   NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
   UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
   UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
+  SANITY_REVALIDATION_SECRET: process.env.SANITY_REVALIDATION_SECRET,
 }
 
 /**
