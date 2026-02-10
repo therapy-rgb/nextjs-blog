@@ -98,4 +98,14 @@ export const structure: StructureResolver = (S) =>
             .documentId('photoGallery')
             .schemaType('photoGallery')
         ),
+
+      // Puttering Poems (singleton)
+      S.listItem()
+        .title('Puttering')
+        .icon(() => '✍️')
+        .child(
+          S.document()
+            .documentId('putteringPoems')
+            .schemaType('putteringPoems')
+        ),
     ])

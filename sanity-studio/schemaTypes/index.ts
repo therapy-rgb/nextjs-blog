@@ -5,5 +5,6 @@ import journalEntry from './journalEntry'
 import blockContent from './blockContent'
 import documentationSection from './documentationSection'
 import photoGallery from './photoGallery'
+import putteringPoems from './putteringPoems'
 
-export const schemaTypes = [author, category, post, journalEntry, blockContent, documentationSection, photoGallery]
+export const schemaTypes = [author, category, post, journalEntry, blockContent, documentationSection, photoGallery, putteringPoems]

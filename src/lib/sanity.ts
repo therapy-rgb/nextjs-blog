@@ -90,3 +90,14 @@ export const photoGalleryQuery = `*[_id == "photoGallery"][0] {
     asset
   }
 }`
+
+export const putteringPoemsQuery = `*[_id == "putteringPoems"][0] {
+  _id,
+  title,
+  poems[] {
+    _key,
+    title,
+    "slug": slug.current,
+    text
+  }
+}`

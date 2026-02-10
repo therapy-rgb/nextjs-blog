@@ -13,6 +13,7 @@ const REVALIDATION_PATHS: Record<string, (slug?: string) => string[]> = {
     return paths
   },
   photoGallery: () => ['/la-familia'],
+  putteringPoems: () => ['/puttering'],
   documentationSection: () => ['/documentation'],
   author: () => ['/journal'],
 }

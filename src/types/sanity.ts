@@ -91,3 +91,16 @@ export interface PhotoGallery {
   title: string
   photos: GalleryPhoto[]
 }
+
+export interface Poem {
+  _key: string
+  title: string
+  slug: string
+  text: string
+}
+
+export interface PutteringPoems {
+  _id: string
+  title: string
+  poems: Poem[]
+}

@@ -26,7 +26,7 @@ A personal blog about family, finances, music, and suburban life.
 | `/journal` | Blog listing, sourced from Sanity (ISR: 1 hr) |
 | `/posts/[slug]` | Individual blog posts (ISR: 1 hr) |
 | `/la-familia` | Family photo gallery (vertical scroll) |
-| `/puttering` | Poetry viewer with dropdown selector |
+| `/puttering` | Poetry viewer from Sanity CMS (ISR: 1 hr) |
 | `/about` | About page |
 | `/contact` | Contact page (UI only) |
 | `/documentation` | Site info from Sanity CMS: About Me, Now, Accessibility, Colophon (ISR: 1 hr) |
@@ -157,7 +157,7 @@ The Documentation page sections (About Me, Now, Accessibility, Colophon) are `do
 
 ### Photo and poetry pages
 
-La Familia and Puttering are client components with images/content stored directly in `public/`. Update the data arrays in their respective `page.tsx` files.
+La Familia photos and Puttering poems are managed in Sanity CMS. Edit them in Sanity Studio under their respective sidebar singletons. ISR revalidates every hour, and the Sanity webhook triggers on-demand revalidation.
 
 ## Deployment
 
