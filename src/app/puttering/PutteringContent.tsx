@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams, useRouter } from 'next/navigation'
-import { Suspense } from 'react'
+import { useState, Suspense } from 'react'
 import Image from 'next/image'
 import type { Poem } from '@/types/sanity'
 
@@ -16,31 +16,50 @@ function PutteringInner({ poems }: { poems: Poem[] }) {
   const prevPoem = selectedIndex > 0 ? poems[selectedIndex - 1] : null
   const nextPoem = selectedIndex >= 0 && selectedIndex < poems.length - 1 ? poems[selectedIndex + 1] : null
 
+  const [open, setOpen] = useState(!!selectedSlug)
+
+  const handleSelect = (slug: string) => {
+    setOpen(true)
+    router.push(`/puttering?poem=${slug}`, { scroll: false })
+  }
+
   return (
     <div className="bg-sdm-background min-h-screen">
       <div className="max-w-6xl mx-auto px-4 py-8">
         <h1 className="sr-only">Puttering - A Collection of Poems</h1>
 
         <div className="flex flex-col md:flex-row gap-8">
-          {/* Sidebar poem list */}
-          <nav className="md:w-56 shrink-0" aria-label="Poem selection">
-            <ul className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-2 md:pb-0 md:sticky md:top-24">
-              {poems.map(poem => (
-                <li key={poem._key} className="shrink-0">
-                  <button
-                    onClick={() => router.push(`/puttering?poem=${poem.slug}`, { scroll: false })}
-                    className={`font-cooper text-lg text-left transition-colors duration-200 px-3 py-2 rounded-md whitespace-nowrap md:whitespace-normal w-full ${
-                      selectedSlug === poem.slug
-                        ? 'text-sdm-primary font-bold bg-sdm-card shadow-sm border border-warm-gray-200'
-                        : 'text-sdm-text-light hover:text-sdm-primary hover:bg-sdm-card/50'
-                    }`}
-                    aria-current={selectedSlug === poem.slug ? 'true' : undefined}
-                  >
-                    {poem.title}
-                  </button>
-                </li>
-              ))}
-            </ul>
+          {/* Sidebar dropdown */}
+          <nav className="md:w-56 shrink-0 md:sticky md:top-24 md:self-start" aria-label="Poem selection">
+            <div>
+              <button
+                onClick={() => setOpen(!open)}
+                className="w-full flex items-center justify-between py-2.5 px-3 text-left font-cooper text-lg font-semibold text-sdm-text border-b border-sdm-text/20 hover:bg-sdm-card/50 transition-colors"
+                aria-expanded={open}
+              >
+                Poems
+                <span className={`text-sdm-text-light transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>&#9662;</span>
+              </button>
+              {open && (
+                <ul className="py-1">
+                  {poems.map(poem => (
+                    <li key={poem._key}>
+                      <button
+                        onClick={() => handleSelect(poem.slug)}
+                        className={`w-full text-left py-1.5 px-5 font-cooper text-base transition-colors duration-200 ${
+                          selectedSlug === poem.slug
+                            ? 'text-sdm-primary font-semibold'
+                            : 'text-sdm-text-light hover:text-sdm-primary'
+                        }`}
+                        aria-current={selectedSlug === poem.slug ? 'true' : undefined}
+                      >
+                        {poem.title}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </nav>
 
           {/* Main content area */}
