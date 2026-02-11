@@ -130,6 +130,38 @@ SANITY_REVALIDATION_SECRET=<webhook-secret>
 - Custom hooks live in `src/hooks/` with `'use client'` directive
 - All site constants belong in `src/lib/constants.ts`
 - Screenshot/reference PNGs/JPGs in the project root are gitignored — delete them when no longer needed rather than letting them accumulate
+- Escape HTML entities in JSX (`&quot;`, `&apos;`)
+
+## Styling
+
+- **Tailwind CSS v4** with custom color tokens prefixed `sdm-` (defined in `tailwind.config.ts`)
+- Primary: `sdm-primary` (#C44569 deep rose), Accent: `sdm-accent` (#2EC4B6 bright teal)
+- Background: `sdm-background` (#F3EFF5 light lavender), Text: `sdm-text` (#1D3557 navy)
+- Fonts: **Cooper** (`font-cooper`, `font-display`) for headings/body, **TT Disruptors** (`font-disruptors`) for Puttering poetry
+- Base font size is 22px (`text-base` = 1.375rem) — intentionally large
+- Typography plugin used for rich text content
+
+## Sanity CMS
+
+### Schemas (in `sanity-studio/schemaTypes/`)
+
+| Type | Description |
+|------|-------------|
+| `journalEntry` | Blog posts (primary content type) |
+| `post` | Legacy posts (from WordPress migration) |
+| `author` | Author profiles |
+| `category` | Post categories |
+| `blockContent` | Rich text config |
+| `documentationSection` | Notes page content |
+| `photoGallery` | La Familia photo gallery (singleton) |
+| `putteringPoems` | Poetry collection (singleton) |
+
+### Content Flow
+- Content managed in Sanity Studio → fetched via GROQ queries in `src/lib/sanity.ts`
+- On-demand revalidation via Sanity webhook (`/api/revalidate`)
+- ISR fallback: 1hr for content pages, 24hr for static pages
+- `published == true` required for posts to appear (BLOG_QUERY filters by this)
+- `private != true` for journal entries
 
 ## Security Notes
 
@@ -139,6 +171,17 @@ SANITY_REVALIDATION_SECRET=<webhook-secret>
 - Keep `.env*.local` files gitignored
 - API routes should use `api-security.ts` for rate limiting and origin validation
 - Sentry tracks errors in production (disabled in dev)
+- CSP headers configured in `next.config.ts`
+
+## Gotchas
+
+- Project uses **Next.js 16**, **React 19**, **Sanity v5**, **Tailwind v4** — keep versions in sync, don't upgrade individually
+- Use `npm run lint` not `next lint` (deprecated in Next.js 16)
+- Always test build locally before pushing (`npm run build`)
+- `sanity-studio/` is a separate app with its own `package.json` and `node_modules/`
+- WordPress migration data in `migration/` is preserved for reference — don't delete
+- `next.config.ts` has WordPress → new URL redirect rules — leave these intact
+- Sanity project ID is `4qp7h589` (in `.env.local`)
 
 ## Deployment
 
