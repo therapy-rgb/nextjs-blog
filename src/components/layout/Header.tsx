@@ -25,7 +25,7 @@ export default function Header() {
           {/* Logo */}
           <Link
             href="/"
-            className="font-display text-3xl font-bold text-sdm-primary hover:text-sdm-accent transition-colors duration-200"
+            className="font-display text-xl font-bold text-sdm-primary hover:text-sdm-accent transition-colors duration-200"
           >
             Suburban Dad Mode
           </Link>
@@ -55,66 +55,88 @@ export default function Header() {
           <button
             ref={toggleButtonRef}
             type="button"
-            className="md:hidden inline-flex items-center justify-center p-3 min-w-[44px] min-h-[44px] rounded-md text-sdm-text-light hover:text-sdm-primary hover:bg-warm-gray-100 transition-colors duration-200"
+            className="md:hidden inline-flex items-center gap-2 justify-center p-3 min-w-[44px] min-h-[44px] rounded-md text-sdm-text-light hover:text-sdm-primary hover:bg-warm-gray-100 transition-colors duration-200"
             onClick={toggle}
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
             aria-label={isOpen ? 'Close main menu' : 'Open main menu'}
           >
-            {/* Hamburger icon */}
+            <span className="text-sm font-semibold tracking-wide uppercase">Menu</span>
             <svg
-              className={`${isOpen ? 'hidden' : 'block'} h-6 w-6`}
+              className="h-6 w-6"
               stroke="currentColor"
               fill="none"
               viewBox="0 0 24 24"
               aria-hidden="true"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            {/* Close icon */}
-            <svg
-              className={`${isOpen ? 'block' : 'hidden'} h-6 w-6`}
-              stroke="currentColor"
-              fill="none"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M7 12h16M4 18h16" />
             </svg>
           </button>
         </div>
 
-        {/* Mobile Navigation with Focus Trap */}
-        {isOpen && (
-          <FocusTrap
-            active={isOpen}
-            focusTrapOptions={{
-              allowOutsideClick: true,
-              returnFocusOnDeactivate: true,
-              initialFocus: false,
-            }}
+      </div>
+
+      {/* Mobile Side Drawer */}
+      <div className="md:hidden" aria-hidden={!isOpen}>
+        {/* Backdrop */}
+        <div
+          className={`fixed inset-0 bg-black/30 z-40 transition-opacity duration-300 ${
+            isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
+          onClick={close}
+        />
+
+        {/* Drawer panel */}
+        <FocusTrap
+          active={isOpen}
+          focusTrapOptions={{
+            allowOutsideClick: true,
+            returnFocusOnDeactivate: true,
+            initialFocus: false,
+          }}
+        >
+          <nav
+            id="mobile-menu"
+            ref={menuRef}
+            className={`fixed top-0 right-0 w-44 bg-sdm-primary/80 backdrop-blur-sm shadow-xl rounded-bl-2xl z-50 transform transition-transform duration-300 ease-in-out ${
+              isOpen ? 'translate-x-0' : 'translate-x-full'
+            }`}
+            aria-label="Mobile navigation"
           >
-            <nav id="mobile-menu" ref={menuRef} className="md:hidden" aria-label="Mobile navigation">
-              <div className="px-2 pt-2 pb-3 space-y-1 border-t border-warm-gray-200">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={`block px-3 py-3 min-h-[44px] rounded-md text-lg font-cooper transition-colors duration-200 ${
-                      pathname === item.href
-                        ? 'text-sdm-primary bg-warm-gray-100 font-bold'
-                        : 'text-sdm-text-light hover:text-sdm-primary hover:bg-warm-gray-100'
-                    }`}
-                    onClick={close}
-                    aria-current={pathname === item.href ? 'page' : undefined}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-            </nav>
-          </FocusTrap>
-        )}
+            {/* Close button */}
+            <div className="flex justify-start p-4 pb-2">
+              <button
+                type="button"
+                className="inline-flex items-center justify-center p-2 min-w-[44px] min-h-[44px] rounded-md text-white/70 hover:text-white transition-colors duration-200"
+                onClick={close}
+                aria-label="Close menu"
+              >
+                <svg className="h-5 w-5" stroke="currentColor" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Nav links */}
+            <div className="px-4 pb-4 space-y-0.5">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`block px-3 py-2.5 min-h-[44px] rounded-lg text-lg font-cooper transition-colors duration-200 ${
+                    pathname === item.href
+                      ? 'text-white font-bold bg-white/20'
+                      : 'text-white/85 hover:text-white hover:bg-white/10'
+                  }`}
+                  onClick={close}
+                  aria-current={pathname === item.href ? 'page' : undefined}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </nav>
+        </FocusTrap>
       </div>
     </header>
   )

@@ -1,3 +1,4 @@
+import React from 'react'
 import { PortableText as BasePortableText, PortableTextBlock } from '@portabletext/react'
 import Image from 'next/image'
 import { urlFor } from '@/lib/sanity'
@@ -9,6 +10,18 @@ interface PortableTextProps {
 }
 
 const components = {
+  marks: {
+    link: ({ children, value }: { children: React.ReactNode; value?: { href?: string } }) => (
+      <a
+        href={value?.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-sdm-primary no-underline hover:text-sdm-accent transition-colors duration-200"
+      >
+        {children}
+      </a>
+    ),
+  },
   types: {
     image: ({ value }: { value: SanityImage }) => {
       if (!value?.asset?._ref) {
