@@ -76,6 +76,15 @@ function DocumentationInner({ sections }: DocumentationContentProps) {
                 </h2>
                 <div className="font-cooper text-lg leading-relaxed text-sdm-text prose prose-lg max-w-none">
                   <PortableText content={selectedSection.content} />
+                  {selectedSection.slug.current === 'colophon' && (
+                    <p>
+                      The footer illustration is{' '}
+                      <a href="https://thedesignsquiggle.com" target="_blank" rel="noopener noreferrer" className="text-sdm-primary no-underline hover:text-sdm-accent transition-colors duration-200">
+                        The Design Squiggle
+                      </a>{' '}
+                      by Damien Newman.
+                    </p>
+                  )}
                 </div>
               </article>
             )}
