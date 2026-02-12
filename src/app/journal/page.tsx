@@ -141,13 +141,13 @@ export default async function Journal() {
                           </h2>
                           <time
                             dateTime={post.publishedAt}
-                            className="font-cooper text-base md:text-lg text-sdm-primary whitespace-nowrap"
+                            className="font-cooper font-light text-base md:text-lg text-sdm-primary whitespace-nowrap"
                           >
                             {format(new Date(post.publishedAt), 'MM/dd/yyyy')}
                           </time>
                         </div>
                         {(post.excerpt || fallbackExcerpts[post.slug.current]) && (
-                          <p className="font-cooper text-lg text-sdm-text-light mt-2 leading-relaxed max-w-[75%]">
+                          <p className="font-cooper font-light text-lg text-sdm-text-light mt-2 leading-relaxed max-w-[75%]">
                             {post.excerpt || fallbackExcerpts[post.slug.current]}
                           </p>
                         )}

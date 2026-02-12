@@ -81,6 +81,13 @@ export default function RootLayout({
         {/* Preload custom fonts for better LCP and reduced CLS */}
         <link
           rel="preload"
+          href="/fonts/cooper_light.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
           href="/fonts/cooper_medium.woff2"
           as="font"
           type="font/woff2"

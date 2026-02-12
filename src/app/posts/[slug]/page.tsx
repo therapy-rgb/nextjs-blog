@@ -189,7 +189,7 @@ export default async function PostPage({ params }: PostPageProps) {
         )}
       </header>
 
-      <div className="prose prose-xl max-w-none text-xl md:text-2xl">
+      <div className="prose prose-xl max-w-none text-xl md:text-2xl font-light">
         <PortableText content={post.body} />
       </div>
 
