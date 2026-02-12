@@ -42,5 +42,11 @@ git push origin main
 ```
 Confirm the push succeeded and display the commit hash.
 
-### 7. Summary
-Report what was shipped: commit hash, files changed, and remind that Vercel will auto-deploy from main.
+### 7. Deploy
+```bash
+vercel --prod
+```
+Trigger an immediate production deployment rather than waiting for the git-triggered build.
+
+### 8. Summary
+Report what was shipped: commit hash, files changed, and confirm the Vercel production deploy was triggered.
