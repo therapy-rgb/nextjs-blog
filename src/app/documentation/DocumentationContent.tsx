@@ -74,7 +74,7 @@ function DocumentationInner({ sections }: DocumentationContentProps) {
                 <h2 className="font-cooper text-2xl md:text-3xl text-sdm-text mb-6">
                   {selectedSection.title}
                 </h2>
-                <div className="font-cooper text-lg leading-relaxed text-sdm-text prose prose-lg max-w-none">
+                <div className="prose prose-xl max-w-none text-xl md:text-2xl font-light">
                   <PortableText content={selectedSection.content} />
                   {selectedSection.slug.current === 'colophon' && (
                     <p>
