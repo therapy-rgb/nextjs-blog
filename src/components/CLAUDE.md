@@ -6,7 +6,7 @@ Components are organized by category:
 
 - **layout/** - Structural components: Header, Footer, PageContainer
 - **ui/** - Reusable UI elements: ArrowLink, ContentCard
-- **content/** - Content rendering: PortableText, PostCard, AuthorAvatar
+- **content/** - Content rendering: PortableText, PostCard, ProjectCard, AuthorAvatar
 - **seo/** - SEO-related: JsonLd
 
 Each subdirectory has an `index.ts` barrel export. Import from the category:
