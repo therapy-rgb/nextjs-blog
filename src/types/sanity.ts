@@ -114,5 +114,6 @@ export interface Project {
   repoUrl?: string
   image?: SanityImage
   techStack: string[]
+  category?: 'public' | 'internal'
   order: number
 }

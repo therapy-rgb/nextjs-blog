@@ -13,8 +13,7 @@ Uses Next.js App Router. Pages are server components by default.
 - **/contact** - Contact page (UI only, no backend)
 - **/la-familia** - Photo gallery from Sanity CMS (ISR: 1hr, server component)
 - **/puttering** - Poetry viewer from Sanity CMS (ISR: 1hr, server component + client PutteringContent)
-- **/documentation** - Site info with sidebar nav, content from Sanity CMS (ISR: 1hr, client component for tab switching)
-- **/projects** - Project portfolio from Sanity CMS (ISR: 1hr, server component with ProjectCard grid)
+- **/documentation** - Site info with sidebar nav, content from Sanity CMS (ISR: 1hr, client component for tab switching). Also includes Projects section in sidebar between "Now" and "Accessibility"
 
 ## Conventions
 

@@ -1,15 +1,19 @@
 import Image from 'next/image'
 import { Project } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
-import { ContentCard } from '@/components/ui'
 
 interface ProjectCardProps {
   project: Project
+  variant?: 'default' | 'muted'
 }
 
-export default function ProjectCard({ project }: ProjectCardProps) {
+export default function ProjectCard({ project, variant = 'default' }: ProjectCardProps) {
+  const cardClass = variant === 'muted'
+    ? 'bg-warm-gray-100 border border-warm-gray-200 rounded-lg p-6 overflow-hidden flex flex-col'
+    : 'bg-sdm-card border border-warm-gray-200 rounded-lg shadow-sm p-6 overflow-hidden flex flex-col'
+
   return (
-    <ContentCard padding="sm" className="overflow-hidden flex flex-col">
+    <div className={cardClass}>
       {project.image && (
         <div className="relative h-48 -mx-6 -mt-6 mb-4 overflow-hidden">
           <Image
@@ -43,8 +47,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </div>
       )}
 
-      <div className="flex items-center gap-4">
-        {project.url && (
+      {project.url && (
+        <div>
           <a
             href={project.url}
             target="_blank"
@@ -56,21 +60,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
-        )}
-        {project.repoUrl && (
-          <a
-            href={project.repoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sdm-text-light font-cooper hover:text-sdm-text transition-colors duration-200"
-          >
-            GitHub
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-          </a>
-        )}
-      </div>
-    </ContentCard>
+        </div>
+      )}
+    </div>
   )
 }

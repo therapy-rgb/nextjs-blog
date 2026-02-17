@@ -30,7 +30,7 @@ A personal blog about family, finances, music, and suburban life.
 | `/about` | About page |
 | `/contact` | Contact page (UI only) |
 | `/documentation` | Site info from Sanity CMS: About Me, Now, Accessibility, Colophon (ISR: 1 hr) |
-| `/projects` | Portfolio-style project dashboard from Sanity CMS (ISR: 1 hr) |
+| `/documentation?section=projects` | Portfolio-style project dashboard (within Notes page, from Sanity CMS) |
 
 ## Getting Started
 

@@ -71,6 +71,21 @@ export default defineType({
       description: 'Technology tags (e.g., "Next.js 16", "Racket", "Tailwind v4")',
     }),
     defineField({
+      name: 'category',
+      title: 'Category',
+      type: 'string',
+      description: 'Whether this is a public-facing or internal project',
+      options: {
+        list: [
+          {title: 'Public', value: 'public'},
+          {title: 'Internal', value: 'internal'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'public',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: 'visible',
       title: 'Visible',
       type: 'boolean',

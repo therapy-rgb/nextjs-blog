@@ -3,7 +3,6 @@ export const navigation = [
   { name: 'Puttering', href: '/puttering' },
   { name: 'Journal', href: '/journal' },
   { name: 'Notes', href: '/documentation' },
-  { name: 'Projects', href: '/projects' },
 ] as const
 
 export type NavigationItem = (typeof navigation)[number]

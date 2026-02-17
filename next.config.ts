@@ -190,6 +190,12 @@ const nextConfig: NextConfig = {
         destination: '/categories/:slug*',
         permanent: true
       },
+      // Projects moved into Notes page
+      {
+        source: '/projects',
+        destination: '/documentation?section=projects',
+        permanent: true,
+      },
       // WWW redirect
       {
         source: '/:path*',

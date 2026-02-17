@@ -111,5 +111,6 @@ export const projectsQuery = `*[_type == "project" && visible == true] | order(o
   repoUrl,
   image,
   techStack,
+  category,
   order
 }`
