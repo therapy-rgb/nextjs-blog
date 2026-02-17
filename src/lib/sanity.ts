@@ -101,3 +101,15 @@ export const putteringPoemsQuery = `*[_id == "putteringPoems"][0] {
     text
   }
 }`
+
+export const projectsQuery = `*[_type == "project" && visible == true] | order(order asc) {
+  _id,
+  title,
+  slug,
+  description,
+  url,
+  repoUrl,
+  image,
+  techStack,
+  order
+}`

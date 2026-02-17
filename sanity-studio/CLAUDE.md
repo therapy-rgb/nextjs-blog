@@ -23,6 +23,7 @@ Defined in `schemaTypes/`. Current types:
 | `documentationSection` | Notes page sections |
 | `photoGallery` | Photo gallery (singleton) |
 | `putteringPoems` | Poetry collection (singleton) |
+| `project` | Portfolio projects (visible toggle, ordered) |
 
 ## Adding a New Schema
 

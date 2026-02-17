@@ -30,6 +30,7 @@ A personal blog about family, finances, music, and suburban life.
 | `/about` | About page |
 | `/contact` | Contact page (UI only) |
 | `/documentation` | Site info from Sanity CMS: About Me, Now, Accessibility, Colophon (ISR: 1 hr) |
+| `/projects` | Portfolio-style project dashboard from Sanity CMS (ISR: 1 hr) |
 
 ## Getting Started
 
@@ -96,6 +97,7 @@ src/
 │   ├── about/              # About page
 │   ├── contact/            # Contact page
 │   ├── documentation/      # Site info (About, Now, Accessibility, Colophon)
+│   ├── projects/           # Project portfolio
 │   ├── global-error.tsx    # Sentry error boundary
 │   ├── not-found.tsx       # 404 page
 │   ├── sitemap.ts          # Auto-generated sitemap
@@ -104,7 +106,7 @@ src/
 ├── components/             # Organized by category, imported via barrel exports
 │   ├── layout/             # Header, Footer, PageContainer
 │   ├── ui/                 # ArrowLink, ContentCard
-│   ├── content/            # PortableText, PostCard, AuthorAvatar
+│   ├── content/            # PortableText, PostCard, ProjectCard, AuthorAvatar
 │   └── seo/                # JsonLd (structured data)
 │
 ├── hooks/
@@ -138,7 +140,7 @@ Components are grouped by category. Always use barrel exports:
 ```ts
 import { Header, Footer, PageContainer } from '@/components/layout'
 import { ArrowLink, ContentCard } from '@/components/ui'
-import { PortableText, PostCard, AuthorAvatar } from '@/components/content'
+import { PortableText, PostCard, ProjectCard, AuthorAvatar } from '@/components/content'
 import { JsonLd } from '@/components/seo'
 ```
 

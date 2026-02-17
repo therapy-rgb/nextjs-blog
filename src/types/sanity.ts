@@ -104,3 +104,15 @@ export interface PutteringPoems {
   title: string
   poems: Poem[]
 }
+
+export interface Project {
+  _id: string
+  title: string
+  slug: { current: string }
+  description: string
+  url?: string
+  repoUrl?: string
+  image?: SanityImage
+  techStack: string[]
+  order: number
+}
