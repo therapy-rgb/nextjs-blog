@@ -105,12 +105,13 @@ src/
 │
 ├── components/             # Organized by category, imported via barrel exports
 │   ├── layout/             # Header, Footer, PageContainer
-│   ├── ui/                 # ArrowLink, ContentCard
+│   ├── ui/                 # ArrowLink, ContentCard, ThemeToggle
 │   ├── content/            # PortableText, PostCard, ProjectCard, AuthorAvatar
 │   └── seo/                # JsonLd (structured data)
 │
 ├── hooks/
-│   └── useMobileMenu.ts   # Mobile menu logic (escape, scroll lock, route-close)
+│   ├── useMobileMenu.ts   # Mobile menu logic (escape, scroll lock, route-close)
+│   └── useTheme.ts        # Theme toggle (light/dark/system) with localStorage + OS sync
 │
 ├── lib/
 │   ├── sanity.ts           # Sanity client + all GROQ queries
@@ -139,7 +140,7 @@ Components are grouped by category. Always use barrel exports:
 
 ```ts
 import { Header, Footer, PageContainer } from '@/components/layout'
-import { ArrowLink, ContentCard } from '@/components/ui'
+import { ArrowLink, ContentCard, ThemeToggle } from '@/components/ui'
 import { PortableText, PostCard, ProjectCard, AuthorAvatar } from '@/components/content'
 import { JsonLd } from '@/components/seo'
 ```

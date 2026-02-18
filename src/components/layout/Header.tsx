@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import FocusTrap from 'focus-trap-react'
 import { navigation } from '@/lib/navigation'
 import { useMobileMenu } from '@/hooks/useMobileMenu'
+import { ThemeToggle } from '@/components/ui'
 
 export default function Header() {
   const { isOpen, toggle, close, toggleButtonRef } = useMobileMenu()
@@ -31,7 +32,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex">
+          <nav className="hidden md:flex items-center">
             <ul className="flex space-x-8">
               {navigation.map((item) => (
                 <li key={item.name}>
@@ -49,6 +50,9 @@ export default function Header() {
                 </li>
               ))}
             </ul>
+            <div className="ml-6 border-l border-sdm-border pl-4">
+              <ThemeToggle />
+            </div>
           </nav>
 
           {/* Mobile menu button */}
@@ -134,6 +138,9 @@ export default function Header() {
                   {item.name}
                 </Link>
               ))}
+            </div>
+            <div className="px-4 pb-4 border-t border-white/20 pt-3">
+              <ThemeToggle variant="overlay" />
             </div>
           </nav>
         </FocusTrap>

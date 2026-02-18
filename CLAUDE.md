@@ -43,12 +43,13 @@ src/
 │   └── ...
 ├── components/       # React components (organized by category)
 │   ├── layout/       # Header, Footer, PageContainer
-│   ├── ui/           # ArrowLink, ContentCard
+│   ├── ui/           # ArrowLink, ContentCard, ThemeToggle
 │   ├── content/      # PortableText, PostCard, AuthorAvatar
 │   ├── seo/          # JsonLd
 │   └── index.ts      # Root barrel export
 ├── hooks/            # Custom React hooks
-│   └── useMobileMenu.ts
+│   ├── useMobileMenu.ts
+│   └── useTheme.ts
 ├── lib/
 │   ├── sanity.ts     # Sanity client & GROQ queries
 │   ├── constants.ts  # Centralized site config, rate limits, origins
@@ -81,6 +82,7 @@ vitest.config.ts      # Test configuration
 - `src/components/content/PortableText.tsx` - Sanity rich text renderer
 - `src/components/layout/Header.tsx` - Header with focus-trap mobile menu
 - `src/hooks/useMobileMenu.ts` - Mobile menu hook (escape, scroll lock, route-close)
+- `src/hooks/useTheme.ts` - Theme toggle hook (light/dark/system, localStorage, OS sync via useSyncExternalStore)
 - `src/app/layout.tsx` - Root layout with Header/Footer
 - `src/components/layout/Footer.tsx` - Footer with page-specific SVG line art
 
@@ -139,7 +141,8 @@ SANITY_REVALIDATION_SECRET=<webhook-secret>
 - Background: `sdm-background` (light lavender), Text: `sdm-text` (navy), Text-light: `sdm-text-light`
 - Card: `sdm-card`, Border: `sdm-border`, Surface-subtle: `sdm-surface-subtle`, Border-input: `sdm-border-input`
 - Primary-subtle: `sdm-primary-subtle` (icon backgrounds), Overlay: `sdm-overlay` (mobile menu)
-- All tokens have dark mode values via `prefers-color-scheme: dark` in `globals.css`
+- Dark mode uses class-based toggling (`:root.dark` in `globals.css`), controlled by `useTheme` hook (light/dark/system)
+- `ThemeScript` component in `<head>` prevents FOUC by applying `.dark` class before first paint
 - Fonts: **Cooper** (`font-cooper`, `font-display`) for headings/body, **TT Disruptors** (`font-disruptors`) for Puttering poetry
 - Base font size is 22px (`text-base` = 1.375rem) — intentionally large
 - Typography plugin used for rich text content

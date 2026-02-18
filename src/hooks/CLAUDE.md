@@ -3,6 +3,7 @@
 ## Files
 
 - **useMobileMenu.ts** - Mobile menu state management with route-close, Escape key, body scroll lock, and focus restoration
+- **useTheme.ts** - Theme toggle (light/dark/system) using `useSyncExternalStore` for localStorage + OS preference. Cross-tab sync via `storage` event
 
 ## Conventions
 
