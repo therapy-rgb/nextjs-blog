@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300">
+  <rect width="600" height="300" rx="8" fill="#F3EFF5"/>
+  <!-- Decorative dots pattern -->
+  <circle cx="50" cy="40" r="3" fill="#C44569" opacity="0.15"/>
+  <circle cx="80" cy="55" r="2" fill="#2EC4B6" opacity="0.2"/>
+  <circle cx="540" cy="250" r="3" fill="#C44569" opacity="0.15"/>
+  <circle cx="520" cy="60" r="2.5" fill="#2EC4B6" opacity="0.15"/>
+  <circle cx="100" cy="260" r="2" fill="#C44569" opacity="0.12"/>
+  <!-- Bold serif "D" centered -->
+  <path d="
+    M 205 60
+    L 320 60
+    C 415 60, 455 115, 455 150
+    C 455 185, 415 240, 320 240
+    L 205 240
+    Z
+    M 255 105
+    L 255 195
+    L 305 195
+    C 355 195, 385 178, 385 150
+    C 385 122, 355 105, 305 105
+    Z
+  " fill="#C44569" fill-rule="evenodd"/>
+  <!-- Subtle underline accent -->
+  <line x1="220" y1="258" x2="380" y2="258" stroke="#2EC4B6" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+</svg>

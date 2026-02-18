@@ -1,6 +1,18 @@
 import Image from 'next/image'
 import { Project } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
+import { getTechIcon } from '@/lib/tech-icons'
+
+/**
+ * Maps project slugs to static hero images in public/projects/.
+ * Used as a fallback when no Sanity image is uploaded.
+ */
+const STATIC_HERO_MAP: Record<string, string> = {
+  'suburban-dad-mode': '/projects/suburban-dad-mode.svg',
+  'methodology': '/projects/methodology.svg',
+  'llc-site': '/projects/llc-site.svg',
+  'claude-code-config': '/projects/claude-code-config.svg',
+}
 
 interface ProjectCardProps {
   project: Project
@@ -12,17 +24,32 @@ export default function ProjectCard({ project, variant = 'default' }: ProjectCar
     ? 'bg-warm-gray-100 border border-warm-gray-200 rounded-lg p-6 overflow-hidden flex flex-col'
     : 'bg-sdm-card border border-warm-gray-200 rounded-lg shadow-sm p-6 overflow-hidden flex flex-col'
 
+  const slug = project.slug?.current
+  const staticHero = slug ? STATIC_HERO_MAP[slug] : undefined
+  const hasSanityImage = !!project.image
+  const hasHero = hasSanityImage || !!staticHero
+
   return (
     <div className={cardClass}>
-      {project.image && (
+      {hasHero && (
         <div className="relative h-48 -mx-6 -mt-6 mb-4 overflow-hidden">
-          <Image
-            src={urlFor(project.image).width(600).height(300).auto('format').url()}
-            alt={project.image.alt || project.title}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover"
-          />
+          {hasSanityImage ? (
+            <Image
+              src={urlFor(project.image!).width(600).height(300).auto('format').url()}
+              alt={project.image!.alt || project.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
+          ) : (
+            <Image
+              src={staticHero!}
+              alt={project.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
+          )}
         </div>
       )}
 
@@ -36,14 +63,18 @@ export default function ProjectCard({ project, variant = 'default' }: ProjectCar
 
       {project.techStack?.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-4">
-          {project.techStack.map((tech) => (
-            <span
-              key={tech}
-              className="text-xs font-cooper px-2 py-1 rounded-full bg-warm-gray-100 text-sdm-text-light"
-            >
-              {tech}
-            </span>
-          ))}
+          {project.techStack.map((tech) => {
+            const Icon = getTechIcon(tech)
+            return (
+              <span
+                key={tech}
+                className="inline-flex items-center gap-1.5 text-xs font-cooper px-2.5 py-1 rounded-full bg-warm-gray-100 text-sdm-text-light"
+              >
+                {Icon && <Icon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />}
+                {tech}
+              </span>
+            )
+          })}
         </div>
       )}
 
