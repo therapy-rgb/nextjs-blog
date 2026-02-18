@@ -11,27 +11,27 @@ const config: Config = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
-        // Suburban Dad Mode color palette
+        // Suburban Dad Mode color palette (resolved via CSS custom properties for dark mode)
         'sdm': {
-          primary: '#C44569',    // Deep rose
-          accent: '#2EC4B6',     // Bright teal
-          background: '#F3EFF5', // Light lavender background
-          text: '#1D3557',       // Rich navy text
-          'text-light': '#457B9D', // Steel blue text
-          'card': '#FFFFFF',     // White card background
+          primary: 'var(--sdm-primary)',
+          accent: 'var(--sdm-accent)',
+          background: 'var(--sdm-background)',
+          text: 'var(--sdm-text)',
+          'text-light': 'var(--sdm-text-light)',
+          'card': 'var(--sdm-card)',
         },
-        // Custom grays to match the aesthetic
+        // Custom grays (resolved via CSS custom properties for dark mode)
         'warm-gray': {
-          50: '#FAFAF9',
-          100: '#F5F5F4',
-          200: '#E7E5E4',
-          300: '#D6D3D1',
-          400: '#A8A29E',
-          500: '#78716C',
-          600: '#57534E',
-          700: '#44403C',
-          800: '#292524',
-          900: '#1C1917',
+          50: 'var(--wg-50)',
+          100: 'var(--wg-100)',
+          200: 'var(--wg-200)',
+          300: 'var(--wg-300)',
+          400: 'var(--wg-400)',
+          500: 'var(--wg-500)',
+          600: 'var(--wg-600)',
+          700: 'var(--wg-700)',
+          800: 'var(--wg-800)',
+          900: 'var(--wg-900)',
         },
       },
       fontFamily: {

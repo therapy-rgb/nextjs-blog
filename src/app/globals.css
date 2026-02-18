@@ -39,6 +39,66 @@
 :root {
   --background: #F3EFF5;
   --foreground: #1D3557;
+
+  /* Suburban Dad Mode color palette */
+  --sdm-primary: #C44569;
+  --sdm-accent: #2EC4B6;
+  --sdm-background: #F3EFF5;
+  --sdm-text: #1D3557;
+  --sdm-text-light: #457B9D;
+  --sdm-card: #FFFFFF;
+
+  /* Warm grays */
+  --wg-50: #FAFAF9;
+  --wg-100: #F5F5F4;
+  --wg-200: #E7E5E4;
+  --wg-300: #D6D3D1;
+  --wg-400: #A8A29E;
+  --wg-500: #78716C;
+  --wg-600: #57534E;
+  --wg-700: #44403C;
+  --wg-800: #292524;
+  --wg-900: #1C1917;
+
+  /* Scrollbar & UI chrome */
+  --scrollbar-track: #E8E4EB;
+  --scrollbar-thumb: #C44569;
+  --scrollbar-thumb-hover: #A33755;
+  --selection-bg: #C44569;
+  --selection-text: #FFFFFF;
+  --focus-ring: #C44569;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1B1F2E;
+    --foreground: #E2DFE4;
+
+    --sdm-primary: #D4597D;
+    --sdm-accent: #38D4C6;
+    --sdm-background: #1B1F2E;
+    --sdm-text: #E2DFE4;
+    --sdm-text-light: #9EADC0;
+    --sdm-card: #252A3B;
+
+    --wg-50: #1E222E;
+    --wg-100: #262B38;
+    --wg-200: #333847;
+    --wg-300: #414756;
+    --wg-400: #6B7280;
+    --wg-500: #9CA3AF;
+    --wg-600: #D1D5DB;
+    --wg-700: #E5E7EB;
+    --wg-800: #F3F4F6;
+    --wg-900: #F9FAFB;
+
+    --scrollbar-track: #252A3B;
+    --scrollbar-thumb: #D4597D;
+    --scrollbar-thumb-hover: #E06B8F;
+    --selection-bg: #D4597D;
+    --selection-text: #FFFFFF;
+    --focus-ring: #D4597D;
+  }
 }
 
 @theme inline {
@@ -49,24 +109,24 @@
   --font-display: 'Cooper', serif;
 
   /* Suburban Dad Mode color palette */
-  --color-sdm-primary: #C44569;
-  --color-sdm-accent: #2EC4B6;
-  --color-sdm-background: #F3EFF5;
-  --color-sdm-text: #1D3557;
-  --color-sdm-text-light: #457B9D;
-  --color-sdm-card: #FFFFFF;
+  --color-sdm-primary: var(--sdm-primary);
+  --color-sdm-accent: var(--sdm-accent);
+  --color-sdm-background: var(--sdm-background);
+  --color-sdm-text: var(--sdm-text);
+  --color-sdm-text-light: var(--sdm-text-light);
+  --color-sdm-card: var(--sdm-card);
 
   /* Warm grays */
-  --color-warm-gray-50: #FAFAF9;
-  --color-warm-gray-100: #F5F5F4;
-  --color-warm-gray-200: #E7E5E4;
-  --color-warm-gray-300: #D6D3D1;
-  --color-warm-gray-400: #A8A29E;
-  --color-warm-gray-500: #78716C;
-  --color-warm-gray-600: #57534E;
-  --color-warm-gray-700: #44403C;
-  --color-warm-gray-800: #292524;
-  --color-warm-gray-900: #1C1917;
+  --color-warm-gray-50: var(--wg-50);
+  --color-warm-gray-100: var(--wg-100);
+  --color-warm-gray-200: var(--wg-200);
+  --color-warm-gray-300: var(--wg-300);
+  --color-warm-gray-400: var(--wg-400);
+  --color-warm-gray-500: var(--wg-500);
+  --color-warm-gray-600: var(--wg-600);
+  --color-warm-gray-700: var(--wg-700);
+  --color-warm-gray-800: var(--wg-800);
+  --color-warm-gray-900: var(--wg-900);
 }
 
 /* Custom scrollbar for WebKit browsers */
@@ -75,16 +135,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #E8E4EB;
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #C44569;
+  background: var(--scrollbar-thumb);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #C1292E;
+  background: var(--scrollbar-thumb-hover);
 }
 
 /* Smooth scrolling - respects reduced motion preference */
@@ -96,14 +156,25 @@
 
 /* Selection colors */
 ::selection {
-  background-color: #C44569;
-  color: white;
+  background-color: var(--selection-bg);
+  color: var(--selection-text);
 }
 
 /* Focus styles */
 :focus-visible {
-  outline: 2px solid #C44569;
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+/* Footer squiggle - navy in light mode, light lavender in dark mode */
+.footer-squiggle {
+  filter: brightness(0) invert(13%) sepia(33%) saturate(2468%) hue-rotate(190deg) brightness(92%) contrast(94%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .footer-squiggle {
+    filter: brightness(0) invert(90%) sepia(5%) saturate(300%) hue-rotate(220deg) brightness(105%) contrast(90%);
+  }
 }
 
 /* Prose paragraph spacing */
