@@ -8,10 +8,13 @@ import { getTechIcon } from '@/lib/tech-icons'
  * Used as a fallback when no Sanity image is uploaded.
  */
 const STATIC_HERO_MAP: Record<string, string> = {
-  'suburban-dad-mode': '/projects/suburban-dad-mode.svg',
-  'methodology': '/projects/methodology.svg',
-  'llc-site': '/projects/llc-site.svg',
-  'claude-code-config': '/projects/claude-code-config.svg',
+  'suburban-dad-mode': '/projects/suburban-dad-mode.webp',
+  'methodology': '/projects/methodology.webp',
+  'marcus-berley-therapy': '/projects/marcus-berley-therapy.webp',
+  'claude-code-config': '/projects/claude-code-config.webp',
+  'dotfiles': '/projects/dotfiles.webp',
+  'marcus-system': '/projects/marcus-system.webp',
+  'referral-tracker': '/projects/referral-tracker.webp',
 }
 
 interface ProjectCardProps {
