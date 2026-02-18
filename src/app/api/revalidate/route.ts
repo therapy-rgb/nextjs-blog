@@ -16,6 +16,7 @@ const REVALIDATION_PATHS: Record<string, (slug?: string) => string[]> = {
   putteringPoems: () => ['/puttering'],
   documentationSection: () => ['/documentation'],
   author: () => ['/journal'],
+  project: () => ['/documentation'],
 }
 
 export async function POST(request: NextRequest) {
