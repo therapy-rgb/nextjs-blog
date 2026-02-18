@@ -10,7 +10,7 @@ export default function Footer() {
             alt=""
             width={800}
             height={252}
-            className="w-64 md:w-80 opacity-90 [filter:brightness(0)_invert(13%)_sepia(33%)_saturate(2468%)_hue-rotate(190deg)_brightness(92%)_contrast(94%)]"
+            className="w-64 md:w-80 opacity-90 footer-squiggle"
           />
         </div>
       </div>

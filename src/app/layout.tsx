@@ -57,8 +57,11 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#F3EFF5",
-  colorScheme: "light",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F3EFF5" },
+    { media: "(prefers-color-scheme: dark)", color: "#1B1F2E" },
+  ],
+  colorScheme: "light dark",
 };
 
 const organizationSchema = {
@@ -106,10 +109,11 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href={`/favicon-32x32.png?${FAVICON_VERSION}`} />
         <link rel="apple-touch-icon" sizes="180x180" href={`/apple-touch-icon.png?${FAVICON_VERSION}`} />
         <link rel="manifest" href={`/site.webmanifest?${FAVICON_VERSION}`} />
-        <meta name="theme-color" content="#F3EFF5" />
+        <meta name="theme-color" content="#F3EFF5" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#1B1F2E" media="(prefers-color-scheme: dark)" />
         <meta name="msapplication-TileColor" content="#F3EFF5" />
       </head>
-      <body className="font-cooper antialiased min-h-screen flex flex-col text-sdm-text" style={{backgroundColor: '#F3EFF5'}}>
+      <body className="font-cooper antialiased min-h-screen flex flex-col text-sdm-text bg-sdm-background">
         <Header />
         <main id="main-content" className="flex-grow">
           {children}
