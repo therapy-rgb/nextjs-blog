@@ -2,16 +2,6 @@
 
 import { useTheme } from '@/hooks/useTheme'
 
-type Theme = 'light' | 'dark' | 'system'
-
-const CYCLE: Theme[] = ['light', 'dark', 'system']
-
-const LABELS: Record<Theme, string> = {
-  light: 'Light mode',
-  dark: 'Dark mode',
-  system: 'System mode',
-}
-
 function SunIcon() {
   return (
     <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -36,33 +26,17 @@ function MoonIcon() {
   )
 }
 
-function MonitorIcon() {
-  return (
-    <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-      <line x1="8" y1="21" x2="16" y2="21" />
-      <line x1="12" y1="17" x2="12" y2="21" />
-    </svg>
-  )
-}
-
-const ICONS: Record<Theme, () => React.JSX.Element> = {
-  light: SunIcon,
-  dark: MoonIcon,
-  system: MonitorIcon,
-}
-
 interface ThemeToggleProps {
   variant?: 'default' | 'overlay'
 }
 
 export default function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
-  const { theme, setTheme } = useTheme()
+  const { resolvedTheme, setTheme } = useTheme()
 
-  const next = CYCLE[(CYCLE.indexOf(theme) + 1) % CYCLE.length]
-  const Icon = ICONS[theme]
+  const nextTheme = resolvedTheme === 'dark' ? 'light' : 'dark'
+  const label = resolvedTheme === 'dark' ? 'Dark Mode' : 'Light Mode'
 
-  const baseClasses = 'inline-flex items-center justify-center p-2 min-w-[44px] min-h-[44px] rounded-md transition-colors duration-200'
+  const baseClasses = 'inline-flex items-center gap-2 p-2 min-h-[44px] rounded-md transition-colors duration-200 text-sm font-cooper'
   const variantClasses = variant === 'overlay'
     ? 'text-white/70 hover:text-white'
     : 'text-sdm-text-light hover:text-sdm-primary'
@@ -71,11 +45,12 @@ export default function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
     <button
       type="button"
       className={`${baseClasses} ${variantClasses}`}
-      onClick={() => setTheme(next)}
-      aria-label={LABELS[theme]}
-      title={LABELS[theme]}
+      onClick={() => setTheme(nextTheme)}
+      aria-label={`Switch to ${nextTheme} mode`}
+      title={`Switch to ${nextTheme} mode`}
     >
-      <Icon />
+      {resolvedTheme === 'dark' ? <MoonIcon /> : <SunIcon />}
+      <span>{label}</span>
     </button>
   )
 }
