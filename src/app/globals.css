@@ -47,18 +47,11 @@
   --sdm-text: #1D3557;
   --sdm-text-light: #457B9D;
   --sdm-card: #FFFFFF;
-
-  /* Warm grays */
-  --wg-50: #FAFAF9;
-  --wg-100: #F5F5F4;
-  --wg-200: #E7E5E4;
-  --wg-300: #D6D3D1;
-  --wg-400: #A8A29E;
-  --wg-500: #78716C;
-  --wg-600: #57534E;
-  --wg-700: #44403C;
-  --wg-800: #292524;
-  --wg-900: #1C1917;
+  --sdm-border: #E7E5E4;
+  --sdm-surface-subtle: #F5F5F4;
+  --sdm-border-input: #D6D3D1;
+  --sdm-primary-subtle: rgba(196, 69, 105, 0.1);
+  --sdm-overlay: rgba(196, 69, 105, 0.8);
 
   /* Scrollbar & UI chrome */
   --scrollbar-track: #E8E4EB;
@@ -80,17 +73,11 @@
     --sdm-text: #E2DFE4;
     --sdm-text-light: #9EADC0;
     --sdm-card: #252A3B;
-
-    --wg-50: #1E222E;
-    --wg-100: #262B38;
-    --wg-200: #333847;
-    --wg-300: #414756;
-    --wg-400: #6B7280;
-    --wg-500: #9CA3AF;
-    --wg-600: #D1D5DB;
-    --wg-700: #E5E7EB;
-    --wg-800: #F3F4F6;
-    --wg-900: #F9FAFB;
+    --sdm-border: #333847;
+    --sdm-surface-subtle: #262B38;
+    --sdm-border-input: #414756;
+    --sdm-primary-subtle: rgba(212, 89, 125, 0.15);
+    --sdm-overlay: rgba(212, 89, 125, 0.85);
 
     --scrollbar-track: #252A3B;
     --scrollbar-thumb: #D4597D;
@@ -115,18 +102,11 @@
   --color-sdm-text: var(--sdm-text);
   --color-sdm-text-light: var(--sdm-text-light);
   --color-sdm-card: var(--sdm-card);
-
-  /* Warm grays */
-  --color-warm-gray-50: var(--wg-50);
-  --color-warm-gray-100: var(--wg-100);
-  --color-warm-gray-200: var(--wg-200);
-  --color-warm-gray-300: var(--wg-300);
-  --color-warm-gray-400: var(--wg-400);
-  --color-warm-gray-500: var(--wg-500);
-  --color-warm-gray-600: var(--wg-600);
-  --color-warm-gray-700: var(--wg-700);
-  --color-warm-gray-800: var(--wg-800);
-  --color-warm-gray-900: var(--wg-900);
+  --color-sdm-border: var(--sdm-border);
+  --color-sdm-surface-subtle: var(--sdm-surface-subtle);
+  --color-sdm-border-input: var(--sdm-border-input);
+  --color-sdm-primary-subtle: var(--sdm-primary-subtle);
+  --color-sdm-overlay: var(--sdm-overlay);
 }
 
 /* Custom scrollbar for WebKit browsers */

@@ -194,13 +194,13 @@ export default async function PostPage({ params }: PostPageProps) {
       </div>
 
       {post.categories && post.categories.length > 0 && (
-        <div className="mt-8 pt-8 border-t border-warm-gray-200">
+        <div className="mt-8 pt-8 border-t border-sdm-border">
           <h2 className="text-sm font-semibold text-sdm-text mb-2">Categories</h2>
           <div className="flex flex-wrap gap-2">
             {post.categories.map((category) => (
               <span
                 key={category._id}
-                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-warm-gray-100 text-sdm-text"
+                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-sdm-surface-subtle text-sdm-text"
               >
                 {category.title}
               </span>

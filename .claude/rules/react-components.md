@@ -10,9 +10,10 @@
 - Server components are the default for data-fetching/display components
 
 ## Styling
-- Use Tailwind with project `sdm-*` color tokens (see `tailwind.config.ts`)
-- Primary: `sdm-primary` (deep rose), Accent: `sdm-accent` (bright teal)
-- Text: `sdm-text` (navy), Background: `sdm-background` (lavender)
+- Use Tailwind with semantic `sdm-*` color tokens (see `globals.css` + `tailwind.config.ts`)
+- Primary: `sdm-primary`, Accent: `sdm-accent`, Text: `sdm-text`, Background: `sdm-background`
+- Borders: `sdm-border`, Form inputs: `sdm-border-input`, Subtle surfaces: `sdm-surface-subtle`
+- Icon backgrounds: `sdm-primary-subtle`, Overlays: `sdm-overlay`
 - Cooper font for display/headings, system sans-serif for body
 - Minimum 44x44px touch targets on interactive elements
 

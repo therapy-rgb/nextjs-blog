@@ -19,7 +19,7 @@ export default function ContentCard({
 }: ContentCardProps) {
   return (
     <div
-      className={`bg-sdm-card rounded-lg shadow-sm border border-warm-gray-200 ${paddingClasses[padding]} ${className}`}
+      className={`bg-sdm-card rounded-lg shadow-sm border border-sdm-border ${paddingClasses[padding]} ${className}`}
     >
       {children}
     </div>

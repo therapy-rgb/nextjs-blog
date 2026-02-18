@@ -84,7 +84,7 @@ export default function About() {
             </p>
           </div>
           
-          <div className="bg-warm-gray-50 rounded-lg p-6">
+          <div className="bg-sdm-surface-subtle rounded-lg p-6">
             <h2 className="font-display text-2xl font-bold text-sdm-text mb-4">Let&apos;s Connect</h2>
             <p className="text-sdm-text-light mb-4">
               I love hearing from fellow parents and suburban adventurers. Whether you want to share 

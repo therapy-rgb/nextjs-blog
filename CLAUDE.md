@@ -134,9 +134,12 @@ SANITY_REVALIDATION_SECRET=<webhook-secret>
 
 ## Styling
 
-- **Tailwind CSS v4** with custom color tokens prefixed `sdm-` (defined in `tailwind.config.ts`)
-- Primary: `sdm-primary` (#C44569 deep rose), Accent: `sdm-accent` (#2EC4B6 bright teal)
-- Background: `sdm-background` (#F3EFF5 light lavender), Text: `sdm-text` (#1D3557 navy)
+- **Tailwind CSS v4** with semantic color tokens prefixed `sdm-` (defined in `globals.css` + `tailwind.config.ts`)
+- Primary: `sdm-primary` (deep rose), Accent: `sdm-accent` (bright teal)
+- Background: `sdm-background` (light lavender), Text: `sdm-text` (navy), Text-light: `sdm-text-light`
+- Card: `sdm-card`, Border: `sdm-border`, Surface-subtle: `sdm-surface-subtle`, Border-input: `sdm-border-input`
+- Primary-subtle: `sdm-primary-subtle` (icon backgrounds), Overlay: `sdm-overlay` (mobile menu)
+- All tokens have dark mode values via `prefers-color-scheme: dark` in `globals.css`
 - Fonts: **Cooper** (`font-cooper`, `font-display`) for headings/body, **TT Disruptors** (`font-disruptors`) for Puttering poetry
 - Base font size is 22px (`text-base` = 1.375rem) — intentionally large
 - Typography plugin used for rich text content

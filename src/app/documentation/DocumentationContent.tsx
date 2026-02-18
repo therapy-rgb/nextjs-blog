@@ -83,7 +83,7 @@ function DocumentationInner({ sections, projects }: DocumentationContentProps) {
                     onClick={() => router.push(`/documentation?section=${item.slug}`, { scroll: false })}
                     className={`font-cooper text-lg text-left transition-colors duration-200 px-3 py-2 rounded-md whitespace-nowrap md:whitespace-normal w-full ${
                       selectedSlug === item.slug
-                        ? 'text-sdm-primary font-bold bg-sdm-card shadow-sm border border-warm-gray-200'
+                        ? 'text-sdm-primary font-bold bg-sdm-card shadow-sm border border-sdm-border'
                         : 'text-sdm-text-light hover:text-sdm-primary hover:bg-sdm-card/50'
                     }`}
                     aria-current={selectedSlug === item.slug ? 'true' : undefined}
@@ -150,7 +150,7 @@ function DocumentationInner({ sections, projects }: DocumentationContentProps) {
             )}
 
             {selectedSection && !isProjectsSelected && (
-              <article className="p-6 md:p-12 rounded-lg shadow-md bg-sdm-card border border-warm-gray-200">
+              <article className="p-6 md:p-12 rounded-lg shadow-md bg-sdm-card border border-sdm-border">
                 <h2 className="font-cooper text-2xl md:text-3xl text-sdm-text mb-6">
                   {selectedSection.title}
                 </h2>

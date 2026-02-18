@@ -12,7 +12,7 @@ interface PostCardProps {
 
 export default function PostCard({ post }: PostCardProps) {
   return (
-    <article className="bg-sdm-card rounded-lg shadow-sm border border-warm-gray-200 overflow-hidden hover:shadow-md transition-all duration-200 hover:-translate-y-1">
+    <article className="bg-sdm-card rounded-lg shadow-sm border border-sdm-border overflow-hidden hover:shadow-md transition-all duration-200 hover:-translate-y-1">
       {post.mainImage && (
         <Link href={`/posts/${post.slug.current}`}>
           <div className="relative h-48 sm:h-56 w-full overflow-hidden">

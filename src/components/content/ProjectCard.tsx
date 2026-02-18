@@ -24,8 +24,8 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project, variant = 'default' }: ProjectCardProps) {
   const cardClass = variant === 'muted'
-    ? 'bg-warm-gray-100 border border-warm-gray-200 rounded-lg p-6 overflow-hidden flex flex-col'
-    : 'bg-sdm-card border border-warm-gray-200 rounded-lg shadow-sm p-6 overflow-hidden flex flex-col'
+    ? 'bg-sdm-surface-subtle border border-sdm-border rounded-lg p-6 overflow-hidden flex flex-col'
+    : 'bg-sdm-card border border-sdm-border rounded-lg shadow-sm p-6 overflow-hidden flex flex-col'
 
   const slug = project.slug?.current
   const staticHero = slug ? STATIC_HERO_MAP[slug] : undefined
@@ -71,7 +71,7 @@ export default function ProjectCard({ project, variant = 'default' }: ProjectCar
             return (
               <span
                 key={tech}
-                className="inline-flex items-center gap-1.5 text-xs font-cooper px-2.5 py-1 rounded-full bg-warm-gray-100 text-sdm-text-light"
+                className="inline-flex items-center gap-1.5 text-xs font-cooper px-2.5 py-1 rounded-full bg-sdm-surface-subtle text-sdm-text-light"
               >
                 {Icon && <Icon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />}
                 {tech}

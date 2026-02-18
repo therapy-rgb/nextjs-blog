@@ -81,7 +81,7 @@ function PutteringInner({ poems }: { poems: Poem[] }) {
             {/* Poem display with TT Disruptors font */}
             {selectedPoem && (
               <article className="flex flex-col items-center">
-                <div className="p-6 md:p-12 rounded-lg shadow-md bg-sdm-card border border-warm-gray-200">
+                <div className="p-6 md:p-12 rounded-lg shadow-md bg-sdm-card border border-sdm-border">
                   <div
                     className="text-left text-6xl md:text-7xl leading-tight text-sdm-text whitespace-pre-line"
                     style={{ fontFamily: "'TT Disruptors', cursive" }}

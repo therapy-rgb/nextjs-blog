@@ -13,7 +13,7 @@ export default function Header() {
   const menuRef = useRef<HTMLDivElement>(null)
 
   return (
-    <header className="border-b border-warm-gray-200 shadow-sm bg-sdm-card">
+    <header className="border-b border-sdm-border shadow-sm bg-sdm-card">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-sdm-primary focus:text-white focus:px-4 focus:py-2 focus:rounded-md"
@@ -55,7 +55,7 @@ export default function Header() {
           <button
             ref={toggleButtonRef}
             type="button"
-            className="md:hidden inline-flex items-center gap-2 justify-center p-3 min-w-[44px] min-h-[44px] rounded-md text-sdm-text-light hover:text-sdm-primary hover:bg-warm-gray-100 transition-colors duration-200"
+            className="md:hidden inline-flex items-center gap-2 justify-center p-3 min-w-[44px] min-h-[44px] rounded-md text-sdm-text-light hover:text-sdm-primary hover:bg-sdm-surface-subtle transition-colors duration-200"
             onClick={toggle}
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
@@ -98,7 +98,7 @@ export default function Header() {
           <nav
             id="mobile-menu"
             ref={menuRef}
-            className={`fixed top-0 right-0 w-44 bg-sdm-primary/80 backdrop-blur-sm shadow-xl rounded-bl-2xl z-50 transform transition-transform duration-300 ease-in-out ${
+            className={`fixed top-0 right-0 w-44 bg-sdm-overlay backdrop-blur-sm shadow-xl rounded-bl-2xl z-50 transform transition-transform duration-300 ease-in-out ${
               isOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
             aria-label="Mobile navigation"

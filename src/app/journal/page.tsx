@@ -128,7 +128,7 @@ export default async function Journal() {
                     {monthGroup.posts.map((post) => (
                       <article
                         key={post._id}
-                        className="border-b border-warm-gray-200 pb-8 mb-8 last:mb-0"
+                        className="border-b border-sdm-border pb-8 mb-8 last:mb-0"
                       >
                         <div className="flex justify-between items-baseline gap-4">
                           <h2>
