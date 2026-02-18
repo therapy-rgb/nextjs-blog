@@ -43,8 +43,8 @@ src/
 │   └── ...
 ├── components/       # React components (organized by category)
 │   ├── layout/       # Header, Footer, PageContainer
-│   ├── ui/           # ArrowLink, ContentCard, ThemeToggle
-│   ├── content/      # PortableText, PostCard, AuthorAvatar
+│   ├── ui/           # ArrowLink, ContentCard, ThemeToggle, Typewriter
+│   ├── content/      # PortableText, PostCard, ProjectCard, AuthorAvatar
 │   ├── seo/          # JsonLd
 │   └── index.ts      # Root barrel export
 ├── hooks/            # Custom React hooks
@@ -57,7 +57,8 @@ src/
 │   ├── validation.ts # Input validation & sanitization (XSS prevention)
 │   ├── api-security.ts # Rate limiting, origin validation, honeypot, IP extraction
 │   ├── logging.ts    # Structured JSON logging
-│   └── navigation.ts # Navigation links
+│   ├── navigation.ts # Navigation links
+│   └── tech-icons.ts # Tech name → react-icons mapping for ProjectCard
 ├── types/
 │   └── sanity.ts     # TypeScript types for Sanity data
 └── __tests__/        # Vitest test files
@@ -78,6 +79,7 @@ vitest.config.ts      # Test configuration
 - `src/lib/env.ts` - Environment validation (runs at startup)
 - `src/lib/validation.ts` - Shared validation/sanitization utilities
 - `src/lib/api-security.ts` - Rate limiting, CSRF protection, bot detection
+- `src/lib/tech-icons.ts` - Maps tech names to react-icons for ProjectCard
 - `src/app/api/revalidate/route.ts` - Sanity webhook handler for on-demand ISR
 - `src/components/content/PortableText.tsx` - Sanity rich text renderer
 - `src/components/layout/Header.tsx` - Header with focus-trap mobile menu
@@ -91,8 +93,8 @@ vitest.config.ts      # Test configuration
 Components are organized by category. Always import from barrel exports:
 ```ts
 import { Header, Footer, PageContainer } from '@/components/layout'
-import { ArrowLink, ContentCard } from '@/components/ui'
-import { PortableText, PostCard } from '@/components/content'
+import { ArrowLink, ContentCard, ThemeToggle, Typewriter } from '@/components/ui'
+import { PortableText, PostCard, ProjectCard } from '@/components/content'
 import { JsonLd } from '@/components/seo'
 ```
 

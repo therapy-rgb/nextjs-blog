@@ -45,6 +45,14 @@ export const metadata: Metadata = {
     title: "Suburban Dad Mode",
     description: "Life, parenting, and everything in between from the suburbs",
     siteName: "Suburban Dad Mode",
+    images: [
+      {
+        url: "https://suburbandadmode.com/image.webp",
+        width: 600,
+        height: 600,
+        alt: "Suburban Dad Mode",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",

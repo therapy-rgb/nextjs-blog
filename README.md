@@ -63,6 +63,8 @@ SENTRY_ORG=<org-slug>
 SENTRY_PROJECT=<project-slug>
 UPSTASH_REDIS_REST_URL=<redis-url>
 UPSTASH_REDIS_REST_TOKEN=<redis-token>
+SANITY_REVALIDATION_SECRET=<webhook-secret>
+NEXT_PUBLIC_BASE_URL=<base-url>
 ```
 
 ### 3. Run locally
@@ -96,8 +98,9 @@ src/
 │   ├── puttering/          # Poetry viewer
 │   ├── about/              # About page
 │   ├── contact/            # Contact page
-│   ├── documentation/      # Site info (About, Now, Accessibility, Colophon)
-│   ├── projects/           # Project portfolio
+│   ├── documentation/      # Site info (About, Now, Accessibility, Colophon, Projects)
+│   ├── error.tsx           # Error boundary
+│   ├── loading.tsx         # Loading skeleton
 │   ├── global-error.tsx    # Sentry error boundary
 │   ├── not-found.tsx       # 404 page
 │   ├── sitemap.ts          # Auto-generated sitemap
@@ -105,7 +108,7 @@ src/
 │
 ├── components/             # Organized by category, imported via barrel exports
 │   ├── layout/             # Header, Footer, PageContainer
-│   ├── ui/                 # ArrowLink, ContentCard, ThemeToggle
+│   ├── ui/                 # ArrowLink, ContentCard, ThemeToggle, Typewriter
 │   ├── content/            # PortableText, PostCard, ProjectCard, AuthorAvatar
 │   └── seo/                # JsonLd (structured data)
 │
@@ -120,7 +123,8 @@ src/
 │   ├── validation.ts       # Input sanitization + XSS prevention
 │   ├── api-security.ts     # Rate limiting, origin validation, honeypot, IP extraction
 │   ├── logging.ts          # Structured JSON logging
-│   └── navigation.ts       # Nav link definitions
+│   ├── navigation.ts       # Nav link definitions
+│   └── tech-icons.ts       # Tech name → react-icons mapping for ProjectCard
 │
 ├── types/
 │   └── sanity.ts           # TypeScript types for Sanity documents
@@ -140,7 +144,7 @@ Components are grouped by category. Always use barrel exports:
 
 ```ts
 import { Header, Footer, PageContainer } from '@/components/layout'
-import { ArrowLink, ContentCard, ThemeToggle } from '@/components/ui'
+import { ArrowLink, ContentCard, ThemeToggle, Typewriter } from '@/components/ui'
 import { PortableText, PostCard, ProjectCard, AuthorAvatar } from '@/components/content'
 import { JsonLd } from '@/components/seo'
 ```

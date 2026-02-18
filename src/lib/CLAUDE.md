@@ -9,6 +9,7 @@
 - **validation.ts** - Input validation (email, phone) and sanitization (escapeHtml, sanitizeString)
 - **api-security.ts** - Rate limiting (Upstash Redis + fallback), origin validation, honeypot detection, IP extraction
 - **logging.ts** - Structured JSON logging for production debugging
+- **tech-icons.ts** - Maps normalized tech names to react-icons components for ProjectCard
 
 ## Conventions
 
