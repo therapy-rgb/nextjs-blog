@@ -3,7 +3,7 @@ import Image from 'next/image'
 export default function Footer() {
   return (
     <footer className="mt-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8 flex justify-center md:justify-start">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-12 flex justify-center md:justify-start">
         <div aria-hidden="true">
           <Image
             src="/squiggle.webp"
