@@ -5,7 +5,7 @@ import { useEffect, useCallback, useSyncExternalStore } from 'react'
 export type Theme = 'light' | 'dark' | 'system'
 type ResolvedTheme = 'light' | 'dark'
 
-const STORAGE_KEY = 'theme'
+const STORAGE_KEY = 'sdm-theme'
 const LIGHT_COLOR = '#F3EFF5'
 const DARK_COLOR = '#1B1F2E'
 
