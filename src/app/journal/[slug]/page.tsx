@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     title: post.title,
     description: post.excerpt || `Read ${post.title} by ${post.author.name}`,
     alternates: {
-      canonical: `https://suburbandadmode.com/posts/${post.slug.current}`,
+      canonical: `https://suburbandadmode.com/journal/${post.slug.current}`,
     },
     openGraph: {
       title: post.title,
@@ -119,7 +119,7 @@ export default async function PostPage({ params }: PostPageProps) {
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `${baseUrl}/posts/${post.slug.current}`,
+      '@id': `${baseUrl}/journal/${post.slug.current}`,
     },
   }
 
@@ -143,7 +143,7 @@ export default async function PostPage({ params }: PostPageProps) {
         '@type': 'ListItem',
         position: 3,
         name: post.title,
-        item: `https://suburbandadmode.com/posts/${post.slug.current}`,
+        item: `https://suburbandadmode.com/journal/${post.slug.current}`,
       },
     ],
   }

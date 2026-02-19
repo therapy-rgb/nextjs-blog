@@ -9,14 +9,14 @@ interface SanityWebhookPayload {
 const REVALIDATION_PATHS: Record<string, (slug?: string) => string[]> = {
   journalEntry: (slug) => {
     const paths = ['/journal', '/feed.xml']
-    if (slug) paths.push(`/posts/${slug}`)
+    if (slug) paths.push(`/journal/${slug}`)
     return paths
   },
   photoGallery: () => ['/la-familia'],
   putteringPoems: () => ['/puttering'],
-  documentationSection: () => ['/documentation'],
+  documentationSection: () => ['/notes'],
   author: () => ['/journal'],
-  project: () => ['/documentation'],
+  project: () => ['/notes'],
 }
 
 export async function POST(request: NextRequest) {

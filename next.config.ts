@@ -104,96 +104,33 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // WordPress category redirects
+      // Old /posts/:slug → /journal/:slug (URL redesign)
       {
-        source: '/category/finances',
-        destination: '/categories/finances',
-        permanent: true
+        source: '/posts/:slug',
+        destination: '/journal/:slug',
+        permanent: true,
       },
+      // Old /documentation → /notes (URL redesign)
       {
-        source: '/category/finances/page/:page',
-        destination: '/categories/finances?page=:page',
-        permanent: true
+        source: '/documentation',
+        destination: '/notes',
+        permanent: true,
       },
-      {
-        source: '/category/junk-drawer',
-        destination: '/categories/junk-drawer',
-        permanent: true
-      },
-      {
-        source: '/category/junk-drawer/page/:page',
-        destination: '/categories/junk-drawer?page=:page',
-        permanent: true
-      },
-      {
-        source: '/category/la-familia',
-        destination: '/categories/la-familia',
-        permanent: true
-      },
-      {
-        source: '/category/la-familia/page/:page',
-        destination: '/categories/la-familia?page=:page',
-        permanent: true
-      },
-      {
-        source: '/category/music',
-        destination: '/categories/music',
-        permanent: true
-      },
-      {
-        source: '/category/music/page/:page',
-        destination: '/categories/music?page=:page',
-        permanent: true
-      },
-      {
-        source: '/category/news',
-        destination: '/categories/news',
-        permanent: true
-      },
-      {
-        source: '/category/news/page/:page',
-        destination: '/categories/news?page=:page',
-        permanent: true
-      },
-      {
-        source: '/category/today',
-        destination: '/categories/today',
-        permanent: true
-      },
-      {
-        source: '/category/today/page/:page',
-        destination: '/categories/today?page=:page',
-        permanent: true
-      },
-      {
-        source: '/category/uncategorized',
-        destination: '/categories/uncategorized',
-        permanent: true
-      },
-      {
-        source: '/category/uncategorized/page/:page',
-        destination: '/categories/uncategorized?page=:page',
-        permanent: true
-      },
-      {
-        source: '/category/wisdom',
-        destination: '/categories/wisdom',
-        permanent: true
-      },
-      {
-        source: '/category/wisdom/page/:page',
-        destination: '/categories/wisdom?page=:page',
-        permanent: true
-      },
+      // WordPress category redirects → journal (no /categories/ route exists)
       {
         source: '/category/:slug*',
-        destination: '/categories/:slug*',
-        permanent: true
+        destination: '/journal',
+        permanent: true,
+      },
+      {
+        source: '/categories/:slug*',
+        destination: '/journal',
+        permanent: true,
       },
       // Projects moved into Notes page
       {
         source: '/projects',
-        destination: '/documentation?section=projects',
+        destination: '/notes?section=projects',
         permanent: true,
       },
       // WWW redirect

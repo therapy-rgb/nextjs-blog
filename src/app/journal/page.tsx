@@ -142,7 +142,7 @@ export default async function Journal() {
                         <div className="flex justify-between items-baseline gap-4">
                           <h2>
                             <Link
-                              href={`/posts/${post.slug.current}`}
+                              href={`/journal/${post.slug.current}`}
                               className="font-display text-2xl md:text-3xl text-sdm-text hover:text-sdm-primary transition-colors duration-200"
                             >
                               {post.title}

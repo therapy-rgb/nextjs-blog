@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'Notes | Suburban Dad Mode',
   description: 'About this site — who built it, what it runs on, and how accessibility was considered.',
   alternates: {
-    canonical: 'https://suburbandadmode.com/documentation',
+    canonical: 'https://suburbandadmode.com/notes',
   },
 }
 

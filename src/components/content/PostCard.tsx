@@ -14,7 +14,7 @@ export default function PostCard({ post }: PostCardProps) {
   return (
     <article className="bg-sdm-card rounded-lg shadow-sm border border-sdm-border overflow-hidden hover:shadow-md transition-all duration-200 hover:-translate-y-1">
       {post.mainImage && (
-        <Link href={`/posts/${post.slug.current}`}>
+        <Link href={`/journal/${post.slug.current}`}>
           <div className="relative h-48 sm:h-56 w-full overflow-hidden">
             <Image
               src={urlFor(post.mainImage).width(600).height(300).url()}
@@ -44,7 +44,7 @@ export default function PostCard({ post }: PostCardProps) {
 
         <h2 className="font-display text-xl sm:text-2xl font-bold text-sdm-text mb-3 leading-tight">
           <Link
-            href={`/posts/${post.slug.current}`}
+            href={`/journal/${post.slug.current}`}
             className="hover:text-sdm-primary transition-colors duration-200"
           >
             {post.title}
@@ -57,7 +57,7 @@ export default function PostCard({ post }: PostCardProps) {
           </p>
         )}
 
-        <ArrowLink href={`/posts/${post.slug.current}`} aria-label={`Read more about ${post.title}`}>
+        <ArrowLink href={`/journal/${post.slug.current}`} aria-label={`Read more about ${post.title}`}>
           Read more
         </ArrowLink>
       </div>

@@ -24,13 +24,13 @@ A personal blog about family, finances, music, and suburban life.
 |-------|-------------|
 | `/` | Homepage -- hero image with tagline |
 | `/journal` | Blog listing, sourced from Sanity (ISR: 1 hr) |
-| `/posts/[slug]` | Individual blog posts (ISR: 1 hr) |
+| `/journal/[slug]` | Individual blog posts (ISR: 1 hr) |
 | `/la-familia` | Family photo gallery (vertical scroll) |
 | `/puttering` | Poetry viewer from Sanity CMS (ISR: 1 hr) |
 | `/about` | About page |
 | `/contact` | Contact page (UI only) |
-| `/documentation` | Site info from Sanity CMS: About Me, Now, Accessibility, Colophon (ISR: 1 hr) |
-| `/documentation?section=projects` | Portfolio-style project dashboard (within Notes page, from Sanity CMS) |
+| `/notes` | Site info from Sanity CMS: About Me, Now, Accessibility, Colophon (ISR: 1 hr) |
+| `/notes?section=projects` | Portfolio-style project dashboard (within Notes page, from Sanity CMS) |
 
 ## Getting Started
 
@@ -93,12 +93,12 @@ src/
 │   ├── page.tsx            # Homepage
 │   ├── layout.tsx          # Root layout (Header + Footer)
 │   ├── journal/            # Blog listing (ISR)
-│   ├── posts/[slug]/       # Individual posts (ISR)
+│   ├── journal/[slug]/     # Individual posts (ISR)
 │   ├── la-familia/         # Photo gallery
 │   ├── puttering/          # Poetry viewer
 │   ├── about/              # About page
 │   ├── contact/            # Contact page
-│   ├── documentation/      # Site info (About, Now, Accessibility, Colophon, Projects)
+│   ├── notes/              # Site info (About, Now, Accessibility, Colophon, Projects)
 │   ├── error.tsx           # Error boundary
 │   ├── loading.tsx         # Loading skeleton
 │   ├── global-error.tsx    # Sentry error boundary

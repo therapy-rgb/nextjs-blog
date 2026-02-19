@@ -80,7 +80,7 @@ function DocumentationInner({ sections, projects }: DocumentationContentProps) {
               {sidebarItems.map(item => (
                 <li key={item.id} className="shrink-0">
                   <button
-                    onClick={() => router.push(`/documentation?section=${item.slug}`, { scroll: false })}
+                    onClick={() => router.push(`/notes?section=${item.slug}`, { scroll: false })}
                     className={`font-cooper text-lg text-left transition-colors duration-200 px-3 py-2 rounded-md whitespace-nowrap md:whitespace-normal w-full ${
                       selectedSlug === item.slug
                         ? 'text-sdm-primary font-bold bg-sdm-card shadow-sm border border-sdm-border'

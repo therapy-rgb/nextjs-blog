@@ -37,7 +37,7 @@ cd sanity-studio && npm run dev  # localhost:3333
 src/
 ├── app/              # Next.js App Router pages
 │   ├── journal/      # Journal listing (ISR: 1hr)
-│   ├── posts/[slug]/ # Individual posts (ISR: 1hr)
+│   ├── journal/[slug]/ # Individual posts (ISR: 1hr)
 │   ├── api/revalidate/   # Sanity webhook → on-demand ISR
 │   ├── global-error.tsx  # Sentry error boundary
 │   └── ...
