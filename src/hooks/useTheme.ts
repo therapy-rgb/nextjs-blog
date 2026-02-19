@@ -2,7 +2,7 @@
 
 import { useEffect, useCallback, useSyncExternalStore } from 'react'
 
-type Theme = 'light' | 'dark' | 'system'
+export type Theme = 'light' | 'dark' | 'system'
 type ResolvedTheme = 'light' | 'dark'
 
 const STORAGE_KEY = 'theme'
@@ -104,5 +104,5 @@ export function useTheme() {
     emitChange()
   }, [])
 
-  return { theme, resolvedTheme, setTheme }
+  return { theme, resolvedTheme, systemPref, setTheme }
 }

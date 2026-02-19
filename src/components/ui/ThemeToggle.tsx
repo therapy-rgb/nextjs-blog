@@ -1,6 +1,7 @@
 'use client'
 
 import { useTheme } from '@/hooks/useTheme'
+import type { Theme } from '@/hooks/useTheme'
 
 function SunIcon() {
   return (
@@ -26,15 +27,38 @@ function MoonIcon() {
   )
 }
 
+function ComputerIcon() {
+  return (
+    <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="2" y="3" width="20" height="14" rx="2" />
+      <line x1="8" y1="21" x2="16" y2="21" />
+      <line x1="12" y1="17" x2="12" y2="21" />
+    </svg>
+  )
+}
+
 interface ThemeToggleProps {
   variant?: 'default' | 'overlay'
 }
 
 export default function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
-  const { resolvedTheme, setTheme } = useTheme()
+  const { theme, systemPref, setTheme } = useTheme()
 
-  const nextTheme = resolvedTheme === 'dark' ? 'light' : 'dark'
-  const label = resolvedTheme === 'dark' ? 'Dark Mode' : 'Light Mode'
+  // Cycle: system → opposite of system pref → match system pref → system → ...
+  function getNextTheme(): Theme {
+    if (theme === 'system') {
+      return systemPref === 'dark' ? 'light' : 'dark'
+    }
+    if (theme === systemPref) {
+      return 'system'
+    }
+    return systemPref
+  }
+
+  const nextTheme = getNextTheme()
+
+  const icons = { light: <SunIcon />, dark: <MoonIcon />, system: <ComputerIcon /> }
+  const labels = { light: 'Light', dark: 'Dark', system: 'System' }
 
   const baseClasses = 'inline-flex items-center gap-2 p-2 min-h-[44px] rounded-md transition-colors duration-200 text-sm font-cooper'
   const variantClasses = variant === 'overlay'
@@ -49,8 +73,8 @@ export default function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
       aria-label={`Switch to ${nextTheme} mode`}
       title={`Switch to ${nextTheme} mode`}
     >
-      {resolvedTheme === 'dark' ? <MoonIcon /> : <SunIcon />}
-      <span>{label}</span>
+      {icons[theme]}
+      <span>{labels[theme]}</span>
     </button>
   )
 }
