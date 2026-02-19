@@ -8,7 +8,7 @@ interface SanityWebhookPayload {
 
 const REVALIDATION_PATHS: Record<string, (slug?: string) => string[]> = {
   journalEntry: (slug) => {
-    const paths = ['/journal']
+    const paths = ['/journal', '/feed.xml']
     if (slug) paths.push(`/posts/${slug}`)
     return paths
   },

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { format } from 'date-fns'
+import { MdRssFeed } from 'react-icons/md'
 import { client, postsListQuery, defaultAuthor } from "@/lib/sanity";
 import { Post, PostListItem } from "@/types/sanity";
 import { PageContainer } from "@/components/layout";
@@ -98,6 +99,14 @@ export default async function Journal() {
         <h1 className="font-display text-5xl md:text-6xl font-bold text-sdm-text mb-2">
           Journal
         </h1>
+        <a
+          href="/feed.xml"
+          aria-label="Subscribe via RSS"
+          className="inline-flex items-center gap-1.5 text-sm text-sdm-text-light hover:text-sdm-primary transition-colors duration-200"
+        >
+          <span>Subscribe via RSS</span>
+          <MdRssFeed size={16} aria-hidden="true" />
+        </a>
       </div>
 
       {yearGroups.length > 0 ? (
