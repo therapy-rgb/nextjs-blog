@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { format } from 'date-fns'
 import { MdRssFeed } from 'react-icons/md'
 import { client, postsListQuery, defaultAuthor } from "@/lib/sanity";
@@ -62,6 +63,19 @@ function groupPostsByYearAndMonth(posts: Post[]): YearGroup[] {
   }
 
   return groups;
+}
+
+// Static images for posts (slug → filename in /images/journal/)
+const postImages: Record<string, string> = {
+  'all-caught-up': '/images/journal/all-caught-up.webp',
+  'writing-is-pure-luxury': '/images/journal/writing-is-pure-luxury.webp',
+  'february-freeze': '/images/journal/february-freeze.webp',
+  'florida': '/images/journal/florida.webp',
+  'meetings': '/images/journal/meetings.webp',
+  'clearing-a-path': '/images/journal/clearing-a-path.webp',
+  'before-the-work-begins': '/images/journal/before-the-work-begins.webp',
+  'following-up': '/images/journal/following-up.webp',
+  'getting-started': '/images/journal/getting-started.webp',
 }
 
 // Fallback excerpts for posts that don't have one set in Sanity
@@ -139,27 +153,44 @@ export default async function Journal() {
                         key={post._id}
                         className="border-b border-sdm-border pb-8 mb-8 last:mb-0"
                       >
-                        <div className="flex justify-between items-baseline gap-4">
-                          <h2>
-                            <Link
-                              href={`/journal/${post.slug.current}`}
-                              className="font-display text-2xl md:text-3xl text-sdm-text hover:text-sdm-primary transition-colors duration-200"
+                        <div className="flex justify-between gap-4">
+                          <div className="flex-1">
+                            <h2>
+                              <Link
+                                href={`/journal/${post.slug.current}`}
+                                className="font-display text-2xl md:text-3xl text-sdm-text hover:text-sdm-primary transition-colors duration-200"
+                              >
+                                {post.title}
+                              </Link>
+                            </h2>
+                            {(post.excerpt || fallbackExcerpts[post.slug.current]) && (
+                              <p className="font-cooper font-light text-lg text-sdm-text-light mt-2 leading-relaxed">
+                                {post.excerpt || fallbackExcerpts[post.slug.current]}
+                              </p>
+                            )}
+                          </div>
+                          <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                            <time
+                              dateTime={post.publishedAt}
+                              className="font-cooper font-light text-base md:text-lg text-sdm-primary whitespace-nowrap"
                             >
-                              {post.title}
-                            </Link>
-                          </h2>
-                          <time
-                            dateTime={post.publishedAt}
-                            className="font-cooper font-light text-base md:text-lg text-sdm-primary whitespace-nowrap"
-                          >
-                            {format(new Date(post.publishedAt), 'MM/dd/yyyy')}
-                          </time>
+                              {format(new Date(post.publishedAt), 'MM/dd/yyyy')}
+                            </time>
+                            {postImages[post.slug.current] && (
+                              <Link href={`/journal/${post.slug.current}`}>
+                                <Image
+                                  src={postImages[post.slug.current]}
+                                  alt={post.title}
+                                  width={80}
+                                  height={80}
+                                  quality={100}
+                                  unoptimized
+                                  className="rounded"
+                                />
+                              </Link>
+                            )}
+                          </div>
                         </div>
-                        {(post.excerpt || fallbackExcerpts[post.slug.current]) && (
-                          <p className="font-cooper font-light text-lg text-sdm-text-light mt-2 leading-relaxed max-w-[75%]">
-                            {post.excerpt || fallbackExcerpts[post.slug.current]}
-                          </p>
-                        )}
                       </article>
                     ))}
                   </div>
