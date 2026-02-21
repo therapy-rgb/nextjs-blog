@@ -46,7 +46,7 @@ Confirm the push succeeded and display the commit hash.
 ```bash
 vercel --prod
 ```
-Trigger an immediate production deployment rather than waiting for the git-triggered build.
+Trigger an immediate production deployment in the **background** (do not wait for it to finish). The git push already ensures a deploy; this just accelerates it.
 
 ### 8. Summary
 Report what was shipped: commit hash, files changed, and confirm the Vercel production deploy was triggered.
