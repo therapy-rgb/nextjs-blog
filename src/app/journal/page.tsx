@@ -103,9 +103,27 @@ async function getPosts(): Promise<Post[]> {
   }
 }
 
+const journalRowBgs = [
+  'bg-sdm-journal-1',
+  'bg-sdm-journal-2',
+  'bg-sdm-journal-3',
+] as const;
+
 export default async function Journal() {
   const posts = await getPosts();
   const yearGroups = groupPostsByYearAndMonth(posts);
+
+  // Build a global color index map so colors cycle across all posts
+  let globalIndex = 0;
+  const postColorIndex = new Map<string, number>();
+  for (const yg of yearGroups) {
+    for (const mg of yg.months) {
+      for (const p of mg.posts) {
+        postColorIndex.set(p._id, globalIndex % 3);
+        globalIndex++;
+      }
+    }
+  }
 
   return (
     <PageContainer maxWidth="6xl" className="py-20">
@@ -151,7 +169,7 @@ export default async function Journal() {
                     {monthGroup.posts.map((post) => (
                       <article
                         key={post._id}
-                        className="border-b border-sdm-border pb-8 mb-8 last:mb-0"
+                        className={`${journalRowBgs[postColorIndex.get(post._id)!]} rounded-lg px-5 py-6 mb-4 last:mb-0`}
                       >
                         <div className="flex justify-between gap-4">
                           <div className="flex-1">

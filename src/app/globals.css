@@ -53,6 +53,11 @@
   --sdm-primary-subtle: rgba(196, 69, 105, 0.1);
   --sdm-overlay: rgba(196, 69, 105, 0.8);
 
+  /* Journal alternating row backgrounds */
+  --sdm-journal-1: rgba(196, 69, 105, 0.12);
+  --sdm-journal-2: rgba(46, 196, 182, 0.12);
+  --sdm-journal-3: rgba(176, 128, 48, 0.14);
+
   /* Scrollbar & UI chrome */
   --scrollbar-track: #E8E4EB;
   --scrollbar-thumb: #C44569;
@@ -77,6 +82,11 @@
   --sdm-border-input: #414756;
   --sdm-primary-subtle: rgba(212, 89, 125, 0.15);
   --sdm-overlay: rgba(212, 89, 125, 0.85);
+
+  /* Journal alternating row backgrounds */
+  --sdm-journal-1: rgba(212, 89, 125, 0.15);
+  --sdm-journal-2: rgba(56, 212, 198, 0.15);
+  --sdm-journal-3: rgba(212, 168, 74, 0.15);
 
   --scrollbar-track: #252A3B;
   --scrollbar-thumb: #D4597D;
@@ -105,6 +115,11 @@
   --color-sdm-border-input: var(--sdm-border-input);
   --color-sdm-primary-subtle: var(--sdm-primary-subtle);
   --color-sdm-overlay: var(--sdm-overlay);
+
+  /* Journal alternating row backgrounds */
+  --color-sdm-journal-1: var(--sdm-journal-1);
+  --color-sdm-journal-2: var(--sdm-journal-2);
+  --color-sdm-journal-3: var(--sdm-journal-3);
 }
 
 /* Custom scrollbar for WebKit browsers */
