@@ -169,14 +169,14 @@ export default async function Journal() {
                     {monthGroup.posts.map((post) => (
                       <article
                         key={post._id}
-                        className={`${journalRowBgs[postColorIndex.get(post._id)!]} rounded-lg px-5 py-6 mb-4 last:mb-0`}
+                        className={`relative ${journalRowBgs[postColorIndex.get(post._id)!]} rounded-lg px-5 py-6 mb-4 last:mb-0`}
                       >
                         <div className="flex justify-between gap-4">
                           <div className="flex-1">
                             <h2>
                               <Link
                                 href={`/journal/${post.slug.current}`}
-                                className="font-display text-2xl md:text-3xl text-sdm-text hover:text-sdm-primary transition-colors duration-200"
+                                className="font-display text-2xl md:text-3xl text-sdm-text hover:text-sdm-primary transition-colors duration-200 after:absolute after:inset-0"
                               >
                                 {post.title}
                               </Link>
@@ -195,17 +195,15 @@ export default async function Journal() {
                               {format(new Date(post.publishedAt), 'MM/dd/yyyy')}
                             </time>
                             {postImages[post.slug.current] && (
-                              <Link href={`/journal/${post.slug.current}`}>
-                                <Image
-                                  src={postImages[post.slug.current]}
-                                  alt={post.title}
-                                  width={80}
-                                  height={80}
-                                  quality={100}
-                                  unoptimized
-                                  className="rounded"
-                                />
-                              </Link>
+                              <Image
+                                src={postImages[post.slug.current]}
+                                alt=""
+                                width={80}
+                                height={80}
+                                quality={100}
+                                unoptimized
+                                className="rounded"
+                              />
                             )}
                           </div>
                         </div>
