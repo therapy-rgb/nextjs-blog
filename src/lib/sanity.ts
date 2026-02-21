@@ -39,7 +39,7 @@ export const postsListQuery = `*[_type == "journalEntry" && defined(slug) && def
   slug,
   publishedAt,
   excerpt,
-  "mainImage": body[_type == "image"][0]
+  "mainImage": coalesce(mainImage, body[_type == "image"][0])
 }`
 
 // Full query for backwards compatibility (deprecated - use postsListQuery for listings)
@@ -50,7 +50,7 @@ export const postsQuery = `*[_type == "journalEntry" && defined(slug) && defined
   publishedAt,
   excerpt,
   body,
-  "mainImage": body[_type == "image"][0]
+  "mainImage": coalesce(mainImage, body[_type == "image"][0])
 }`
 
 // Full query for individual post detail pages
@@ -61,7 +61,7 @@ export const postQuery = `*[_type == "journalEntry" && slug.current == $slug && 
   publishedAt,
   excerpt,
   body,
-  "mainImage": body[_type == "image"][0]
+  "mainImage": coalesce(mainImage, body[_type == "image"][0])
 }`
 
 export const authorQuery = `*[_type == "author" && slug.current == $slug][0] {

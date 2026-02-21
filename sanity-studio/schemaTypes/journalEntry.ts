@@ -38,6 +38,21 @@ export default defineType({
       rows: 3,
     }),
     defineField({
+      name: 'mainImage',
+      title: 'Main Image',
+      type: 'image',
+      description: 'Hero image shown beneath the date on the journal page',
+      options: {hotspot: true},
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative Text',
+          description: 'Important for SEO and accessibility.',
+        },
+      ],
+    }),
+    defineField({
       name: 'body',
       title: 'Body',
       type: 'blockContent',

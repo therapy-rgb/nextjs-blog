@@ -76,6 +76,7 @@ const postImages: Record<string, string> = {
   'before-the-work-begins': '/images/journal/before-the-work-begins.webp',
   'following-up': '/images/journal/following-up.webp',
   'getting-started': '/images/journal/getting-started.webp',
+  'more-snow': '/images/journal/more-snow.webp',
 }
 
 // Fallback excerpts for posts that don't have one set in Sanity
