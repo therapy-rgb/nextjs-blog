@@ -48,7 +48,7 @@ export default function TechStackContent({ content }: TechStackContentProps) {
           return (
             <div
               key={i}
-              className={`rounded-lg border border-sdm-border bg-sdm-background p-5${isLastOdd ? ' md:col-span-2' : ''}`}
+              className={`rounded-lg border border-sdm-border bg-sdm-background px-8 py-8${isLastOdd ? ' md:col-span-2' : ''}`}
             >
               <h3 className="font-cooper text-lg text-sdm-primary font-bold mb-3 pb-2 border-b border-sdm-border">
                 {section.heading}

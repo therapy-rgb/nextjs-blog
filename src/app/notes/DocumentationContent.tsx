@@ -167,7 +167,15 @@ function DocumentationInner({ sections, projects, changelog }: DocumentationCont
                   Changelog
                 </h2>
                 <p className="text-sdm-text-light font-cooper text-lg mb-8">
-                  Recent changes to this site.
+                  Recent changes to this site.{' '}
+                  <a
+                    href="https://github.com/therapy-rgb/nextjs-blog"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sdm-accent hover:text-sdm-primary transition-colors duration-200"
+                  >
+                    View source on GitHub
+                  </a>
                 </p>
                 {changelog.length > 0 ? (
                   <div className="relative border-l-2 border-sdm-border pl-6 ml-2">
