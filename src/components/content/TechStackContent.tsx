@@ -1,6 +1,7 @@
 import React from 'react'
 import { PortableTextBlock } from '@portabletext/react'
 import PortableText from './PortableText'
+import { FaCreativeCommons, FaCreativeCommonsBy, FaCreativeCommonsNc } from 'react-icons/fa'
 
 interface TechStackContentProps {
   content: PortableTextBlock[]
@@ -45,6 +46,7 @@ export default function TechStackContent({ content }: TechStackContentProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {sections.map((section, i) => {
           const isLastOdd = i === sections.length - 1 && sections.length % 2 === 1
+          const isCredits = section.heading.toLowerCase() === 'credits'
           return (
             <div
               key={i}
@@ -55,6 +57,32 @@ export default function TechStackContent({ content }: TechStackContentProps) {
               </h3>
               <div className="prose prose-sm max-w-none font-light [&_ul]:list-none [&_ul]:pl-0 [&_ul]:my-0 [&_li]:pl-0 [&_li]:my-1.5 [&_p]:my-2 [&_strong]:text-sdm-text [&_strong]:font-bold text-sdm-text-light">
                 <PortableText content={section.blocks} />
+                {isCredits && (
+                  <>
+                    <p className="my-2">
+                      &copy; 2025&ndash;{new Date().getFullYear()} Suburban Dad Mode. All content is licensed under a{' '}
+                      <a
+                        href="https://creativecommons.org/licenses/by-nc/4.0/"
+                        target="_blank"
+                        rel="noopener noreferrer license"
+                        className="text-sdm-primary no-underline hover:text-sdm-accent transition-colors duration-200"
+                      >
+                        Creative Commons Attribution-NonCommercial 4.0 International License
+                      </a>.
+                    </p>
+                    <a
+                      href="https://creativecommons.org/licenses/by-nc/4.0/"
+                      target="_blank"
+                      rel="noopener noreferrer license"
+                      className="inline-flex items-center gap-1.5 text-sdm-primary hover:text-sdm-accent transition-colors duration-200 no-underline"
+                      aria-label="Creative Commons Attribution-NonCommercial 4.0"
+                    >
+                      <FaCreativeCommons className="w-6 h-6" />
+                      <FaCreativeCommonsBy className="w-6 h-6" />
+                      <FaCreativeCommonsNc className="w-6 h-6" />
+                    </a>
+                  </>
+                )}
               </div>
             </div>
           )

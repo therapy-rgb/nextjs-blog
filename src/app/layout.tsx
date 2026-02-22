@@ -92,6 +92,7 @@ export default function RootLayout({
         <ThemeScript />
         <JsonLd data={organizationSchema} />
         <link rel="alternate" type="application/rss+xml" title="Suburban Dad Mode Journal" href="/feed.xml" />
+        <link rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/" />
         {/* Preload custom fonts for better LCP and reduced CLS */}
         <link
           rel="preload"
