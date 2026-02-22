@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { Suspense } from 'react'
 import { DocumentationSection, Project } from '@/types/sanity'
 import PortableText from '@/components/content/PortableText'
-import { ProjectCard } from '@/components/content'
+import { ProjectCard, TechStackContent } from '@/components/content'
 
 const PROJECTS_SLUG = 'projects'
 
@@ -154,18 +154,13 @@ function DocumentationInner({ sections, projects }: DocumentationContentProps) {
                 <h2 className="font-cooper text-2xl md:text-3xl text-sdm-text mb-6">
                   {selectedSection.title}
                 </h2>
-                <div className="prose prose-xl max-w-none text-xl md:text-2xl font-light">
-                  <PortableText content={selectedSection.content} />
-                  {selectedSection.slug.current === 'colophon' && (
-                    <p>
-                      The footer illustration is{' '}
-                      <a href="https://thedesignsquiggle.com" target="_blank" rel="noopener noreferrer" className="text-sdm-primary no-underline hover:text-sdm-accent transition-colors duration-200">
-                        The Design Squiggle
-                      </a>{' '}
-                      by Damien Newman.
-                    </p>
-                  )}
-                </div>
+                {selectedSection.slug.current === 'tech-stack' ? (
+                  <TechStackContent content={selectedSection.content} />
+                ) : (
+                  <div className="prose prose-xl max-w-none text-xl md:text-2xl font-light">
+                    <PortableText content={selectedSection.content} />
+                  </div>
+                )}
               </article>
             )}
           </div>
