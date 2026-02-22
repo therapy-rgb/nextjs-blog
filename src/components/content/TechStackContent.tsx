@@ -60,15 +60,7 @@ export default function TechStackContent({ content }: TechStackContentProps) {
                 {isCredits && (
                   <>
                     <p className="my-2">
-                      &copy; 2025&ndash;{new Date().getFullYear()} Suburban Dad Mode. All content is licensed under a{' '}
-                      <a
-                        href="https://creativecommons.org/licenses/by-nc/4.0/"
-                        target="_blank"
-                        rel="noopener noreferrer license"
-                        className="text-sdm-primary no-underline hover:text-sdm-accent transition-colors duration-200"
-                      >
-                        Creative Commons Attribution-NonCommercial 4.0 International License
-                      </a>.
+                      &copy; 2025&ndash;{new Date().getFullYear()} Suburban Dad Mode. All content is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.
                     </p>
                     <a
                       href="https://creativecommons.org/licenses/by-nc/4.0/"
