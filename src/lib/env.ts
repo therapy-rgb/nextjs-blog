@@ -56,6 +56,11 @@ export function validateEnv(): ValidationResult {
     warnings.push('SANITY_REVALIDATION_SECRET not set - on-demand revalidation webhook will be disabled')
   }
 
+  // Optional: GitHub changelog
+  if (!process.env.GITHUB_TOKEN) {
+    warnings.push('GITHUB_TOKEN not set - changelog on Notes page will be empty')
+  }
+
   return {
     valid: missing.length === 0,
     missing,

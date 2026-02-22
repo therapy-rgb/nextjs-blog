@@ -1,6 +1,7 @@
 import { client, documentationSectionsQuery, projectsQuery } from '@/lib/sanity'
 import { DocumentationSection, Project } from '@/types/sanity'
 import { logError } from '@/lib/logging'
+import { getChangelog } from '@/lib/github'
 import type { Metadata } from 'next'
 import DocumentationContent from './DocumentationContent'
 
@@ -37,7 +38,11 @@ async function getProjects(): Promise<Project[]> {
 }
 
 export default async function Documentation() {
-  const [sections, projects] = await Promise.all([getSections(), getProjects()])
+  const [sections, projects, changelog] = await Promise.all([
+    getSections(),
+    getProjects(),
+    getChangelog(),
+  ])
 
-  return <DocumentationContent sections={sections} projects={projects} />
+  return <DocumentationContent sections={sections} projects={projects} changelog={changelog} />
 }
