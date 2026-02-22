@@ -29,7 +29,7 @@ A personal blog about family, finances, music, and suburban life.
 | `/puttering` | Poetry viewer from Sanity CMS (ISR: 1 hr) |
 | `/about` | About page |
 | `/contact` | Contact page (UI only) |
-| `/notes` | Site info from Sanity CMS: About Me, Now, Accessibility, Colophon (ISR: 1 hr) |
+| `/notes` | Site info from Sanity CMS: About Me, Now, Accessibility, Tech Stack (ISR: 1 hr) |
 | `/notes?section=projects` | Portfolio-style project dashboard (within Notes page, from Sanity CMS) |
 | `/notes?section=changelog` | Monthly timeline of recent site changes (from GitHub API) |
 
@@ -65,6 +65,7 @@ SENTRY_PROJECT=<project-slug>
 UPSTASH_REDIS_REST_URL=<redis-url>
 UPSTASH_REDIS_REST_TOKEN=<redis-token>
 SANITY_REVALIDATION_SECRET=<webhook-secret>
+SANITY_API_TOKEN=<sanity-api-token>
 NEXT_PUBLIC_BASE_URL=<base-url>
 GITHUB_TOKEN=<fine-grained-pat>
 ```
@@ -100,7 +101,7 @@ src/
 │   ├── puttering/          # Poetry viewer
 │   ├── about/              # About page
 │   ├── contact/            # Contact page
-│   ├── notes/              # Site info (About, Now, Accessibility, Colophon, Projects)
+│   ├── notes/              # Site info (About, Now, Accessibility, Tech Stack, Projects, Changelog)
 │   ├── error.tsx           # Error boundary
 │   ├── loading.tsx         # Loading skeleton
 │   ├── global-error.tsx    # Sentry error boundary
@@ -163,7 +164,7 @@ import { JsonLd } from '@/components/seo'
 
 ### Documentation sections (Sanity CMS)
 
-The Documentation page sections (About Me, Now, Accessibility, Colophon) are `documentationSection` documents in Sanity. Edit them in Sanity Studio under the Documentation sidebar item. ISR revalidates every hour.
+The Notes page sections (About Me, Now, Accessibility, Tech Stack) are `documentationSection` documents in Sanity. Edit them in Sanity Studio. ISR revalidates every hour.
 
 ### Photo and poetry pages
 

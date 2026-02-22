@@ -123,6 +123,7 @@ SENTRY_PROJECT=<project-slug>
 UPSTASH_REDIS_REST_URL=<redis-url>
 UPSTASH_REDIS_REST_TOKEN=<redis-token>
 SANITY_REVALIDATION_SECRET=<webhook-secret>
+SANITY_API_TOKEN=<sanity-api-token>
 GITHUB_TOKEN=<fine-grained-pat>
 ```
 
