@@ -31,6 +31,7 @@ A personal blog about family, finances, music, and suburban life.
 | `/contact` | Contact page (UI only) |
 | `/notes` | Site info from Sanity CMS: About Me, Now, Accessibility, Colophon (ISR: 1 hr) |
 | `/notes?section=projects` | Portfolio-style project dashboard (within Notes page, from Sanity CMS) |
+| `/notes?section=changelog` | Monthly timeline of recent site changes (from GitHub API) |
 
 ## Getting Started
 
@@ -65,6 +66,7 @@ UPSTASH_REDIS_REST_URL=<redis-url>
 UPSTASH_REDIS_REST_TOKEN=<redis-token>
 SANITY_REVALIDATION_SECRET=<webhook-secret>
 NEXT_PUBLIC_BASE_URL=<base-url>
+GITHUB_TOKEN=<fine-grained-pat>
 ```
 
 ### 3. Run locally
@@ -124,7 +126,8 @@ src/
 │   ├── api-security.ts     # Rate limiting, origin validation, honeypot, IP extraction
 │   ├── logging.ts          # Structured JSON logging
 │   ├── navigation.ts       # Nav link definitions
-│   └── tech-icons.ts       # Tech name → react-icons mapping for ProjectCard
+│   ├── tech-icons.ts       # Tech name → react-icons mapping for ProjectCard
+│   └── github.ts           # GitHub API client for changelog
 │
 ├── types/
 │   └── sanity.ts           # TypeScript types for Sanity documents
