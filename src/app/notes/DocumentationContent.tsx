@@ -3,25 +3,27 @@
 import { useSearchParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Suspense } from 'react'
-import { DocumentationSection, Project } from '@/types/sanity'
+import { DocumentationSection, Project, ChangelogMonth } from '@/types/sanity'
 import PortableText from '@/components/content/PortableText'
 import { ProjectCard, TechStackContent } from '@/components/content'
 
 const PROJECTS_SLUG = 'projects'
+const CHANGELOG_SLUG = 'changelog'
 
 interface DocumentationContentProps {
   sections: DocumentationSection[]
   projects: Project[]
+  changelog: ChangelogMonth[]
 }
 
 interface SidebarItem {
   id: string
   slug: string
   title: string
-  type: 'section' | 'projects'
+  type: 'section' | 'projects' | 'changelog'
 }
 
-function buildSidebarItems(sections: DocumentationSection[]): SidebarItem[] {
+function buildSidebarItems(sections: DocumentationSection[], hasChangelog: boolean): SidebarItem[] {
   const items: SidebarItem[] = []
 
   for (const section of sections) {
@@ -43,17 +45,27 @@ function buildSidebarItems(sections: DocumentationSection[]): SidebarItem[] {
     }
   }
 
+  if (hasChangelog) {
+    items.push({
+      id: 'changelog',
+      slug: CHANGELOG_SLUG,
+      title: 'Changelog',
+      type: 'changelog',
+    })
+  }
+
   return items
 }
 
-function DocumentationInner({ sections, projects }: DocumentationContentProps) {
+function DocumentationInner({ sections, projects, changelog }: DocumentationContentProps) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const selectedSlug = searchParams.get('section')
   const selectedSection = sections.find(s => s.slug.current === selectedSlug) ?? null
   const isProjectsSelected = selectedSlug === PROJECTS_SLUG
+  const isChangelogSelected = selectedSlug === CHANGELOG_SLUG
 
-  const sidebarItems = buildSidebarItems(sections)
+  const sidebarItems = buildSidebarItems(sections, changelog.length > 0)
   const publicProjects = projects.filter(p => p.category !== 'internal')
   const internalProjects = projects.filter(p => p.category === 'internal')
 
@@ -97,7 +109,7 @@ function DocumentationInner({ sections, projects }: DocumentationContentProps) {
 
           {/* Main content area */}
           <div className="flex-1 min-w-0">
-            {!selectedSection && !isProjectsSelected && (
+            {!selectedSection && !isProjectsSelected && !isChangelogSelected && (
               <div className="flex justify-center">
                 <Image
                   src="/documentation-hero.webp"
@@ -149,7 +161,54 @@ function DocumentationInner({ sections, projects }: DocumentationContentProps) {
               </div>
             )}
 
-            {selectedSection && !isProjectsSelected && (
+            {isChangelogSelected && (
+              <div>
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-sdm-text mb-2">
+                  Changelog
+                </h2>
+                <p className="text-sdm-text-light font-cooper text-lg mb-8">
+                  Recent changes to this site.
+                </p>
+                {changelog.length > 0 ? (
+                  <div className="relative border-l-2 border-sdm-border pl-6 ml-2">
+                    {changelog.map(month => (
+                      <div key={month.yearMonth} className="mb-10">
+                        <h3 className="font-cooper text-xl text-sdm-primary font-bold mb-4 -ml-[calc(1.5rem+2px)] pl-6 relative">
+                          <span className="absolute left-[-5px] top-2 w-2.5 h-2.5 rounded-full bg-sdm-primary" />
+                          {month.label}
+                        </h3>
+                        <ul className="space-y-3">
+                          {month.entries.map(entry => (
+                            <li key={entry.sha} className="relative">
+                              <span className="absolute -left-[calc(1.5rem+5px)] top-2 w-2 h-2 rounded-full bg-sdm-border" />
+                              <p className="font-cooper text-sdm-text">{entry.message}</p>
+                              <p className="text-sm text-sdm-text-light mt-0.5">
+                                {new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                {' · '}
+                                <a
+                                  href={entry.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-sdm-accent hover:text-sdm-primary transition-colors duration-200"
+                                >
+                                  {entry.sha.slice(0, 7)}
+                                </a>
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sdm-text-light font-cooper">
+                    No changelog entries available.
+                  </p>
+                )}
+              </div>
+            )}
+
+            {selectedSection && !isProjectsSelected && !isChangelogSelected && (
               <article className="p-6 md:p-12 rounded-lg shadow-md bg-sdm-card border border-sdm-border">
                 <h2 className="font-cooper text-2xl md:text-3xl text-sdm-text mb-6">
                   {selectedSection.title}
@@ -170,10 +229,10 @@ function DocumentationInner({ sections, projects }: DocumentationContentProps) {
   )
 }
 
-export default function DocumentationContent({ sections, projects }: DocumentationContentProps) {
+export default function DocumentationContent({ sections, projects, changelog }: DocumentationContentProps) {
   return (
     <Suspense fallback={<div className="bg-sdm-background min-h-screen flex items-center justify-center" role="status" aria-live="polite">Loading...</div>}>
-      <DocumentationInner sections={sections} projects={projects} />
+      <DocumentationInner sections={sections} projects={projects} changelog={changelog} />
     </Suspense>
   )
 }

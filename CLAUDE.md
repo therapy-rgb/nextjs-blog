@@ -80,6 +80,7 @@ vitest.config.ts      # Test configuration
 - `src/lib/validation.ts` - Shared validation/sanitization utilities
 - `src/lib/api-security.ts` - Rate limiting, CSRF protection, bot detection
 - `src/lib/tech-icons.ts` - Maps tech names to react-icons for ProjectCard
+- `src/lib/github.ts` - GitHub API client for changelog (fetch, filter, clean, group commits)
 - `src/app/api/revalidate/route.ts` - Sanity webhook handler for on-demand ISR
 - `src/components/content/PortableText.tsx` - Sanity rich text renderer
 - `src/components/layout/Header.tsx` - Header with focus-trap mobile menu
@@ -122,6 +123,7 @@ SENTRY_PROJECT=<project-slug>
 UPSTASH_REDIS_REST_URL=<redis-url>
 UPSTASH_REDIS_REST_TOKEN=<redis-token>
 SANITY_REVALIDATION_SECRET=<webhook-secret>
+GITHUB_TOKEN=<fine-grained-pat>
 ```
 
 ## Conventions

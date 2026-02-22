@@ -117,3 +117,29 @@ export interface Project {
   category?: 'public' | 'internal'
   order: number
 }
+
+// GitHub changelog types
+
+export interface GitHubCommit {
+  sha: string
+  html_url: string
+  commit: {
+    message: string
+    committer: {
+      date: string
+    }
+  }
+}
+
+export interface ChangelogEntry {
+  sha: string
+  message: string
+  date: string
+  url: string
+}
+
+export interface ChangelogMonth {
+  label: string
+  yearMonth: string
+  entries: ChangelogEntry[]
+}
