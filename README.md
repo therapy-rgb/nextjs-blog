@@ -2,21 +2,31 @@
 
 A personal blog about family, finances, music, and suburban life.
 
-**Live site**: [suburbandadmode.com](https://suburbandadmode.com)
-**Repository**: [therapy-rgb/nextjs-blog](https://github.com/therapy-rgb/nextjs-blog)
+**Live site:** [suburbandadmode.com](https://suburbandadmode.com)
 
 ## Tech Stack
 
 | Layer | Tool |
 |-------|------|
-| Framework | Next.js 16 (App Router, Turbopack) |
-| Language | TypeScript, React 19 |
-| Styling | Tailwind CSS v4 + `@tailwindcss/typography` |
-| CMS | Sanity (headless, GROQ queries) |
-| Error tracking | Sentry |
-| Rate limiting | Upstash Redis |
-| Testing | Vitest + React Testing Library |
-| Deployment | Vercel (auto-deploy from `main`) |
+| Framework | [Next.js 16](https://nextjs.org/) (App Router, Turbopack) |
+| Language | [TypeScript](https://www.typescriptlang.org/) + [React 19](https://react.dev/) |
+| Styling | [Tailwind CSS v4](https://tailwindcss.com/) + `@tailwindcss/typography` |
+| CMS | [Sanity v5](https://www.sanity.io/) (headless, GROQ queries) |
+| Error tracking | [Sentry](https://sentry.io/) |
+| Rate limiting | [Upstash Redis](https://upstash.com/) |
+| Testing | [Vitest](https://vitest.dev/) + [React Testing Library](https://testing-library.com/) |
+| Deployment | [Vercel](https://vercel.com/) (auto-deploy from `main`) |
+
+## Features
+
+- **Journal** -- long-form blog posts about family, finances, music, and suburban life
+- **La Familia** -- family photo gallery with vertical scroll layout
+- **Puttering** -- poetry collection rendered in handwritten font
+- **Notes** -- site info hub (About Me, Now, Accessibility, Tech Stack, Projects, Changelog)
+- **Dark mode** -- three-state toggle (light / dark / system preference), persisted in localStorage
+- **RSS feed** -- auto-generated at `/feed.xml`
+- **On-demand revalidation** -- Sanity webhook triggers instant cache invalidation; ISR as fallback
+- **Changelog** -- monthly timeline of site changes pulled from the GitHub API
 
 ## Pages
 
@@ -28,9 +38,9 @@ A personal blog about family, finances, music, and suburban life.
 | `/la-familia` | Family photo gallery (vertical scroll) |
 | `/puttering` | Poetry viewer from Sanity CMS (ISR: 1 hr) |
 | `/about` | About page |
-| `/contact` | Contact page (UI only) |
+| `/contact` | Contact page |
 | `/notes` | Site info from Sanity CMS: About Me, Now, Accessibility, Tech Stack (ISR: 1 hr) |
-| `/notes?section=projects` | Portfolio-style project dashboard (within Notes page, from Sanity CMS) |
+| `/notes?section=projects` | Portfolio-style project dashboard (from Sanity CMS) |
 | `/notes?section=changelog` | Monthly timeline of recent site changes (from GitHub API) |
 
 ## Getting Started
@@ -40,9 +50,11 @@ A personal blog about family, finances, music, and suburban life.
 - Node.js 18+
 - npm
 
-### 1. Install dependencies
+### 1. Clone and install
 
 ```bash
+git clone https://github.com/therapy-rgb/nextjs-blog.git
+cd nextjs-blog
 npm install
 ```
 
@@ -58,6 +70,7 @@ NEXT_PUBLIC_SANITY_DATASET=production
 Optional (recommended for production):
 
 ```
+NEXT_PUBLIC_BASE_URL=<base-url>
 NEXT_PUBLIC_SENTRY_DSN=<sentry-dsn>
 SENTRY_DSN=<sentry-dsn>
 SENTRY_ORG=<org-slug>
@@ -66,27 +79,26 @@ UPSTASH_REDIS_REST_URL=<redis-url>
 UPSTASH_REDIS_REST_TOKEN=<redis-token>
 SANITY_REVALIDATION_SECRET=<webhook-secret>
 SANITY_API_TOKEN=<sanity-api-token>
-NEXT_PUBLIC_BASE_URL=<base-url>
 GITHUB_TOKEN=<fine-grained-pat>
 ```
 
 ### 3. Run locally
 
 ```bash
-npm run dev            # Next.js dev server (Turbopack) -- localhost:3000
-cd sanity-studio && npm run dev   # Sanity Studio -- localhost:3333
+npm run dev                          # Next.js dev server (Turbopack) -- localhost:3000
+cd sanity-studio && npm run dev      # Sanity Studio -- localhost:3333
 ```
 
 ## Scripts
 
-```bash
-npm run dev        # Dev server with Turbopack
-npm run build      # Production build
-npm run start      # Serve production build
-npm run lint       # ESLint on src/
-npm run test       # Run tests once
-npm run test:watch # Run tests in watch mode
-```
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Dev server with Turbopack |
+| `npm run build` | Production build |
+| `npm run start` | Serve production build |
+| `npm run lint` | ESLint on `src/` |
+| `npm run test` | Run tests once |
+| `npm run test:watch` | Run tests in watch mode |
 
 ## Project Structure
 
@@ -102,6 +114,8 @@ src/
 │   ├── about/              # About page
 │   ├── contact/            # Contact page
 │   ├── notes/              # Site info (About, Now, Accessibility, Tech Stack, Projects, Changelog)
+│   ├── api/revalidate/     # Sanity webhook for on-demand ISR
+│   ├── feed.xml/           # RSS feed generation
 │   ├── error.tsx           # Error boundary
 │   ├── loading.tsx         # Loading skeleton
 │   ├── global-error.tsx    # Sentry error boundary
@@ -116,8 +130,8 @@ src/
 │   └── seo/                # JsonLd (structured data)
 │
 ├── hooks/
-│   ├── useMobileMenu.ts   # Mobile menu logic (escape, scroll lock, route-close)
-│   └── useTheme.ts        # Theme toggle (light/dark/system) with localStorage + OS sync
+│   ├── useMobileMenu.ts    # Mobile menu logic (escape, scroll lock, route-close)
+│   └── useTheme.ts         # Theme toggle (light/dark/system) with localStorage + OS sync
 │
 ├── lib/
 │   ├── sanity.ts           # Sanity client + all GROQ queries
@@ -127,81 +141,71 @@ src/
 │   ├── api-security.ts     # Rate limiting, origin validation, honeypot, IP extraction
 │   ├── logging.ts          # Structured JSON logging
 │   ├── navigation.ts       # Nav link definitions
-│   ├── tech-icons.ts       # Tech name → react-icons mapping for ProjectCard
+│   ├── tech-icons.ts       # Tech name -> react-icons mapping for ProjectCard
 │   └── github.ts           # GitHub API client for changelog
 │
 ├── types/
 │   └── sanity.ts           # TypeScript types for Sanity documents
 │
 └── __tests__/              # Vitest tests
-    ├── setup.ts
-    ├── validation.test.ts
-    └── env.test.ts
 
-sanity-studio/              # Separate Sanity Studio app
+sanity-studio/              # Separate Sanity Studio app (own package.json)
 public/                     # Static assets, fonts, images
 ```
 
-## Component Imports
+## Content Management
 
-Components are grouped by category. Always use barrel exports:
-
-```ts
-import { Header, Footer, PageContainer } from '@/components/layout'
-import { ArrowLink, ContentCard, ThemeToggle, Typewriter } from '@/components/ui'
-import { PortableText, PostCard, ProjectCard, AuthorAvatar } from '@/components/content'
-import { JsonLd } from '@/components/seo'
-```
-
-## How Content Works
-
-### Blog posts (Sanity CMS)
+### Journal entries (Sanity CMS)
 
 1. Write and publish in Sanity Studio (locally at `localhost:3333` or deployed)
 2. Next.js fetches content via GROQ queries in `src/lib/sanity.ts`
 3. ISR revalidates every hour -- no manual redeploy needed for content changes
 4. Private entries (`private: true`) are filtered out of all public queries
+5. Sanity webhook triggers on-demand revalidation for near-instant updates
 
-### Documentation sections (Sanity CMS)
+### Sanity schemas
 
-The Notes page sections (About Me, Now, Accessibility, Tech Stack) are `documentationSection` documents in Sanity. Edit them in Sanity Studio. ISR revalidates every hour.
+| Type | Description |
+|------|-------------|
+| `journalEntry` | Blog posts (primary content type) |
+| `post` | Legacy posts (from WordPress migration) |
+| `author` | Author profiles |
+| `category` | Post categories |
+| `blockContent` | Rich text configuration |
+| `documentationSection` | Notes page sections (About Me, Now, Accessibility, Tech Stack) |
+| `photoGallery` | La Familia photo gallery (singleton) |
+| `putteringPoems` | Poetry collection (singleton) |
+| `project` | Portfolio projects with tech stack, links, category, and visibility |
 
 ### Photo and poetry pages
 
-La Familia photos and Puttering poems are managed in Sanity CMS. Edit them in Sanity Studio under their respective sidebar singletons. ISR revalidates every hour, and the Sanity webhook triggers on-demand revalidation.
+La Familia photos and Puttering poems are managed in Sanity CMS under their respective sidebar singletons. ISR revalidates every hour, and the Sanity webhook triggers on-demand revalidation.
 
 ## Deployment
 
-Pushing to `main` triggers an automatic Vercel deployment. No manual steps required.
+Pushing to `main` triggers an automatic [Vercel](https://vercel.com/) deployment. No manual steps required.
 
 ```bash
-# Manual deploy (if needed)
-vercel --prod
-```
-
-### Sanity Studio
-
-```bash
-cd sanity-studio && npx sanity deploy
+vercel --prod                            # Manual deploy (if needed)
+cd sanity-studio && npx sanity deploy    # Deploy Sanity Studio
 ```
 
 ## Custom Fonts
 
-- **Cooper** -- Main display/body font (`font-cooper`, `font-display`)
-- **TT Disruptors** -- Handwritten font for poems on the Puttering page
+- **Cooper** -- main display and body font (`font-cooper`, `font-display`)
+- **TT Disruptors** -- handwritten font for poems on the Puttering page
 
 Font files are in `public/fonts/`.
 
-## Other Documentation
+## Design
 
-These files exist in the repo for specific workflows:
+- **Colors:** Semantic `sdm-*` tokens -- deep rose primary, bright teal accent, light lavender background, navy text
+- **Dark mode:** Class-based toggling via `useTheme` hook (light / dark / system), `ThemeScript` prevents FOUC
+- **Typography:** Cooper for headings and body (22px base), Georgia as fallback
+- **Footer:** Page-specific SVG line art illustrations
 
-| File | Purpose |
-|------|---------|
-| `CLAUDE.md` | AI assistant instructions (project conventions, architecture) |
-| `START_HERE.md` | Quick-start guide for writing journal entries |
-| `JOURNAL_ENTRIES.md` | Detailed journal entry workflow |
-| `DEPLOYMENT.md` | Deployment troubleshooting notes |
-| `SANITY_SETUP_GUIDE.md` | Initial Sanity CMS setup walkthrough |
-| `La_Familia_Instructions.md` | How to update the photo gallery |
-| `Puttering_Instructions.md` | How to update the poetry page |
+## License
+
+This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](LICENSE) (CC BY-NC 4.0).
+
+You are free to share and adapt the material for non-commercial purposes with appropriate attribution. See the [LICENSE](LICENSE) file for details.
