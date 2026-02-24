@@ -10,7 +10,45 @@ interface PortableTextProps {
 }
 
 const components = {
+  block: {
+    h1: ({ children }: { children?: React.ReactNode }) => (
+      <h1 className="text-4xl font-bold mt-10 mb-4">{children}</h1>
+    ),
+    h2: ({ children }: { children?: React.ReactNode }) => (
+      <h2 className="text-3xl font-bold mt-10 mb-3">{children}</h2>
+    ),
+    h3: ({ children }: { children?: React.ReactNode }) => (
+      <h3 className="text-2xl font-semibold mt-8 mb-2">{children}</h3>
+    ),
+    h4: ({ children }: { children?: React.ReactNode }) => (
+      <h4 className="text-xl font-semibold mt-6 mb-2">{children}</h4>
+    ),
+    blockquote: ({ children }: { children?: React.ReactNode }) => (
+      <blockquote className="border-l-4 border-sdm-primary pl-6 my-8 italic text-sdm-text-light">
+        {children}
+      </blockquote>
+    ),
+  },
+  list: {
+    bullet: ({ children }: { children?: React.ReactNode }) => (
+      <ul className="list-disc pl-8 my-6 space-y-2">{children}</ul>
+    ),
+    number: ({ children }: { children?: React.ReactNode }) => (
+      <ol className="list-decimal pl-8 my-6 space-y-2">{children}</ol>
+    ),
+  },
   marks: {
+    strong: ({ children }: { children?: React.ReactNode }) => (
+      <strong className="font-bold">{children}</strong>
+    ),
+    em: ({ children }: { children?: React.ReactNode }) => (
+      <em className="italic">{children}</em>
+    ),
+    code: ({ children }: { children?: React.ReactNode }) => (
+      <code className="bg-sdm-surface-subtle border border-sdm-border px-1.5 py-0.5 rounded text-[0.875em] font-mono">
+        {children}
+      </code>
+    ),
     link: ({ children, value }: { children: React.ReactNode; value?: { href?: string } }) => (
       <a
         href={value?.href}
@@ -23,6 +61,18 @@ const components = {
     ),
   },
   types: {
+    code: ({ value }: { value: { code?: string; language?: string; filename?: string } }) => (
+      <figure className="my-8">
+        {value.filename && (
+          <figcaption className="text-sm text-sdm-text-light mb-2 font-mono">
+            {value.filename}
+          </figcaption>
+        )}
+        <pre className="bg-sdm-surface-subtle border border-sdm-border rounded-lg p-4 overflow-x-auto">
+          <code className="text-base font-mono leading-relaxed">{value.code}</code>
+        </pre>
+      </figure>
+    ),
     image: ({ value }: { value: SanityImage }) => {
       if (!value?.asset?._ref) {
         return null
