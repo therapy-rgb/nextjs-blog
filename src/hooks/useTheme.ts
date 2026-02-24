@@ -3,16 +3,25 @@
 import { useEffect, useCallback, useSyncExternalStore } from 'react'
 
 export type Theme = 'light' | 'dark' | 'system'
+export type ColorScheme = 'rose' | 'ocean' | 'forest' | 'sunset' | 'midnight'
 type ResolvedTheme = 'light' | 'dark'
 
 const STORAGE_KEY = 'sdm-theme'
-const LIGHT_COLOR = '#F3EFF5'
-const DARK_COLOR = '#1B1F2E'
+const COLOR_SCHEME_KEY = 'sdm-color-scheme'
 
-// Module-level listener set for same-tab localStorage notifications
+export const COLOR_SCHEMES: { id: ColorScheme; label: string; swatch: string }[] = [
+  { id: 'rose', label: 'Rose', swatch: '#C44569' },
+  { id: 'ocean', label: 'Ocean', swatch: '#2563EB' },
+  { id: 'forest', label: 'Forest', swatch: '#15803D' },
+  { id: 'sunset', label: 'Sunset', swatch: '#C2410C' },
+  { id: 'midnight', label: 'Midnight', swatch: '#7C3AED' },
+]
+
+// === Theme (light/dark/system) subscriptions ===
+
 const themeListeners = new Set<() => void>()
 
-function emitChange() {
+function emitThemeChange() {
   themeListeners.forEach((fn) => fn())
 }
 
@@ -42,7 +51,42 @@ function getThemeServerSnapshot(): Theme {
   return 'system'
 }
 
-// OS preference subscription
+// === Color scheme subscriptions ===
+
+const colorSchemeListeners = new Set<() => void>()
+
+function emitColorSchemeChange() {
+  colorSchemeListeners.forEach((fn) => fn())
+}
+
+function subscribeToColorScheme(callback: () => void) {
+  colorSchemeListeners.add(callback)
+  const onStorage = (e: StorageEvent) => {
+    if (e.key === COLOR_SCHEME_KEY || e.key === null) callback()
+  }
+  window.addEventListener('storage', onStorage)
+  return () => {
+    colorSchemeListeners.delete(callback)
+    window.removeEventListener('storage', onStorage)
+  }
+}
+
+function getColorSchemeSnapshot(): ColorScheme {
+  try {
+    const raw = localStorage.getItem(COLOR_SCHEME_KEY)
+    if (raw === 'ocean' || raw === 'forest' || raw === 'sunset' || raw === 'midnight') return raw
+  } catch {
+    // Private browsing or storage unavailable
+  }
+  return 'rose'
+}
+
+function getColorSchemeServerSnapshot(): ColorScheme {
+  return 'rose'
+}
+
+// === OS preference subscription ===
+
 function subscribeToSystemPref(callback: () => void) {
   const mq = window.matchMedia('(prefers-color-scheme: dark)')
   mq.addEventListener('change', callback)
@@ -57,6 +101,8 @@ function getSystemPrefServerSnapshot(): ResolvedTheme {
   return 'light'
 }
 
+// === DOM application ===
+
 function applyTheme(resolved: ResolvedTheme) {
   const root = document.documentElement
   if (resolved === 'dark') {
@@ -65,31 +111,46 @@ function applyTheme(resolved: ResolvedTheme) {
     root.classList.remove('dark')
   }
   root.style.colorScheme = resolved
+}
 
-  // Update theme-color meta tags for mobile browser chrome
-  const metaTags = document.querySelectorAll('meta[name="theme-color"]')
-  const color = resolved === 'dark' ? DARK_COLOR : LIGHT_COLOR
-  metaTags.forEach((tag) => {
-    tag.setAttribute('content', color)
-  })
+function applyColorScheme(scheme: ColorScheme) {
+  const root = document.documentElement
+  if (scheme === 'rose') {
+    root.removeAttribute('data-theme')
+  } else {
+    root.setAttribute('data-theme', scheme)
+  }
+}
+
+function updateMetaThemeColor() {
+  const color = getComputedStyle(document.documentElement).getPropertyValue('--sdm-background').trim()
+  if (color) {
+    document.querySelectorAll('meta[name="theme-color"]').forEach((tag) => {
+      tag.setAttribute('content', color)
+    })
+  }
 }
 
 /**
- * Hook for managing theme state with light/dark/system modes.
+ * Hook for managing theme state with light/dark/system modes
+ * and multiple color scheme palettes (rose, ocean, forest, sunset, midnight).
  * Uses useSyncExternalStore to read from localStorage and OS
  * preference without triggering setState-in-effect lint violations.
- * Persists choice to localStorage, syncs across tabs, and
+ * Persists choices to localStorage, syncs across tabs, and
  * listens for OS preference changes in system mode.
  */
 export function useTheme() {
   const theme = useSyncExternalStore(subscribeToTheme, getThemeSnapshot, getThemeServerSnapshot)
   const systemPref = useSyncExternalStore(subscribeToSystemPref, getSystemPrefSnapshot, getSystemPrefServerSnapshot)
+  const colorScheme = useSyncExternalStore(subscribeToColorScheme, getColorSchemeSnapshot, getColorSchemeServerSnapshot)
   const resolvedTheme: ResolvedTheme = theme === 'system' ? systemPref : theme
 
-  // Apply theme to DOM whenever resolved theme changes
   useEffect(() => {
     applyTheme(resolvedTheme)
-  }, [resolvedTheme])
+    applyColorScheme(colorScheme)
+    // Read computed background after both are applied
+    requestAnimationFrame(() => updateMetaThemeColor())
+  }, [resolvedTheme, colorScheme])
 
   const setTheme = useCallback((next: Theme) => {
     try {
@@ -101,8 +162,21 @@ export function useTheme() {
     } catch {
       // Private browsing or storage unavailable
     }
-    emitChange()
+    emitThemeChange()
   }, [])
 
-  return { theme, resolvedTheme, systemPref, setTheme }
+  const setColorScheme = useCallback((next: ColorScheme) => {
+    try {
+      if (next === 'rose') {
+        localStorage.removeItem(COLOR_SCHEME_KEY)
+      } else {
+        localStorage.setItem(COLOR_SCHEME_KEY, next)
+      }
+    } catch {
+      // Private browsing or storage unavailable
+    }
+    emitColorSchemeChange()
+  }, [])
+
+  return { theme, resolvedTheme, systemPref, colorScheme, setTheme, setColorScheme }
 }

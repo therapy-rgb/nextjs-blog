@@ -96,6 +96,234 @@
   --focus-ring: #D4597D;
 }
 
+/* === Ocean === */
+:root[data-theme="ocean"] {
+  --background: #EFF6FF;
+  --foreground: #1E293B;
+
+  --sdm-primary: #2563EB;
+  --sdm-accent: #E8910C;
+  --sdm-background: #EFF6FF;
+  --sdm-text: #1E293B;
+  --sdm-text-light: #64748B;
+  --sdm-card: #FFFFFF;
+  --sdm-border: #CBD5E1;
+  --sdm-surface-subtle: #F1F5F9;
+  --sdm-border-input: #94A3B8;
+  --sdm-primary-subtle: rgba(37, 99, 235, 0.1);
+  --sdm-overlay: rgba(37, 99, 235, 0.8);
+
+  --sdm-journal-1: rgba(37, 99, 235, 0.12);
+  --sdm-journal-2: rgba(232, 145, 12, 0.12);
+  --sdm-journal-3: rgba(16, 185, 129, 0.14);
+
+  --scrollbar-track: #DBEAFE;
+  --scrollbar-thumb: #2563EB;
+  --scrollbar-thumb-hover: #1D4ED8;
+  --selection-bg: #2563EB;
+  --selection-text: #FFFFFF;
+  --focus-ring: #2563EB;
+}
+
+:root.dark[data-theme="ocean"] {
+  --background: #0F172A;
+  --foreground: #E2E8F0;
+
+  --sdm-primary: #60A5FA;
+  --sdm-accent: #FBBF24;
+  --sdm-background: #0F172A;
+  --sdm-text: #E2E8F0;
+  --sdm-text-light: #94A3B8;
+  --sdm-card: #1E293B;
+  --sdm-border: #334155;
+  --sdm-surface-subtle: #1E293B;
+  --sdm-border-input: #475569;
+  --sdm-primary-subtle: rgba(96, 165, 250, 0.15);
+  --sdm-overlay: rgba(96, 165, 250, 0.85);
+
+  --sdm-journal-1: rgba(96, 165, 250, 0.15);
+  --sdm-journal-2: rgba(251, 191, 36, 0.15);
+  --sdm-journal-3: rgba(52, 211, 153, 0.15);
+
+  --scrollbar-track: #1E293B;
+  --scrollbar-thumb: #60A5FA;
+  --scrollbar-thumb-hover: #93C5FD;
+  --selection-bg: #60A5FA;
+  --selection-text: #FFFFFF;
+  --focus-ring: #60A5FA;
+}
+
+/* === Forest === */
+:root[data-theme="forest"] {
+  --background: #F0FDF4;
+  --foreground: #1A2E1A;
+
+  --sdm-primary: #15803D;
+  --sdm-accent: #B45309;
+  --sdm-background: #F0FDF4;
+  --sdm-text: #1A2E1A;
+  --sdm-text-light: #4D7C5E;
+  --sdm-card: #FFFFFF;
+  --sdm-border: #BBF7D0;
+  --sdm-surface-subtle: #ECFDF5;
+  --sdm-border-input: #86EFAC;
+  --sdm-primary-subtle: rgba(21, 128, 61, 0.1);
+  --sdm-overlay: rgba(21, 128, 61, 0.8);
+
+  --sdm-journal-1: rgba(21, 128, 61, 0.12);
+  --sdm-journal-2: rgba(180, 83, 9, 0.12);
+  --sdm-journal-3: rgba(22, 163, 74, 0.14);
+
+  --scrollbar-track: #DCFCE7;
+  --scrollbar-thumb: #15803D;
+  --scrollbar-thumb-hover: #166534;
+  --selection-bg: #15803D;
+  --selection-text: #FFFFFF;
+  --focus-ring: #15803D;
+}
+
+:root.dark[data-theme="forest"] {
+  --background: #0A1A12;
+  --foreground: #D1E7DD;
+
+  --sdm-primary: #4ADE80;
+  --sdm-accent: #FBBF24;
+  --sdm-background: #0A1A12;
+  --sdm-text: #D1E7DD;
+  --sdm-text-light: #86B298;
+  --sdm-card: #132A1B;
+  --sdm-border: #1E3F2A;
+  --sdm-surface-subtle: #132A1B;
+  --sdm-border-input: #2D5A3E;
+  --sdm-primary-subtle: rgba(74, 222, 128, 0.15);
+  --sdm-overlay: rgba(74, 222, 128, 0.85);
+
+  --sdm-journal-1: rgba(74, 222, 128, 0.15);
+  --sdm-journal-2: rgba(251, 191, 36, 0.15);
+  --sdm-journal-3: rgba(34, 197, 94, 0.15);
+
+  --scrollbar-track: #132A1B;
+  --scrollbar-thumb: #4ADE80;
+  --scrollbar-thumb-hover: #86EFAC;
+  --selection-bg: #4ADE80;
+  --selection-text: #0A1A12;
+  --focus-ring: #4ADE80;
+}
+
+/* === Sunset === */
+:root[data-theme="sunset"] {
+  --background: #FFF7ED;
+  --foreground: #292524;
+
+  --sdm-primary: #C2410C;
+  --sdm-accent: #7C3AED;
+  --sdm-background: #FFF7ED;
+  --sdm-text: #292524;
+  --sdm-text-light: #78716C;
+  --sdm-card: #FFFFFF;
+  --sdm-border: #E7E5E4;
+  --sdm-surface-subtle: #FAFAF9;
+  --sdm-border-input: #D6D3D1;
+  --sdm-primary-subtle: rgba(194, 65, 12, 0.1);
+  --sdm-overlay: rgba(194, 65, 12, 0.8);
+
+  --sdm-journal-1: rgba(194, 65, 12, 0.12);
+  --sdm-journal-2: rgba(124, 58, 237, 0.12);
+  --sdm-journal-3: rgba(234, 88, 12, 0.14);
+
+  --scrollbar-track: #FED7AA;
+  --scrollbar-thumb: #C2410C;
+  --scrollbar-thumb-hover: #9A3412;
+  --selection-bg: #C2410C;
+  --selection-text: #FFFFFF;
+  --focus-ring: #C2410C;
+}
+
+:root.dark[data-theme="sunset"] {
+  --background: #1C1412;
+  --foreground: #F5E6D3;
+
+  --sdm-primary: #FB923C;
+  --sdm-accent: #A78BFA;
+  --sdm-background: #1C1412;
+  --sdm-text: #F5E6D3;
+  --sdm-text-light: #B8977A;
+  --sdm-card: #2A1F1A;
+  --sdm-border: #3D2E24;
+  --sdm-surface-subtle: #2A1F1A;
+  --sdm-border-input: #5C4536;
+  --sdm-primary-subtle: rgba(251, 146, 60, 0.15);
+  --sdm-overlay: rgba(251, 146, 60, 0.85);
+
+  --sdm-journal-1: rgba(251, 146, 60, 0.15);
+  --sdm-journal-2: rgba(167, 139, 250, 0.15);
+  --sdm-journal-3: rgba(253, 186, 116, 0.15);
+
+  --scrollbar-track: #2A1F1A;
+  --scrollbar-thumb: #FB923C;
+  --scrollbar-thumb-hover: #FDBA74;
+  --selection-bg: #FB923C;
+  --selection-text: #1C1412;
+  --focus-ring: #FB923C;
+}
+
+/* === Midnight === */
+:root[data-theme="midnight"] {
+  --background: #FAF5FF;
+  --foreground: #1E1B4B;
+
+  --sdm-primary: #7C3AED;
+  --sdm-accent: #0891B2;
+  --sdm-background: #FAF5FF;
+  --sdm-text: #1E1B4B;
+  --sdm-text-light: #6D628A;
+  --sdm-card: #FFFFFF;
+  --sdm-border: #E9D5FF;
+  --sdm-surface-subtle: #F5F3FF;
+  --sdm-border-input: #D8B4FE;
+  --sdm-primary-subtle: rgba(124, 58, 237, 0.1);
+  --sdm-overlay: rgba(124, 58, 237, 0.8);
+
+  --sdm-journal-1: rgba(124, 58, 237, 0.12);
+  --sdm-journal-2: rgba(8, 145, 178, 0.12);
+  --sdm-journal-3: rgba(139, 92, 246, 0.14);
+
+  --scrollbar-track: #EDE9FE;
+  --scrollbar-thumb: #7C3AED;
+  --scrollbar-thumb-hover: #6D28D9;
+  --selection-bg: #7C3AED;
+  --selection-text: #FFFFFF;
+  --focus-ring: #7C3AED;
+}
+
+:root.dark[data-theme="midnight"] {
+  --background: #13111C;
+  --foreground: #E8E0F0;
+
+  --sdm-primary: #A78BFA;
+  --sdm-accent: #22D3EE;
+  --sdm-background: #13111C;
+  --sdm-text: #E8E0F0;
+  --sdm-text-light: #9B8FBB;
+  --sdm-card: #1E1A2E;
+  --sdm-border: #2D2844;
+  --sdm-surface-subtle: #1E1A2E;
+  --sdm-border-input: #443D66;
+  --sdm-primary-subtle: rgba(167, 139, 250, 0.15);
+  --sdm-overlay: rgba(167, 139, 250, 0.85);
+
+  --sdm-journal-1: rgba(167, 139, 250, 0.15);
+  --sdm-journal-2: rgba(34, 211, 238, 0.15);
+  --sdm-journal-3: rgba(196, 181, 253, 0.15);
+
+  --scrollbar-track: #1E1A2E;
+  --scrollbar-thumb: #A78BFA;
+  --scrollbar-thumb-hover: #C4B5FD;
+  --selection-bg: #A78BFA;
+  --selection-text: #13111C;
+  --focus-ring: #A78BFA;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

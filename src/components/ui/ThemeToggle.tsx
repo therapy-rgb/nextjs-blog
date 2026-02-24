@@ -2,6 +2,7 @@
 
 import { useTheme } from '@/hooks/useTheme'
 import type { Theme } from '@/hooks/useTheme'
+import { COLOR_SCHEMES } from '@/hooks/useTheme'
 
 function SunIcon() {
   return (
@@ -42,7 +43,7 @@ interface ThemeToggleProps {
 }
 
 export default function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
-  const { theme, systemPref, setTheme } = useTheme()
+  const { theme, systemPref, colorScheme, setTheme, setColorScheme } = useTheme()
 
   // Cycle: system → opposite of system pref → match system pref → system → ...
   function getNextTheme(): Theme {
@@ -65,16 +66,43 @@ export default function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
     ? 'text-white/70 hover:text-white'
     : 'text-sdm-text-light hover:text-sdm-primary'
 
+  const isOverlay = variant === 'overlay'
+
   return (
-    <button
-      type="button"
-      className={`${baseClasses} ${variantClasses}`}
-      onClick={() => setTheme(nextTheme)}
-      aria-label={`Switch to ${nextTheme} mode`}
-      title={`Switch to ${nextTheme} mode`}
-    >
-      {icons[theme]}
-      <span>{labels[theme]}</span>
-    </button>
+    <div className="flex flex-col gap-2">
+      <button
+        type="button"
+        className={`${baseClasses} ${variantClasses}`}
+        onClick={() => setTheme(nextTheme)}
+        aria-label={`Switch to ${nextTheme} mode`}
+        title={`Switch to ${nextTheme} mode`}
+      >
+        {icons[theme]}
+        <span>{labels[theme]}</span>
+      </button>
+      <div className="flex items-center gap-2.5 px-2" role="radiogroup" aria-label="Color scheme">
+        {COLOR_SCHEMES.map((scheme) => (
+          <button
+            key={scheme.id}
+            type="button"
+            className={`w-5 h-5 rounded-full transition-all duration-200 ${
+              colorScheme === scheme.id
+                ? isOverlay
+                  ? 'ring-2 ring-white ring-offset-2 ring-offset-transparent scale-110'
+                  : 'ring-2 ring-sdm-text ring-offset-2 ring-offset-sdm-card scale-110'
+                : isOverlay
+                  ? 'opacity-60 hover:opacity-100 hover:scale-110'
+                  : 'opacity-50 hover:opacity-100 hover:scale-110'
+            }`}
+            style={{ backgroundColor: scheme.swatch }}
+            onClick={() => setColorScheme(scheme.id)}
+            role="radio"
+            aria-checked={colorScheme === scheme.id}
+            aria-label={`${scheme.label} color scheme`}
+            title={scheme.label}
+          />
+        ))}
+      </div>
+    </div>
   )
 }
