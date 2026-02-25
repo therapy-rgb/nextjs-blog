@@ -167,6 +167,7 @@ GITHUB_TOKEN=<fine-grained-pat>
 | `photoGallery` | La Familia photo gallery (singleton) |
 | `putteringPoems` | Poetry collection (singleton) |
 | `project` | Portfolio projects with tech stack, links, category (public/internal), visibility toggle |
+| `link` | Curated external links (name, url, order) shown on Notes page |
 
 ### Content Flow
 - Content managed in Sanity Studio → fetched via GROQ queries in `src/lib/sanity.ts`

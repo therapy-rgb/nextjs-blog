@@ -118,6 +118,13 @@ export interface Project {
   order: number
 }
 
+export interface Link {
+  _id: string
+  name: string
+  url: string
+  order?: number
+}
+
 // GitHub changelog types
 
 export interface GitHubCommit {

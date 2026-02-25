@@ -24,6 +24,7 @@ Defined in `schemaTypes/`. Current types:
 | `photoGallery` | Photo gallery (singleton) |
 | `putteringPoems` | Poetry collection (singleton) |
 | `project` | Portfolio projects (visible toggle, ordered) |
+| `link` | Curated external links (name, url, ordered) |
 
 ## Adding a New Schema
 

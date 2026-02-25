@@ -1,5 +1,5 @@
-import { client, documentationSectionsQuery, projectsQuery } from '@/lib/sanity'
-import { DocumentationSection, Project } from '@/types/sanity'
+import { client, documentationSectionsQuery, projectsQuery, linksQuery } from '@/lib/sanity'
+import { DocumentationSection, Project, Link } from '@/types/sanity'
 import { logError } from '@/lib/logging'
 import { getChangelog } from '@/lib/github'
 import type { Metadata } from 'next'
@@ -37,12 +37,24 @@ async function getProjects(): Promise<Project[]> {
   }
 }
 
+async function getLinks(): Promise<Link[]> {
+  try {
+    return await client.fetch(linksQuery)
+  } catch (error) {
+    logError('sanity', 'Error fetching links', {
+      error: error instanceof Error ? error.message : String(error),
+    })
+    return []
+  }
+}
+
 export default async function Documentation() {
-  const [sections, projects, changelog] = await Promise.all([
+  const [sections, projects, links, changelog] = await Promise.all([
     getSections(),
     getProjects(),
+    getLinks(),
     getChangelog(),
   ])
 
-  return <DocumentationContent sections={sections} projects={projects} changelog={changelog} />
+  return <DocumentationContent sections={sections} projects={projects} links={links} changelog={changelog} />
 }

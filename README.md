@@ -176,6 +176,7 @@ public/                     # Static assets, fonts, images
 | `photoGallery` | La Familia photo gallery (singleton) |
 | `putteringPoems` | Poetry collection (singleton) |
 | `project` | Portfolio projects with tech stack, links, category, and visibility |
+| `link` | Curated external links (name, url, order) shown on Notes page |
 
 ### Photo and poetry pages
 

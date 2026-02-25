@@ -97,6 +97,16 @@ export const structure: StructureResolver = (S) =>
             .defaultOrdering([{field: 'order', direction: 'asc'}])
         ),
 
+      // Links
+      S.listItem()
+        .title('Links')
+        .icon(() => '🔗')
+        .child(
+          S.documentTypeList('link')
+            .title('All Links')
+            .defaultOrdering([{field: 'order', direction: 'asc'}])
+        ),
+
       S.divider(),
 
       // La Familia Photo Gallery (singleton)

@@ -3,16 +3,18 @@
 import { useSearchParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Suspense } from 'react'
-import { DocumentationSection, Project, ChangelogMonth } from '@/types/sanity'
+import { DocumentationSection, Project, Link, ChangelogMonth } from '@/types/sanity'
 import PortableText from '@/components/content/PortableText'
 import { ProjectCard, TechStackContent } from '@/components/content'
 
 const PROJECTS_SLUG = 'projects'
+const LINKS_SLUG = 'links'
 const CHANGELOG_SLUG = 'changelog'
 
 interface DocumentationContentProps {
   sections: DocumentationSection[]
   projects: Project[]
+  links: Link[]
   changelog: ChangelogMonth[]
 }
 
@@ -20,7 +22,7 @@ interface SidebarItem {
   id: string
   slug: string
   title: string
-  type: 'section' | 'projects' | 'changelog'
+  type: 'section' | 'projects' | 'links' | 'changelog'
 }
 
 function buildSidebarItems(sections: DocumentationSection[], hasChangelog: boolean): SidebarItem[] {
@@ -34,13 +36,19 @@ function buildSidebarItems(sections: DocumentationSection[], hasChangelog: boole
       type: 'section',
     })
 
-    // Insert "Projects" after "now"
+    // Insert "Projects" and "Links" after "now"
     if (section.slug.current === 'now') {
       items.push({
         id: 'projects',
         slug: PROJECTS_SLUG,
         title: 'Projects',
         type: 'projects',
+      })
+      items.push({
+        id: 'links',
+        slug: LINKS_SLUG,
+        title: 'Links',
+        type: 'links',
       })
     }
   }
@@ -57,12 +65,13 @@ function buildSidebarItems(sections: DocumentationSection[], hasChangelog: boole
   return items
 }
 
-function DocumentationInner({ sections, projects, changelog }: DocumentationContentProps) {
+function DocumentationInner({ sections, projects, links, changelog }: DocumentationContentProps) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const selectedSlug = searchParams.get('section')
   const selectedSection = sections.find(s => s.slug.current === selectedSlug) ?? null
   const isProjectsSelected = selectedSlug === PROJECTS_SLUG
+  const isLinksSelected = selectedSlug === LINKS_SLUG
   const isChangelogSelected = selectedSlug === CHANGELOG_SLUG
 
   const sidebarItems = buildSidebarItems(sections, changelog.length > 0)
@@ -109,7 +118,7 @@ function DocumentationInner({ sections, projects, changelog }: DocumentationCont
 
           {/* Main content area */}
           <div className="flex-1 min-w-0">
-            {!selectedSection && !isProjectsSelected && !isChangelogSelected && (
+            {!selectedSection && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
               <div className="flex justify-center">
                 <Image
                   src="/documentation-hero.webp"
@@ -156,6 +165,37 @@ function DocumentationInner({ sections, projects, changelog }: DocumentationCont
                 ) : (
                   <p className="text-sdm-text-light font-cooper">
                     No projects to show yet.
+                  </p>
+                )}
+              </div>
+            )}
+
+            {isLinksSelected && (
+              <div>
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-sdm-text mb-2">
+                  Links
+                </h2>
+                <p className="text-sdm-text-light font-cooper text-lg mb-8">
+                  The web is made of links woven together. Here are a few that I love.
+                </p>
+                {links.length > 0 ? (
+                  <ul className="flex flex-wrap gap-2">
+                    {links.map((link) => (
+                      <li key={link._id}>
+                        <a
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-block px-3 py-1.5 rounded-full border border-sdm-border bg-sdm-card hover:border-sdm-primary/40 hover:shadow-sm transition-all duration-200 text-center font-cooper text-base text-sdm-text hover:text-sdm-primary"
+                        >
+                          {link.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sdm-text-light font-cooper">
+                    No links yet.
                   </p>
                 )}
               </div>
@@ -216,7 +256,7 @@ function DocumentationInner({ sections, projects, changelog }: DocumentationCont
               </div>
             )}
 
-            {selectedSection && !isProjectsSelected && !isChangelogSelected && (
+            {selectedSection && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
               <article className="p-6 md:p-12 rounded-lg shadow-md bg-sdm-card border border-sdm-border">
                 <h2 className="font-cooper text-2xl md:text-3xl text-sdm-text mb-6">
                   {selectedSection.title}
@@ -237,10 +277,10 @@ function DocumentationInner({ sections, projects, changelog }: DocumentationCont
   )
 }
 
-export default function DocumentationContent({ sections, projects, changelog }: DocumentationContentProps) {
+export default function DocumentationContent({ sections, projects, links, changelog }: DocumentationContentProps) {
   return (
     <Suspense fallback={<div className="bg-sdm-background min-h-screen flex items-center justify-center" role="status" aria-live="polite">Loading...</div>}>
-      <DocumentationInner sections={sections} projects={projects} changelog={changelog} />
+      <DocumentationInner sections={sections} projects={projects} links={links} changelog={changelog} />
     </Suspense>
   )
 }

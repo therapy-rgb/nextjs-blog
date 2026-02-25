@@ -102,6 +102,12 @@ export const putteringPoemsQuery = `*[_id == "putteringPoems"][0] {
   }
 }`
 
+export const linksQuery = `*[_type == "link"] | order(lower(name) asc) {
+  _id,
+  name,
+  url
+}`
+
 export const projectsQuery = `*[_type == "project" && visible == true] | order(order asc) {
   _id,
   title,
