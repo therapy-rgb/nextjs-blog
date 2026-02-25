@@ -70,15 +70,13 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      // Favicon cache busting for mobile browsers
+      // Favicon cache busting — short-lived cache to prevent stale favicons
       {
-        source: '/:path(favicon.ico|favicon-16x16.png|favicon-32x32.png|apple-touch-icon.png|icon-192.png|icon-512.png)',
+        source: '/:path(favicon.ico|favicon.svg|favicon-16x16.png|favicon-32x32.png|apple-touch-icon.png|icon-192.png|icon-512.png)',
         headers: [
           {
             key: 'Cache-Control',
-            value: process.env.NODE_ENV === 'development'
-              ? 'no-cache, no-store, must-revalidate'
-              : 'public, max-age=3600, must-revalidate',
+            value: 'public, no-cache, must-revalidate',
           },
           {
             key: 'Pragma',

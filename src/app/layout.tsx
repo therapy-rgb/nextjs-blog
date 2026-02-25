@@ -14,7 +14,7 @@ const inter = Inter({
 
 
 // Cache busting version for favicons - update this to force mobile cache refresh
-const FAVICON_VERSION = "v20250918b";
+const FAVICON_VERSION = "v20260225";
 
 export const metadata: Metadata = {
   title: "Suburban Dad Mode",
@@ -24,6 +24,7 @@ export const metadata: Metadata = {
   manifest: `/site.webmanifest?${FAVICON_VERSION}`,
   icons: {
     icon: [
+      { url: `/favicon.svg?${FAVICON_VERSION}`, type: "image/svg+xml" },
       { url: `/favicon.ico?${FAVICON_VERSION}`, sizes: "32x32" },
       { url: `/favicon-16x16.png?${FAVICON_VERSION}`, sizes: "16x16", type: "image/png" },
       { url: `/favicon-32x32.png?${FAVICON_VERSION}`, sizes: "32x32", type: "image/png" },
@@ -116,6 +117,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         {/* Explicit favicon links for aggressive mobile cache busting */}
+        <link rel="icon" type="image/svg+xml" href={`/favicon.svg?${FAVICON_VERSION}`} />
         <link rel="icon" type="image/x-icon" href={`/favicon.ico?${FAVICON_VERSION}`} />
         <link rel="icon" type="image/png" sizes="16x16" href={`/favicon-16x16.png?${FAVICON_VERSION}`} />
         <link rel="icon" type="image/png" sizes="32x32" href={`/favicon-32x32.png?${FAVICON_VERSION}`} />
