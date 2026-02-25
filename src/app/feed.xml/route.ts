@@ -54,6 +54,11 @@ export async function GET() {
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
     <managingEditor>${escapeXml(DEFAULT_AUTHOR.email)} (${escapeXml(DEFAULT_AUTHOR.name)})</managingEditor>
     <atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml" />
+    <image>
+      <url>${SITE_URL}/favicon-32x32.png</url>
+      <title>${escapeXml(SITE_NAME)}</title>
+      <link>${SITE_URL}/journal</link>
+    </image>
     ${items}
   </channel>
 </rss>`
