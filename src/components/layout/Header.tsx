@@ -139,8 +139,8 @@ export default function Header() {
                 </Link>
               ))}
             </div>
-            <div className="px-4 pb-4 border-t border-white/20 pt-3">
-              <ThemeToggle variant="overlay" />
+            <div className="mx-3 mb-3 mt-3 px-3 py-2.5 rounded-xl bg-white/95 dark:bg-gray-900/95 shadow-sm">
+              <ThemeToggle />
             </div>
           </nav>
         </FocusTrap>

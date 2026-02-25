@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { useTheme } from '@/hooks/useTheme'
 import type { Theme } from '@/hooks/useTheme'
 import { COLOR_SCHEMES } from '@/hooks/useTheme'
@@ -38,12 +39,23 @@ function ComputerIcon() {
   )
 }
 
+function DropperIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className ?? 'h-5 w-5'} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+    </svg>
+  )
+}
+
 interface ThemeToggleProps {
   variant?: 'default' | 'overlay'
 }
 
 export default function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
   const { theme, systemPref, colorScheme, setTheme, setColorScheme } = useTheme()
+  const [paletteOpen, setPaletteOpen] = useState(false)
+  const paletteRef = useRef<HTMLDivElement>(null)
+  const dropperRef = useRef<HTMLButtonElement>(null)
 
   // Cycle: system → opposite of system pref → match system pref → system → ...
   function getNextTheme(): Theme {
@@ -56,6 +68,30 @@ export default function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
     return systemPref
   }
 
+  const closePalette = useCallback(() => setPaletteOpen(false), [])
+
+  // Close on click outside
+  useEffect(() => {
+    if (!paletteOpen) return
+    function handleClick(e: MouseEvent) {
+      if (
+        paletteRef.current && !paletteRef.current.contains(e.target as Node) &&
+        dropperRef.current && !dropperRef.current.contains(e.target as Node)
+      ) {
+        closePalette()
+      }
+    }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') closePalette()
+    }
+    document.addEventListener('mousedown', handleClick)
+    document.addEventListener('keydown', handleKey)
+    return () => {
+      document.removeEventListener('mousedown', handleClick)
+      document.removeEventListener('keydown', handleKey)
+    }
+  }, [paletteOpen, closePalette])
+
   const nextTheme = getNextTheme()
 
   const icons = { light: <SunIcon />, dark: <MoonIcon />, system: <ComputerIcon /> }
@@ -67,9 +103,10 @@ export default function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
     : 'text-sdm-text-light hover:text-sdm-primary'
 
   const isOverlay = variant === 'overlay'
+  const activeScheme = COLOR_SCHEMES.find((s) => s.id === colorScheme)
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex items-center gap-1">
       <button
         type="button"
         className={`${baseClasses} ${variantClasses}`}
@@ -80,28 +117,65 @@ export default function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
         {icons[theme]}
         <span>{labels[theme]}</span>
       </button>
-      <div className="flex items-center gap-2.5 px-2" role="radiogroup" aria-label="Color scheme">
-        {COLOR_SCHEMES.map((scheme) => (
-          <button
-            key={scheme.id}
-            type="button"
-            className={`w-5 h-5 rounded-full transition-all duration-200 ${
-              colorScheme === scheme.id
-                ? isOverlay
-                  ? 'ring-2 ring-white ring-offset-2 ring-offset-transparent scale-110'
-                  : 'ring-2 ring-sdm-text ring-offset-2 ring-offset-sdm-card scale-110'
-                : isOverlay
-                  ? 'opacity-60 hover:opacity-100 hover:scale-110'
-                  : 'opacity-50 hover:opacity-100 hover:scale-110'
-            }`}
-            style={{ backgroundColor: scheme.swatch }}
-            onClick={() => setColorScheme(scheme.id)}
-            role="radio"
-            aria-checked={colorScheme === scheme.id}
-            aria-label={`${scheme.label} color scheme`}
-            title={scheme.label}
+
+      {/* Color scheme dropper */}
+      <div className="relative">
+        <button
+          ref={dropperRef}
+          type="button"
+          className={`${baseClasses} ${variantClasses}`}
+          onClick={() => setPaletteOpen((prev) => !prev)}
+          aria-expanded={paletteOpen}
+          aria-haspopup="true"
+          aria-label="Color scheme"
+          title="Color scheme"
+        >
+          <DropperIcon />
+          <span
+            className="w-3 h-3 rounded-full ring-1 ring-current/30"
+            style={{ backgroundColor: activeScheme?.swatch }}
+            aria-hidden="true"
           />
-        ))}
+        </button>
+
+        {/* Popover */}
+        {paletteOpen && (
+          <div
+            ref={paletteRef}
+            className={`absolute right-0 mt-2 p-3 rounded-xl shadow-lg z-50 ${
+              isOverlay ? 'bg-sdm-overlay backdrop-blur-sm' : 'bg-sdm-card border border-sdm-border'
+            }`}
+            role="radiogroup"
+            aria-label="Color scheme"
+          >
+            <div className="flex items-center gap-3">
+              {COLOR_SCHEMES.map((scheme) => (
+                <button
+                  key={scheme.id}
+                  type="button"
+                  className={`w-7 h-7 rounded-full transition-all duration-200 ${
+                    colorScheme === scheme.id
+                      ? isOverlay
+                        ? 'ring-2 ring-white ring-offset-2 ring-offset-transparent scale-110'
+                        : 'ring-2 ring-sdm-text ring-offset-2 ring-offset-sdm-card scale-110'
+                      : isOverlay
+                        ? 'opacity-60 hover:opacity-100 hover:scale-110'
+                        : 'opacity-50 hover:opacity-100 hover:scale-110'
+                  }`}
+                  style={{ backgroundColor: scheme.swatch }}
+                  onClick={() => {
+                    setColorScheme(scheme.id)
+                    closePalette()
+                  }}
+                  role="radio"
+                  aria-checked={colorScheme === scheme.id}
+                  aria-label={`${scheme.label} color scheme`}
+                  title={scheme.label}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

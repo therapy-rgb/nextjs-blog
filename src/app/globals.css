@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @font-face {
   font-family: 'Cooper';
   src: url('/fonts/cooper_light.woff2') format('woff2'),
