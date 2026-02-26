@@ -39,13 +39,6 @@ function ComputerIcon() {
   )
 }
 
-function DropperIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className ?? 'h-5 w-5'} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
-    </svg>
-  )
-}
 
 interface ThemeToggleProps {
   variant?: 'default' | 'overlay'
@@ -130,9 +123,8 @@ export default function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
           aria-label="Color scheme"
           title="Color scheme"
         >
-          <DropperIcon />
           <span
-            className="w-3 h-3 rounded-full ring-1 ring-current/30"
+            className="w-3.5 h-3.5 rounded-full ring-1 ring-current/30"
             style={{ backgroundColor: activeScheme?.swatch }}
             aria-hidden="true"
           />
