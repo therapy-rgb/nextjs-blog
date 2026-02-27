@@ -13,7 +13,7 @@ Uses Next.js App Router. Pages are server components by default.
 - **/contact** - Contact page (UI only, no backend)
 - **/la-familia** - Photo gallery from Sanity CMS (ISR: 1hr, server component)
 - **/puttering** - Poetry viewer from Sanity CMS (ISR: 1hr, server component + client PutteringContent)
-- **/notes** - Site info with sidebar nav, content from Sanity CMS (ISR: 1hr, client component for tab switching). Sidebar order: About Me, Now, Projects, Links, Accessibility, Tech Stack, Changelog
+- **/notes** - Site info with sidebar nav, content from Sanity CMS (ISR: 1hr, client component for tab switching). Sidebar order: About Me, Now, House, Cars, Finances, Book Group, Projects, Links, Accessibility, Tech Stack, Changelog
 
 ## Conventions
 

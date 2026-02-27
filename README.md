@@ -22,7 +22,7 @@ A personal blog about family, finances, music, and suburban life.
 - **Journal** -- long-form blog posts about family, finances, music, and suburban life
 - **La Familia** -- family photo gallery with vertical scroll layout
 - **Puttering** -- poetry collection rendered in handwritten font
-- **Notes** -- site info hub (About Me, Now, Accessibility, Tech Stack, Projects, Changelog)
+- **Notes** -- site info hub (About Me, Now, House, Cars, Finances, Book Group, Projects, Links, Accessibility, Tech Stack, Changelog)
 - **Dark mode** -- three-state toggle (light / dark / system preference), persisted in localStorage
 - **RSS feed** -- auto-generated at `/feed.xml`
 - **On-demand revalidation** -- Sanity webhook triggers instant cache invalidation; ISR as fallback
@@ -39,7 +39,7 @@ A personal blog about family, finances, music, and suburban life.
 | `/puttering` | Poetry viewer from Sanity CMS (ISR: 1 hr) |
 | `/about` | About page |
 | `/contact` | Contact page |
-| `/notes` | Site info from Sanity CMS: About Me, Now, Accessibility, Tech Stack (ISR: 1 hr) |
+| `/notes` | Site info from Sanity CMS: About Me, Now, House, Cars, Finances, Book Group, Projects, Links, Accessibility, Tech Stack (ISR: 1 hr) |
 | `/notes?section=projects` | Portfolio-style project dashboard (from Sanity CMS) |
 | `/notes?section=changelog` | Monthly timeline of recent site changes (from GitHub API) |
 
@@ -113,7 +113,7 @@ src/
 │   ├── puttering/          # Poetry viewer
 │   ├── about/              # About page
 │   ├── contact/            # Contact page
-│   ├── notes/              # Site info (About, Now, Accessibility, Tech Stack, Projects, Changelog)
+│   ├── notes/              # Site info (About, Now, House, Cars, Finances, Book Group, Projects, Links, Accessibility, Tech Stack, Changelog)
 │   ├── api/revalidate/     # Sanity webhook for on-demand ISR
 │   ├── feed.xml/           # RSS feed generation
 │   ├── error.tsx           # Error boundary
@@ -177,6 +177,10 @@ public/                     # Static assets, fonts, images
 | `putteringPoems` | Poetry collection (singleton) |
 | `project` | Portfolio projects with tech stack, links, category, and visibility |
 | `link` | Curated external links (name, url, order) shown on Notes page |
+| `houseItem` | House maintenance/repairs/upgrades checklist items |
+| `carItem` | Car maintenance/repairs items (per vehicle) |
+| `financeItem` | Finance tracking items (grouped, e.g. taxes-2025) |
+| `bookGroupItem` | Book group reading list (title, author, year, meeting date) |
 
 ### Photo and poetry pages
 

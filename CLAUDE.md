@@ -168,6 +168,10 @@ GITHUB_TOKEN=<fine-grained-pat>
 | `putteringPoems` | Poetry collection (singleton) |
 | `project` | Portfolio projects with tech stack, links, category (public/internal), visibility toggle |
 | `link` | Curated external links (name, url, order) shown on Notes page |
+| `houseItem` | House maintenance/repairs/upgrades checklist items |
+| `carItem` | Car maintenance/repairs items (per vehicle) |
+| `financeItem` | Finance tracking items (grouped, e.g. taxes-2025) |
+| `bookGroupItem` | Book group reading list (title, author, year, meeting date) |
 
 ### Content Flow
 - Content managed in Sanity Studio → fetched via GROQ queries in `src/lib/sanity.ts`
