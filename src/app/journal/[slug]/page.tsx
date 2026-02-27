@@ -233,20 +233,20 @@ export default async function PostPage({ params }: PostPageProps) {
 
       {(adjacentPosts.newer || adjacentPosts.older) && (
         <nav className="flex items-center justify-between mt-12 pt-8 border-t border-sdm-border" aria-label="Journal navigation">
-          {adjacentPosts.newer ? (
-            <Link
-              href={`/journal/${adjacentPosts.newer.slug}`}
-              className="font-cooper text-sdm-text-light hover:text-sdm-primary transition-colors duration-200"
-            >
-              &larr; {adjacentPosts.newer.title}
-            </Link>
-          ) : <span />}
           {adjacentPosts.older ? (
             <Link
               href={`/journal/${adjacentPosts.older.slug}`}
+              className="font-cooper text-sdm-text-light hover:text-sdm-primary transition-colors duration-200"
+            >
+              &larr; {adjacentPosts.older.title}
+            </Link>
+          ) : <span />}
+          {adjacentPosts.newer ? (
+            <Link
+              href={`/journal/${adjacentPosts.newer.slug}`}
               className="font-cooper text-sdm-text-light hover:text-sdm-primary transition-colors duration-200 text-right"
             >
-              {adjacentPosts.older.title} &rarr;
+              {adjacentPosts.newer.title} &rarr;
             </Link>
           ) : <span />}
         </nav>
