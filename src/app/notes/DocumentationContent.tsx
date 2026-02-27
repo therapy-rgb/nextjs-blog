@@ -3,11 +3,12 @@
 import { useSearchParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Suspense } from 'react'
-import { DocumentationSection, Project, Link, ChangelogMonth, HouseItem } from '@/types/sanity'
+import { DocumentationSection, Project, Link, ChangelogMonth, HouseItem, CarItem } from '@/types/sanity'
 import PortableText from '@/components/content/PortableText'
 import { ProjectCard, TechStackContent } from '@/components/content'
 
 const HOUSE_SLUG = 'house'
+const CARS_SLUG = 'cars'
 const PROJECTS_SLUG = 'projects'
 const LINKS_SLUG = 'links'
 const CHANGELOG_SLUG = 'changelog'
@@ -18,13 +19,14 @@ interface DocumentationContentProps {
   links: Link[]
   changelog: ChangelogMonth[]
   houseItems: HouseItem[]
+  carItems: CarItem[]
 }
 
 interface SidebarItem {
   id: string
   slug: string
   title: string
-  type: 'section' | 'house' | 'projects' | 'links' | 'changelog'
+  type: 'section' | 'house' | 'cars' | 'projects' | 'links' | 'changelog'
 }
 
 function buildSidebarItems(sections: DocumentationSection[], hasChangelog: boolean): SidebarItem[] {
@@ -45,6 +47,12 @@ function buildSidebarItems(sections: DocumentationSection[], hasChangelog: boole
         slug: HOUSE_SLUG,
         title: 'House',
         type: 'house',
+      })
+      items.push({
+        id: 'cars',
+        slug: CARS_SLUG,
+        title: 'Cars',
+        type: 'cars',
       })
       items.push({
         id: 'projects',
@@ -79,12 +87,23 @@ const HOUSE_CATEGORIES = [
   { value: 'upgrades', label: 'Upgrades', icon: '✨', accent: 'border-sdm-text-light/30 bg-sdm-surface-subtle' },
 ] as const
 
-function DocumentationInner({ sections, projects, links, changelog, houseItems }: DocumentationContentProps) {
+const CAR_VEHICLES = [
+  { value: 'rav4', label: 'Rav4', icon: '🚙' },
+  { value: 'bolt-euv', label: 'Bolt EUV', icon: '⚡' },
+] as const
+
+const CAR_CATEGORIES = [
+  { value: 'maintenance', label: 'Maintenance', accent: 'border-sdm-primary/40 bg-sdm-primary/5' },
+  { value: 'repairs', label: 'Repairs', accent: 'border-sdm-accent/40 bg-sdm-accent/5' },
+] as const
+
+function DocumentationInner({ sections, projects, links, changelog, houseItems, carItems }: DocumentationContentProps) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const selectedSlug = searchParams.get('section')
   const selectedSection = sections.find(s => s.slug.current === selectedSlug) ?? null
   const isHouseSelected = selectedSlug === HOUSE_SLUG
+  const isCarsSelected = selectedSlug === CARS_SLUG
   const isProjectsSelected = selectedSlug === PROJECTS_SLUG
   const isLinksSelected = selectedSlug === LINKS_SLUG
   const isChangelogSelected = selectedSlug === CHANGELOG_SLUG
@@ -133,7 +152,7 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems }
 
           {/* Main content area */}
           <div className="flex-1 min-w-0">
-            {!selectedSection && !isHouseSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
+            {!selectedSection && !isHouseSelected && !isCarsSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
               <div className="flex justify-center">
                 <Image
                   src="/documentation-hero.webp"
@@ -183,6 +202,58 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems }
                   </>
                 ) : (
                   <p className="text-sdm-text-light font-cooper">No house items yet.</p>
+                )}
+              </div>
+            )}
+
+            {isCarsSelected && (
+              <div>
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-sdm-text mb-2">
+                  Cars
+                </h2>
+                <p className="text-sdm-text-light font-cooper text-lg mb-8">
+                  Keeping the fleet running.
+                </p>
+
+                {carItems.length > 0 ? (
+                  <>
+                    {CAR_VEHICLES.map(({ value: carValue, label: carLabel, icon: carIcon }) => {
+                      const carSpecificItems = carItems.filter(item => item.car === carValue)
+                      if (carSpecificItems.length === 0) return null
+                      return (
+                        <section key={carValue} className="mb-16">
+                          <div className="text-center mb-6">
+                            <h3 className="font-cooper text-2xl text-sdm-text inline-block px-8 py-3 border-2 border-sdm-text/30 rounded-md font-bold">
+                              {carIcon} {carLabel}
+                            </h3>
+                          </div>
+                          {CAR_CATEGORIES.map(({ value: catValue, label: catLabel, accent }) => {
+                            const items = carSpecificItems.filter(item => item.category === catValue)
+                            if (items.length === 0) return null
+                            return (
+                              <div key={catValue} className="mb-8">
+                                <h4 className="font-cooper text-lg text-sdm-primary font-bold mb-3 ml-1">
+                                  {catValue === 'maintenance' ? '🔧' : '🛠️'} {catLabel}
+                                </h4>
+                                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                  {items.map(item => (
+                                    <li
+                                      key={item._id}
+                                      className={`font-cooper text-sdm-text px-4 py-3 rounded-lg border-l-4 ${accent} transition-all duration-200 hover:shadow-sm`}
+                                    >
+                                      {item.title}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )
+                          })}
+                        </section>
+                      )
+                    })}
+                  </>
+                ) : (
+                  <p className="text-sdm-text-light font-cooper">No car items yet.</p>
                 )}
               </div>
             )}
@@ -312,7 +383,7 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems }
               </div>
             )}
 
-            {selectedSection && !isHouseSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
+            {selectedSection && !isHouseSelected && !isCarsSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
               <article className="p-6 md:p-12 rounded-lg shadow-md bg-sdm-card border border-sdm-border">
                 <h2 className="font-cooper text-2xl md:text-3xl text-sdm-text mb-6">
                   {selectedSection.title}
@@ -333,10 +404,10 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems }
   )
 }
 
-export default function DocumentationContent({ sections, projects, links, changelog, houseItems }: DocumentationContentProps) {
+export default function DocumentationContent({ sections, projects, links, changelog, houseItems, carItems }: DocumentationContentProps) {
   return (
     <Suspense fallback={<div className="bg-sdm-background min-h-screen flex items-center justify-center" role="status" aria-live="polite">Loading...</div>}>
-      <DocumentationInner sections={sections} projects={projects} links={links} changelog={changelog} houseItems={houseItems} />
+      <DocumentationInner sections={sections} projects={projects} links={links} changelog={changelog} houseItems={houseItems} carItems={carItems} />
     </Suspense>
   )
 }

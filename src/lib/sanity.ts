@@ -127,6 +127,14 @@ export const houseItemsQuery = `*[_type == "houseItem"] | order(order asc) {
   order
 }`
 
+export const carItemsQuery = `*[_type == "carItem"] | order(order asc) {
+  _id,
+  title,
+  car,
+  category,
+  order
+}`
+
 export const projectsQuery = `*[_type == "project" && visible == true] | order(order asc) {
   _id,
   title,

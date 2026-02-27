@@ -132,6 +132,14 @@ export interface HouseItem {
   order?: number
 }
 
+export interface CarItem {
+  _id: string
+  title: string
+  car: 'rav4' | 'bolt-euv'
+  category: 'maintenance' | 'repairs'
+  order?: number
+}
+
 // GitHub changelog types
 
 export interface GitHubCommit {
