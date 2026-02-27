@@ -6,6 +6,7 @@ import { useState, Suspense } from 'react'
 import { DocumentationSection, Project, Link, ChangelogMonth, HouseItem, CarItem, FinanceItem, BookGroupItem } from '@/types/sanity'
 import PortableText from '@/components/content/PortableText'
 import { ProjectCard, TechStackContent } from '@/components/content'
+import { Dateline } from '@/components/ui'
 
 const HOUSE_SLUG = 'house'
 const CARS_SLUG = 'cars'
@@ -500,6 +501,11 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
                 <h2 className="font-cooper text-2xl md:text-3xl text-sdm-text mb-6">
                   {selectedSection.title}
                 </h2>
+                {selectedSection.slug.current === 'now' && (
+                  <div className="mb-6">
+                    <Dateline />
+                  </div>
+                )}
                 {selectedSection.slug.current === 'tech-stack' ? (
                   <TechStackContent content={selectedSection.content} />
                 ) : (

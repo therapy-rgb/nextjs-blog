@@ -5,7 +5,7 @@
 Components are organized by category:
 
 - **layout/** - Structural components: Header, Footer, PageContainer
-- **ui/** - Reusable UI elements: ArrowLink, ContentCard, ThemeToggle, Typewriter
+- **ui/** - Reusable UI elements: ArrowLink, ContentCard, Dateline, ThemeToggle, Typewriter
 - **content/** - Content rendering: PortableText, PostCard, ProjectCard, AuthorAvatar
 - **seo/** - SEO-related: JsonLd
 

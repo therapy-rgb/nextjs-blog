@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
           "style-src 'self' 'unsafe-inline'",
           "img-src 'self' data: blob: https://cdn.sanity.io",
           "font-src 'self' data:",
-          "connect-src 'self' https://*.sanity.io https://*.sentry.io https://*.ingest.sentry.io",
+          "connect-src 'self' https://*.sanity.io https://*.sentry.io https://*.ingest.sentry.io https://api.open-meteo.com",
           "frame-ancestors 'none'",
           "base-uri 'self'",
           "form-action 'self'",
