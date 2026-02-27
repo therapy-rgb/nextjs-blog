@@ -74,9 +74,9 @@ function buildSidebarItems(sections: DocumentationSection[], hasChangelog: boole
 }
 
 const HOUSE_CATEGORIES = [
-  { value: 'maintenance', label: 'Maintenance' },
-  { value: 'repairs', label: 'Repairs' },
-  { value: 'upgrades', label: 'Upgrades' },
+  { value: 'maintenance', label: 'Maintenance', icon: '🔧', accent: 'border-sdm-primary/40 bg-sdm-primary/5' },
+  { value: 'repairs', label: 'Repairs', icon: '🛠️', accent: 'border-sdm-accent/40 bg-sdm-accent/5' },
+  { value: 'upgrades', label: 'Upgrades', icon: '✨', accent: 'border-sdm-text-light/30 bg-sdm-surface-subtle' },
 ] as const
 
 function DocumentationInner({ sections, projects, links, changelog, houseItems }: DocumentationContentProps) {
@@ -151,23 +151,37 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems }
                 <h2 className="font-display text-2xl md:text-3xl font-bold text-sdm-text mb-2">
                   House
                 </h2>
+                <p className="text-sdm-text-light font-cooper text-lg mb-8">
+                  The never-ending list of things a house needs.
+                </p>
 
-                {HOUSE_CATEGORIES.map(({ value, label }, i) => {
-                  const items = houseItems.filter(item => item.category === value)
-                  if (items.length === 0) return null
-                  return (
-                    <section key={value} className={i < HOUSE_CATEGORIES.length - 1 ? 'mb-12' : ''}>
-                      <h3 className="font-cooper text-xl text-sdm-primary font-bold mb-4">{label}</h3>
-                      <ul className="space-y-2 font-cooper text-sdm-text">
-                        {items.map(item => (
-                          <li key={item._id}>{item.title}</li>
-                        ))}
-                      </ul>
-                    </section>
-                  )
-                })}
-
-                {houseItems.length === 0 && (
+                {houseItems.length > 0 ? (
+                  <>
+                    {HOUSE_CATEGORIES.map(({ value, label, icon, accent }) => {
+                      const items = houseItems.filter(item => item.category === value)
+                      if (items.length === 0) return null
+                      return (
+                        <section key={value} className="mb-12">
+                          <div className="text-center mb-4">
+                            <h3 className="font-cooper text-xl text-sdm-primary inline-block px-6 py-2 border-2 border-sdm-text/30 rounded-md">
+                              {icon} {label}
+                            </h3>
+                          </div>
+                          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {items.map(item => (
+                              <li
+                                key={item._id}
+                                className={`font-cooper text-sdm-text px-4 py-3 rounded-lg border-l-4 ${accent} transition-all duration-200 hover:shadow-sm`}
+                              >
+                                {item.title}
+                              </li>
+                            ))}
+                          </ul>
+                        </section>
+                      )
+                    })}
+                  </>
+                ) : (
                   <p className="text-sdm-text-light font-cooper">No house items yet.</p>
                 )}
               </div>
