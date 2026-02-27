@@ -140,6 +140,13 @@ export interface CarItem {
   order?: number
 }
 
+export interface FinanceItem {
+  _id: string
+  title: string
+  group: 'taxes-2025'
+  order?: number
+}
+
 // GitHub changelog types
 
 export interface GitHubCommit {

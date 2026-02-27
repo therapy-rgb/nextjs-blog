@@ -135,6 +135,13 @@ export const carItemsQuery = `*[_type == "carItem"] | order(order asc) {
   order
 }`
 
+export const financeItemsQuery = `*[_type == "financeItem"] | order(order asc) {
+  _id,
+  title,
+  group,
+  order
+}`
+
 export const projectsQuery = `*[_type == "project" && visible == true] | order(order asc) {
   _id,
   title,

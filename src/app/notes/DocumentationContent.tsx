@@ -3,12 +3,13 @@
 import { useSearchParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Suspense } from 'react'
-import { DocumentationSection, Project, Link, ChangelogMonth, HouseItem, CarItem } from '@/types/sanity'
+import { DocumentationSection, Project, Link, ChangelogMonth, HouseItem, CarItem, FinanceItem } from '@/types/sanity'
 import PortableText from '@/components/content/PortableText'
 import { ProjectCard, TechStackContent } from '@/components/content'
 
 const HOUSE_SLUG = 'house'
 const CARS_SLUG = 'cars'
+const FINANCES_SLUG = 'finances'
 const PROJECTS_SLUG = 'projects'
 const LINKS_SLUG = 'links'
 const CHANGELOG_SLUG = 'changelog'
@@ -20,13 +21,14 @@ interface DocumentationContentProps {
   changelog: ChangelogMonth[]
   houseItems: HouseItem[]
   carItems: CarItem[]
+  financeItems: FinanceItem[]
 }
 
 interface SidebarItem {
   id: string
   slug: string
   title: string
-  type: 'section' | 'house' | 'cars' | 'projects' | 'links' | 'changelog'
+  type: 'section' | 'house' | 'cars' | 'finances' | 'projects' | 'links' | 'changelog'
 }
 
 function buildSidebarItems(sections: DocumentationSection[], hasChangelog: boolean): SidebarItem[] {
@@ -53,6 +55,12 @@ function buildSidebarItems(sections: DocumentationSection[], hasChangelog: boole
         slug: CARS_SLUG,
         title: 'Cars',
         type: 'cars',
+      })
+      items.push({
+        id: 'finances',
+        slug: FINANCES_SLUG,
+        title: 'Finances',
+        type: 'finances',
       })
       items.push({
         id: 'projects',
@@ -97,13 +105,18 @@ const CAR_CATEGORIES = [
   { value: 'repairs', label: 'Repairs', accent: 'border-sdm-accent/40 bg-sdm-accent/5' },
 ] as const
 
-function DocumentationInner({ sections, projects, links, changelog, houseItems, carItems }: DocumentationContentProps) {
+const FINANCE_GROUPS = [
+  { value: 'taxes-2025', label: 'Taxes 2025', icon: '🧾' },
+] as const
+
+function DocumentationInner({ sections, projects, links, changelog, houseItems, carItems, financeItems }: DocumentationContentProps) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const selectedSlug = searchParams.get('section')
   const selectedSection = sections.find(s => s.slug.current === selectedSlug) ?? null
   const isHouseSelected = selectedSlug === HOUSE_SLUG
   const isCarsSelected = selectedSlug === CARS_SLUG
+  const isFinancesSelected = selectedSlug === FINANCES_SLUG
   const isProjectsSelected = selectedSlug === PROJECTS_SLUG
   const isLinksSelected = selectedSlug === LINKS_SLUG
   const isChangelogSelected = selectedSlug === CHANGELOG_SLUG
@@ -152,7 +165,7 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
 
           {/* Main content area */}
           <div className="flex-1 min-w-0">
-            {!selectedSection && !isHouseSelected && !isCarsSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
+            {!selectedSection && !isHouseSelected && !isCarsSelected && !isFinancesSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
               <div className="flex justify-center">
                 <Image
                   src="/documentation-hero.webp"
@@ -254,6 +267,47 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
                   </>
                 ) : (
                   <p className="text-sdm-text-light font-cooper">No car items yet.</p>
+                )}
+              </div>
+            )}
+
+            {isFinancesSelected && (
+              <div>
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-sdm-text mb-2">
+                  Finances
+                </h2>
+                <p className="text-sdm-text-light font-cooper text-lg mb-8">
+                  Keeping the money stuff organized.
+                </p>
+
+                {financeItems.length > 0 ? (
+                  <>
+                    {FINANCE_GROUPS.map(({ value: groupValue, label: groupLabel, icon: groupIcon }) => {
+                      const groupItems = financeItems.filter(item => item.group === groupValue)
+                      if (groupItems.length === 0) return null
+                      return (
+                        <section key={groupValue} className="mb-12">
+                          <div className="text-center mb-6">
+                            <h3 className="font-cooper text-2xl text-sdm-text inline-block px-8 py-3 border-2 border-sdm-text/30 rounded-md font-bold">
+                              {groupIcon} {groupLabel}
+                            </h3>
+                          </div>
+                          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {groupItems.map(item => (
+                              <li
+                                key={item._id}
+                                className="font-cooper text-sdm-text px-4 py-3 rounded-lg border-l-4 border-sdm-primary/40 bg-sdm-primary/5 transition-all duration-200 hover:shadow-sm"
+                              >
+                                {item.title}
+                              </li>
+                            ))}
+                          </ul>
+                        </section>
+                      )
+                    })}
+                  </>
+                ) : (
+                  <p className="text-sdm-text-light font-cooper">No finance items yet.</p>
                 )}
               </div>
             )}
@@ -383,7 +437,7 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
               </div>
             )}
 
-            {selectedSection && !isHouseSelected && !isCarsSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
+            {selectedSection && !isHouseSelected && !isCarsSelected && !isFinancesSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
               <article className="p-6 md:p-12 rounded-lg shadow-md bg-sdm-card border border-sdm-border">
                 <h2 className="font-cooper text-2xl md:text-3xl text-sdm-text mb-6">
                   {selectedSection.title}
@@ -404,10 +458,10 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
   )
 }
 
-export default function DocumentationContent({ sections, projects, links, changelog, houseItems, carItems }: DocumentationContentProps) {
+export default function DocumentationContent({ sections, projects, links, changelog, houseItems, carItems, financeItems }: DocumentationContentProps) {
   return (
     <Suspense fallback={<div className="bg-sdm-background min-h-screen flex items-center justify-center" role="status" aria-live="polite">Loading...</div>}>
-      <DocumentationInner sections={sections} projects={projects} links={links} changelog={changelog} houseItems={houseItems} carItems={carItems} />
+      <DocumentationInner sections={sections} projects={projects} links={links} changelog={changelog} houseItems={houseItems} carItems={carItems} financeItems={financeItems} />
     </Suspense>
   )
 }

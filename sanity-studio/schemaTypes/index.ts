@@ -10,5 +10,6 @@ import project from './project'
 import link from './link'
 import houseItem from './houseItem'
 import carItem from './carItem'
+import financeItem from './financeItem'
 
-export const schemaTypes = [author, category, post, journalEntry, blockContent, documentationSection, photoGallery, putteringPoems, project, link, houseItem, carItem]
+export const schemaTypes = [author, category, post, journalEntry, blockContent, documentationSection, photoGallery, putteringPoems, project, link, houseItem, carItem, financeItem]

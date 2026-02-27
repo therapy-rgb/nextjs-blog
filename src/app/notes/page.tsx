@@ -1,5 +1,5 @@
-import { client, documentationSectionsQuery, projectsQuery, linksQuery, houseItemsQuery, carItemsQuery } from '@/lib/sanity'
-import { DocumentationSection, Project, Link, HouseItem, CarItem } from '@/types/sanity'
+import { client, documentationSectionsQuery, projectsQuery, linksQuery, houseItemsQuery, carItemsQuery, financeItemsQuery } from '@/lib/sanity'
+import { DocumentationSection, Project, Link, HouseItem, CarItem, FinanceItem } from '@/types/sanity'
 import { logError } from '@/lib/logging'
 import { getChangelog } from '@/lib/github'
 import type { Metadata } from 'next'
@@ -70,15 +70,27 @@ async function getCarItems(): Promise<CarItem[]> {
   }
 }
 
+async function getFinanceItems(): Promise<FinanceItem[]> {
+  try {
+    return await client.fetch(financeItemsQuery)
+  } catch (error) {
+    logError('sanity', 'Error fetching finance items', {
+      error: error instanceof Error ? error.message : String(error),
+    })
+    return []
+  }
+}
+
 export default async function Documentation() {
-  const [sections, projects, links, changelog, houseItems, carItems] = await Promise.all([
+  const [sections, projects, links, changelog, houseItems, carItems, financeItems] = await Promise.all([
     getSections(),
     getProjects(),
     getLinks(),
     getChangelog(),
     getHouseItems(),
     getCarItems(),
+    getFinanceItems(),
   ])
 
-  return <DocumentationContent sections={sections} projects={projects} links={links} changelog={changelog} houseItems={houseItems} carItems={carItems} />
+  return <DocumentationContent sections={sections} projects={projects} links={links} changelog={changelog} houseItems={houseItems} carItems={carItems} financeItems={financeItems} />
 }
