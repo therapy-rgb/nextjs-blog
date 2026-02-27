@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { Suspense } from 'react'
+import { useState, Suspense } from 'react'
 import { DocumentationSection, Project, Link, ChangelogMonth, HouseItem, CarItem, FinanceItem } from '@/types/sanity'
 import PortableText from '@/components/content/PortableText'
 import { ProjectCard, TechStackContent } from '@/components/content'
@@ -121,6 +121,7 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
   const isLinksSelected = selectedSlug === LINKS_SLUG
   const isChangelogSelected = selectedSlug === CHANGELOG_SLUG
 
+  const [open, setOpen] = useState(!!selectedSlug)
   const sidebarItems = buildSidebarItems(sections, changelog.length > 0)
   const publicProjects = projects.filter(p => p.category !== 'internal')
   const internalProjects = projects.filter(p => p.category === 'internal')
@@ -142,25 +143,40 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
         <h1 className="font-cooper text-3xl md:text-4xl text-sdm-text mb-8">Notes</h1>
 
         <div className="flex flex-col md:flex-row gap-8">
-          {/* Sidebar menu */}
-          <nav className="md:w-56 shrink-0" aria-label="Notes sections">
-            <ul className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-2 md:pb-0 md:sticky md:top-24">
-              {sidebarItems.map(item => (
-                <li key={item.id} className="shrink-0">
-                  <button
-                    onClick={() => router.push(`/notes?section=${item.slug}`, { scroll: false })}
-                    className={`font-cooper text-lg text-left transition-colors duration-200 px-3 py-2 rounded-md whitespace-nowrap md:whitespace-normal w-full ${
-                      selectedSlug === item.slug
-                        ? 'text-sdm-primary font-bold bg-sdm-card shadow-sm border border-sdm-border'
-                        : 'text-sdm-text-light hover:text-sdm-primary hover:bg-sdm-card/50'
-                    }`}
-                    aria-current={selectedSlug === item.slug ? 'true' : undefined}
-                  >
-                    {item.title}
-                  </button>
-                </li>
-              ))}
-            </ul>
+          {/* Sidebar dropdown */}
+          <nav className="md:w-56 shrink-0 md:sticky md:top-24 md:self-start" aria-label="Notes sections">
+            <div>
+              <button
+                onClick={() => setOpen(!open)}
+                className="w-full flex items-center justify-between py-2.5 px-3 text-left font-cooper text-lg font-semibold text-sdm-text border-b border-sdm-text/20 hover:bg-sdm-card/50 transition-colors"
+                aria-expanded={open}
+              >
+                Notes
+                <span className={`text-sdm-text-light transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>&#9662;</span>
+              </button>
+              {open && (
+                <ul className="py-1">
+                  {sidebarItems.map(item => (
+                    <li key={item.id}>
+                      <button
+                        onClick={() => {
+                          setOpen(true)
+                          router.push(`/notes?section=${item.slug}`, { scroll: false })
+                        }}
+                        className={`w-full text-left py-1.5 px-5 font-cooper text-base transition-colors duration-200 ${
+                          selectedSlug === item.slug
+                            ? 'text-sdm-primary font-semibold'
+                            : 'text-sdm-text-light hover:text-sdm-primary'
+                        }`}
+                        aria-current={selectedSlug === item.slug ? 'true' : undefined}
+                      >
+                        {item.title}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </nav>
 
           {/* Main content area */}
