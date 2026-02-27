@@ -1,13 +1,14 @@
 'use client'
 
 import { useSearchParams, useRouter } from 'next/navigation'
-import { useState, Suspense } from 'react'
+import { useState, useRef, Suspense } from 'react'
 import Image from 'next/image'
 import type { Poem } from '@/types/sanity'
 
 function PutteringInner({ poems }: { poems: Poem[] }) {
   const searchParams = useSearchParams()
   const router = useRouter()
+  const contentRef = useRef<HTMLDivElement>(null)
   const selectedSlug = searchParams.get('poem')
   const selectedIndex = selectedSlug
     ? poems.findIndex(p => p.slug === selectedSlug)
@@ -18,9 +19,14 @@ function PutteringInner({ poems }: { poems: Poem[] }) {
 
   const [open, setOpen] = useState(!!selectedSlug)
 
+  const navigateToPoem = (slug: string) => {
+    router.push(`/puttering?poem=${slug}`, { scroll: false })
+    contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   const handleSelect = (slug: string) => {
     setOpen(true)
-    router.push(`/puttering?poem=${slug}`, { scroll: false })
+    navigateToPoem(slug)
   }
 
   return (
@@ -63,7 +69,7 @@ function PutteringInner({ poems }: { poems: Poem[] }) {
           </nav>
 
           {/* Main content area */}
-          <div className="flex-1 min-w-0">
+          <div ref={contentRef} className="flex-1 min-w-0">
             {/* Bookshelf image when no poem selected */}
             {!selectedPoem && (
               <div className="flex justify-center">
@@ -94,7 +100,7 @@ function PutteringInner({ poems }: { poems: Poem[] }) {
                 <div className="flex items-center justify-between w-full max-w-md mt-8">
                   {prevPoem ? (
                     <button
-                      onClick={() => router.push(`/puttering?poem=${prevPoem.slug}`, { scroll: false })}
+                      onClick={() => navigateToPoem(prevPoem.slug)}
                       className="font-cooper text-sdm-text-light hover:text-sdm-primary transition-colors duration-200"
                     >
                       &larr; {prevPoem.title}
@@ -102,7 +108,7 @@ function PutteringInner({ poems }: { poems: Poem[] }) {
                   ) : <span />}
                   {nextPoem ? (
                     <button
-                      onClick={() => router.push(`/puttering?poem=${nextPoem.slug}`, { scroll: false })}
+                      onClick={() => navigateToPoem(nextPoem.slug)}
                       className="font-cooper text-sdm-text-light hover:text-sdm-primary transition-colors duration-200"
                     >
                       {nextPoem.title} &rarr;
