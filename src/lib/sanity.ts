@@ -142,6 +142,15 @@ export const financeItemsQuery = `*[_type == "financeItem"] | order(order asc) {
   order
 }`
 
+export const bookGroupItemsQuery = `*[_type == "bookGroupItem"] | order(order asc) {
+  _id,
+  title,
+  author,
+  year,
+  meetingDate,
+  order
+}`
+
 export const projectsQuery = `*[_type == "project" && visible == true] | order(order asc) {
   _id,
   title,

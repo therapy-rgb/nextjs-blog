@@ -1,5 +1,5 @@
-import { client, documentationSectionsQuery, projectsQuery, linksQuery, houseItemsQuery, carItemsQuery, financeItemsQuery } from '@/lib/sanity'
-import { DocumentationSection, Project, Link, HouseItem, CarItem, FinanceItem } from '@/types/sanity'
+import { client, documentationSectionsQuery, projectsQuery, linksQuery, houseItemsQuery, carItemsQuery, financeItemsQuery, bookGroupItemsQuery } from '@/lib/sanity'
+import { DocumentationSection, Project, Link, HouseItem, CarItem, FinanceItem, BookGroupItem } from '@/types/sanity'
 import { logError } from '@/lib/logging'
 import { getChangelog } from '@/lib/github'
 import type { Metadata } from 'next'
@@ -81,8 +81,19 @@ async function getFinanceItems(): Promise<FinanceItem[]> {
   }
 }
 
+async function getBookGroupItems(): Promise<BookGroupItem[]> {
+  try {
+    return await client.fetch(bookGroupItemsQuery)
+  } catch (error) {
+    logError('sanity', 'Error fetching book group items', {
+      error: error instanceof Error ? error.message : String(error),
+    })
+    return []
+  }
+}
+
 export default async function Documentation() {
-  const [sections, projects, links, changelog, houseItems, carItems, financeItems] = await Promise.all([
+  const [sections, projects, links, changelog, houseItems, carItems, financeItems, bookGroupItems] = await Promise.all([
     getSections(),
     getProjects(),
     getLinks(),
@@ -90,7 +101,8 @@ export default async function Documentation() {
     getHouseItems(),
     getCarItems(),
     getFinanceItems(),
+    getBookGroupItems(),
   ])
 
-  return <DocumentationContent sections={sections} projects={projects} links={links} changelog={changelog} houseItems={houseItems} carItems={carItems} financeItems={financeItems} />
+  return <DocumentationContent sections={sections} projects={projects} links={links} changelog={changelog} houseItems={houseItems} carItems={carItems} financeItems={financeItems} bookGroupItems={bookGroupItems} />
 }

@@ -147,6 +147,15 @@ export interface FinanceItem {
   order?: number
 }
 
+export interface BookGroupItem {
+  _id: string
+  title: string
+  author: string
+  year?: string
+  meetingDate?: string
+  order?: number
+}
+
 // GitHub changelog types
 
 export interface GitHubCommit {

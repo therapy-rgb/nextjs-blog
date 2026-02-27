@@ -3,13 +3,14 @@
 import { useSearchParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useState, Suspense } from 'react'
-import { DocumentationSection, Project, Link, ChangelogMonth, HouseItem, CarItem, FinanceItem } from '@/types/sanity'
+import { DocumentationSection, Project, Link, ChangelogMonth, HouseItem, CarItem, FinanceItem, BookGroupItem } from '@/types/sanity'
 import PortableText from '@/components/content/PortableText'
 import { ProjectCard, TechStackContent } from '@/components/content'
 
 const HOUSE_SLUG = 'house'
 const CARS_SLUG = 'cars'
 const FINANCES_SLUG = 'finances'
+const BOOKGROUP_SLUG = 'book-group'
 const PROJECTS_SLUG = 'projects'
 const LINKS_SLUG = 'links'
 const CHANGELOG_SLUG = 'changelog'
@@ -22,13 +23,14 @@ interface DocumentationContentProps {
   houseItems: HouseItem[]
   carItems: CarItem[]
   financeItems: FinanceItem[]
+  bookGroupItems: BookGroupItem[]
 }
 
 interface SidebarItem {
   id: string
   slug: string
   title: string
-  type: 'section' | 'house' | 'cars' | 'finances' | 'projects' | 'links' | 'changelog'
+  type: 'section' | 'house' | 'cars' | 'finances' | 'book-group' | 'projects' | 'links' | 'changelog'
 }
 
 function buildSidebarItems(sections: DocumentationSection[], hasChangelog: boolean): SidebarItem[] {
@@ -61,6 +63,12 @@ function buildSidebarItems(sections: DocumentationSection[], hasChangelog: boole
         slug: FINANCES_SLUG,
         title: 'Finances',
         type: 'finances',
+      })
+      items.push({
+        id: 'book-group',
+        slug: BOOKGROUP_SLUG,
+        title: 'Book Group',
+        type: 'book-group',
       })
       items.push({
         id: 'projects',
@@ -109,7 +117,7 @@ const FINANCE_GROUPS = [
   { value: 'taxes-2025', label: 'Taxes 2025', icon: '🧾' },
 ] as const
 
-function DocumentationInner({ sections, projects, links, changelog, houseItems, carItems, financeItems }: DocumentationContentProps) {
+function DocumentationInner({ sections, projects, links, changelog, houseItems, carItems, financeItems, bookGroupItems }: DocumentationContentProps) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const selectedSlug = searchParams.get('section')
@@ -117,6 +125,7 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
   const isHouseSelected = selectedSlug === HOUSE_SLUG
   const isCarsSelected = selectedSlug === CARS_SLUG
   const isFinancesSelected = selectedSlug === FINANCES_SLUG
+  const isBookGroupSelected = selectedSlug === BOOKGROUP_SLUG
   const isProjectsSelected = selectedSlug === PROJECTS_SLUG
   const isLinksSelected = selectedSlug === LINKS_SLUG
   const isChangelogSelected = selectedSlug === CHANGELOG_SLUG
@@ -181,7 +190,7 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
 
           {/* Main content area */}
           <div className="flex-1 min-w-0">
-            {!selectedSection && !isHouseSelected && !isCarsSelected && !isFinancesSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
+            {!selectedSection && !isHouseSelected && !isCarsSelected && !isFinancesSelected && !isBookGroupSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
               <div className="flex justify-center">
                 <Image
                   src="/documentation-hero.webp"
@@ -328,6 +337,39 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
               </div>
             )}
 
+            {isBookGroupSelected && (
+              <div>
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-sdm-text mb-2">
+                  Book Group
+                </h2>
+                <p className="text-sdm-text-light font-cooper text-lg mb-8">
+                  The Providence Athenaeum hosts reading groups throughout the year. Suspicious Minds explores paranoia in literature &mdash; &quot;Paranoia comes from the Greek for &apos;beyond the mind,&apos; but are you really out of your mind if you&apos;re right?&quot; Meetings are the fourth Tuesday of the month, 5&ndash;7pm at Bound at the Athenaeum.
+                </p>
+
+                {bookGroupItems.length > 0 ? (
+                  <div className="space-y-3">
+                    {bookGroupItems.map(item => (
+                      <div
+                        key={item._id}
+                        className="flex items-baseline justify-between gap-4 font-cooper px-4 py-3 rounded-lg border-l-4 border-sdm-accent/40 bg-sdm-accent/5 transition-all duration-200 hover:shadow-sm"
+                      >
+                        <div className="min-w-0">
+                          <span className="text-sdm-text font-semibold italic">{item.title}</span>
+                          <span className="text-sdm-text-light"> &mdash; {item.author}</span>
+                          {item.year && <span className="text-sdm-text-light text-sm"> ({item.year})</span>}
+                        </div>
+                        {item.meetingDate && (
+                          <span className="text-sdm-text-light text-sm whitespace-nowrap shrink-0">{item.meetingDate}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sdm-text-light font-cooper">No book group items yet.</p>
+                )}
+              </div>
+            )}
+
             {isProjectsSelected && (
               <div>
                 <h2 className="font-display text-2xl md:text-3xl font-bold text-sdm-text mb-2">
@@ -453,7 +495,7 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
               </div>
             )}
 
-            {selectedSection && !isHouseSelected && !isCarsSelected && !isFinancesSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
+            {selectedSection && !isHouseSelected && !isCarsSelected && !isFinancesSelected && !isBookGroupSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
               <article className="p-6 md:p-12 rounded-lg shadow-md bg-sdm-card border border-sdm-border">
                 <h2 className="font-cooper text-2xl md:text-3xl text-sdm-text mb-6">
                   {selectedSection.title}
@@ -474,10 +516,10 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
   )
 }
 
-export default function DocumentationContent({ sections, projects, links, changelog, houseItems, carItems, financeItems }: DocumentationContentProps) {
+export default function DocumentationContent({ sections, projects, links, changelog, houseItems, carItems, financeItems, bookGroupItems }: DocumentationContentProps) {
   return (
     <Suspense fallback={<div className="bg-sdm-background min-h-screen flex items-center justify-center" role="status" aria-live="polite">Loading...</div>}>
-      <DocumentationInner sections={sections} projects={projects} links={links} changelog={changelog} houseItems={houseItems} carItems={carItems} financeItems={financeItems} />
+      <DocumentationInner sections={sections} projects={projects} links={links} changelog={changelog} houseItems={houseItems} carItems={carItems} financeItems={financeItems} bookGroupItems={bookGroupItems} />
     </Suspense>
   )
 }
