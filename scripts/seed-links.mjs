@@ -47,6 +47,7 @@ const links = [
   { name: 'iamrobin', url: 'https://www.iamrob.in/' },
   { name: 'kottke.org', url: 'https://kottke.org/' },
   { name: 'Sajal Sharma', url: 'https://sajalsharma.com/' },
+  { name: 'NowNowNow', url: 'https://nownownow.com/' },
 ]
 
 async function seed() {
