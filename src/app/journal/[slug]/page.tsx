@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { format } from 'date-fns'
 import { cache } from 'react'
-import { client, postQuery, defaultAuthor } from '@/lib/sanity'
+import { client, postQuery, adjacentPostsQuery, defaultAuthor } from '@/lib/sanity'
 import { Post } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
 import { getBaseUrl } from '@/lib/env'
@@ -30,6 +30,16 @@ export async function generateStaticParams() {
   }))
 }
 
+interface AdjacentPost {
+  title: string
+  slug: string
+}
+
+interface AdjacentPosts {
+  newer: AdjacentPost | null
+  older: AdjacentPost | null
+}
+
 // Cache getPost to deduplicate calls between generateMetadata and page render
 const getPost = cache(async (slug: string): Promise<Post | null> => {
   try {
@@ -44,6 +54,15 @@ const getPost = cache(async (slug: string): Promise<Post | null> => {
   } catch (error) {
     logError('sanity', 'Error fetching post', { error: error instanceof Error ? error.message : String(error) })
     return null
+  }
+})
+
+const getAdjacentPosts = cache(async (publishedAt: string): Promise<AdjacentPosts> => {
+  try {
+    return await client.fetch(adjacentPostsQuery, { publishedAt })
+  } catch (error) {
+    logError('sanity', 'Error fetching adjacent posts', { error: error instanceof Error ? error.message : String(error) })
+    return { newer: null, older: null }
   }
 })
 
@@ -96,7 +115,10 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound()
   }
 
-  const baseUrl = getBaseUrl()
+  const [baseUrl, adjacentPosts] = await Promise.all([
+    Promise.resolve(getBaseUrl()),
+    getAdjacentPosts(post.publishedAt),
+  ])
   
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -207,6 +229,27 @@ export default async function PostPage({ params }: PostPageProps) {
             ))}
           </div>
         </div>
+      )}
+
+      {(adjacentPosts.newer || adjacentPosts.older) && (
+        <nav className="flex items-center justify-between mt-12 pt-8 border-t border-sdm-border" aria-label="Journal navigation">
+          {adjacentPosts.newer ? (
+            <Link
+              href={`/journal/${adjacentPosts.newer.slug}`}
+              className="font-cooper text-sdm-text-light hover:text-sdm-primary transition-colors duration-200"
+            >
+              &larr; {adjacentPosts.newer.title}
+            </Link>
+          ) : <span />}
+          {adjacentPosts.older ? (
+            <Link
+              href={`/journal/${adjacentPosts.older.slug}`}
+              className="font-cooper text-sdm-text-light hover:text-sdm-primary transition-colors duration-200 text-right"
+            >
+              {adjacentPosts.older.title} &rarr;
+            </Link>
+          ) : <span />}
+        </nav>
       )}
     </article>
     </>

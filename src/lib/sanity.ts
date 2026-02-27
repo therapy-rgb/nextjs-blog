@@ -64,6 +64,18 @@ export const postQuery = `*[_type == "journalEntry" && slug.current == $slug && 
   "mainImage": coalesce(mainImage, body[_type == "image"][0])
 }`
 
+// Fetch the adjacent (newer/older) journal entries for prev/next navigation
+export const adjacentPostsQuery = `{
+  "newer": *[_type == "journalEntry" && defined(slug) && defined(publishedAt) && private != true && publishedAt > $publishedAt] | order(publishedAt asc)[0] {
+    title,
+    "slug": slug.current
+  },
+  "older": *[_type == "journalEntry" && defined(slug) && defined(publishedAt) && private != true && publishedAt < $publishedAt] | order(publishedAt desc)[0] {
+    title,
+    "slug": slug.current
+  }
+}`
+
 export const authorQuery = `*[_type == "author" && slug.current == $slug][0] {
   _id,
   name,
