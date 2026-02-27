@@ -125,6 +125,13 @@ export interface Link {
   order?: number
 }
 
+export interface HouseItem {
+  _id: string
+  title: string
+  category: 'maintenance' | 'repairs' | 'upgrades'
+  order?: number
+}
+
 // GitHub changelog types
 
 export interface GitHubCommit {

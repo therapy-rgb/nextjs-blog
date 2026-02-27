@@ -1,5 +1,5 @@
-import { client, documentationSectionsQuery, projectsQuery, linksQuery } from '@/lib/sanity'
-import { DocumentationSection, Project, Link } from '@/types/sanity'
+import { client, documentationSectionsQuery, projectsQuery, linksQuery, houseItemsQuery } from '@/lib/sanity'
+import { DocumentationSection, Project, Link, HouseItem } from '@/types/sanity'
 import { logError } from '@/lib/logging'
 import { getChangelog } from '@/lib/github'
 import type { Metadata } from 'next'
@@ -48,13 +48,25 @@ async function getLinks(): Promise<Link[]> {
   }
 }
 
+async function getHouseItems(): Promise<HouseItem[]> {
+  try {
+    return await client.fetch(houseItemsQuery)
+  } catch (error) {
+    logError('sanity', 'Error fetching house items', {
+      error: error instanceof Error ? error.message : String(error),
+    })
+    return []
+  }
+}
+
 export default async function Documentation() {
-  const [sections, projects, links, changelog] = await Promise.all([
+  const [sections, projects, links, changelog, houseItems] = await Promise.all([
     getSections(),
     getProjects(),
     getLinks(),
     getChangelog(),
+    getHouseItems(),
   ])
 
-  return <DocumentationContent sections={sections} projects={projects} links={links} changelog={changelog} />
+  return <DocumentationContent sections={sections} projects={projects} links={links} changelog={changelog} houseItems={houseItems} />
 }

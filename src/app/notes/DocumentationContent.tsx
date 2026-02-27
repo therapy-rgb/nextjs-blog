@@ -3,10 +3,11 @@
 import { useSearchParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Suspense } from 'react'
-import { DocumentationSection, Project, Link, ChangelogMonth } from '@/types/sanity'
+import { DocumentationSection, Project, Link, ChangelogMonth, HouseItem } from '@/types/sanity'
 import PortableText from '@/components/content/PortableText'
 import { ProjectCard, TechStackContent } from '@/components/content'
 
+const HOUSE_SLUG = 'house'
 const PROJECTS_SLUG = 'projects'
 const LINKS_SLUG = 'links'
 const CHANGELOG_SLUG = 'changelog'
@@ -16,13 +17,14 @@ interface DocumentationContentProps {
   projects: Project[]
   links: Link[]
   changelog: ChangelogMonth[]
+  houseItems: HouseItem[]
 }
 
 interface SidebarItem {
   id: string
   slug: string
   title: string
-  type: 'section' | 'projects' | 'links' | 'changelog'
+  type: 'section' | 'house' | 'projects' | 'links' | 'changelog'
 }
 
 function buildSidebarItems(sections: DocumentationSection[], hasChangelog: boolean): SidebarItem[] {
@@ -36,8 +38,14 @@ function buildSidebarItems(sections: DocumentationSection[], hasChangelog: boole
       type: 'section',
     })
 
-    // Insert "Projects" and "Links" after "now"
+    // Insert "House", "Projects", and "Links" after "now"
     if (section.slug.current === 'now') {
+      items.push({
+        id: 'house',
+        slug: HOUSE_SLUG,
+        title: 'House',
+        type: 'house',
+      })
       items.push({
         id: 'projects',
         slug: PROJECTS_SLUG,
@@ -65,11 +73,18 @@ function buildSidebarItems(sections: DocumentationSection[], hasChangelog: boole
   return items
 }
 
-function DocumentationInner({ sections, projects, links, changelog }: DocumentationContentProps) {
+const HOUSE_CATEGORIES = [
+  { value: 'maintenance', label: 'Maintenance' },
+  { value: 'repairs', label: 'Repairs' },
+  { value: 'upgrades', label: 'Upgrades' },
+] as const
+
+function DocumentationInner({ sections, projects, links, changelog, houseItems }: DocumentationContentProps) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const selectedSlug = searchParams.get('section')
   const selectedSection = sections.find(s => s.slug.current === selectedSlug) ?? null
+  const isHouseSelected = selectedSlug === HOUSE_SLUG
   const isProjectsSelected = selectedSlug === PROJECTS_SLUG
   const isLinksSelected = selectedSlug === LINKS_SLUG
   const isChangelogSelected = selectedSlug === CHANGELOG_SLUG
@@ -118,7 +133,7 @@ function DocumentationInner({ sections, projects, links, changelog }: Documentat
 
           {/* Main content area */}
           <div className="flex-1 min-w-0">
-            {!selectedSection && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
+            {!selectedSection && !isHouseSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
               <div className="flex justify-center">
                 <Image
                   src="/documentation-hero.webp"
@@ -128,6 +143,33 @@ function DocumentationInner({ sections, projects, links, changelog }: Documentat
                   className="rounded-lg shadow-md max-w-lg w-full h-auto"
                   priority
                 />
+              </div>
+            )}
+
+            {isHouseSelected && (
+              <div>
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-sdm-text mb-2">
+                  House
+                </h2>
+
+                {HOUSE_CATEGORIES.map(({ value, label }, i) => {
+                  const items = houseItems.filter(item => item.category === value)
+                  if (items.length === 0) return null
+                  return (
+                    <section key={value} className={i < HOUSE_CATEGORIES.length - 1 ? 'mb-12' : ''}>
+                      <h3 className="font-cooper text-xl text-sdm-primary font-bold mb-4">{label}</h3>
+                      <ul className="space-y-2 font-cooper text-sdm-text">
+                        {items.map(item => (
+                          <li key={item._id}>{item.title}</li>
+                        ))}
+                      </ul>
+                    </section>
+                  )
+                })}
+
+                {houseItems.length === 0 && (
+                  <p className="text-sdm-text-light font-cooper">No house items yet.</p>
+                )}
               </div>
             )}
 
@@ -256,7 +298,7 @@ function DocumentationInner({ sections, projects, links, changelog }: Documentat
               </div>
             )}
 
-            {selectedSection && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
+            {selectedSection && !isHouseSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
               <article className="p-6 md:p-12 rounded-lg shadow-md bg-sdm-card border border-sdm-border">
                 <h2 className="font-cooper text-2xl md:text-3xl text-sdm-text mb-6">
                   {selectedSection.title}
@@ -277,10 +319,10 @@ function DocumentationInner({ sections, projects, links, changelog }: Documentat
   )
 }
 
-export default function DocumentationContent({ sections, projects, links, changelog }: DocumentationContentProps) {
+export default function DocumentationContent({ sections, projects, links, changelog, houseItems }: DocumentationContentProps) {
   return (
     <Suspense fallback={<div className="bg-sdm-background min-h-screen flex items-center justify-center" role="status" aria-live="polite">Loading...</div>}>
-      <DocumentationInner sections={sections} projects={projects} links={links} changelog={changelog} />
+      <DocumentationInner sections={sections} projects={projects} links={links} changelog={changelog} houseItems={houseItems} />
     </Suspense>
   )
 }

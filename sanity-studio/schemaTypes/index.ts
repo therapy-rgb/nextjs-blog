@@ -8,5 +8,6 @@ import photoGallery from './photoGallery'
 import putteringPoems from './putteringPoems'
 import project from './project'
 import link from './link'
+import houseItem from './houseItem'
 
-export const schemaTypes = [author, category, post, journalEntry, blockContent, documentationSection, photoGallery, putteringPoems, project, link]
+export const schemaTypes = [author, category, post, journalEntry, blockContent, documentationSection, photoGallery, putteringPoems, project, link, houseItem]

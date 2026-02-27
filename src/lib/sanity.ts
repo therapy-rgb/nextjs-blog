@@ -120,6 +120,13 @@ export const linksQuery = `*[_type == "link"] | order(lower(name) asc) {
   url
 }`
 
+export const houseItemsQuery = `*[_type == "houseItem"] | order(order asc) {
+  _id,
+  title,
+  category,
+  order
+}`
+
 export const projectsQuery = `*[_type == "project" && visible == true] | order(order asc) {
   _id,
   title,
