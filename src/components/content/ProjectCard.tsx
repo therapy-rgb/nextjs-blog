@@ -81,7 +81,7 @@ export default function ProjectCard({ project, variant = 'default' }: ProjectCar
         </div>
       )}
 
-      {project.url && (
+      {project.url && /^https?:\/\//i.test(project.url) && (
         <div>
           <a
             href={project.url}

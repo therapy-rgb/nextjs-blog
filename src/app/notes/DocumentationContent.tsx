@@ -183,7 +183,7 @@ function DocumentationInner({ sections, projects, links, changelog }: Documentat
                     {links.map((link) => (
                       <li key={link._id}>
                         <a
-                          href={link.url}
+                          href={/^https?:\/\//i.test(link.url) ? link.url : undefined}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-block px-3 py-1.5 rounded-full border border-sdm-border bg-sdm-card hover:border-sdm-primary/40 hover:shadow-sm transition-all duration-200 text-center font-cooper text-base text-sdm-text hover:text-sdm-primary"

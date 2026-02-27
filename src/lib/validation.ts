@@ -66,8 +66,8 @@ export function isNonEmpty(value: string): boolean {
  */
 export function isValidUrl(value: string): boolean {
   try {
-    new URL(value)
-    return true
+    const url = new URL(value)
+    return ['http:', 'https:'].includes(url.protocol)
   } catch {
     return false
   }

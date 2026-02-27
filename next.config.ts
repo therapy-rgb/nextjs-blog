@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
         key: 'Content-Security-Policy',
         value: [
           "default-src 'self'",
-          "script-src 'self' 'unsafe-inline'",
+          "script-src 'self' 'sha256-48mwFFjK43z3EoJptu/mGBvcDGMtixXg3mRoZNpHPRQ='",
           "style-src 'self' 'unsafe-inline'",
           "img-src 'self' data: blob: https://cdn.sanity.io",
           "font-src 'self' data:",
@@ -31,6 +31,7 @@ const nextConfig: NextConfig = {
           "frame-ancestors 'none'",
           "base-uri 'self'",
           "form-action 'self'",
+          "object-src 'none'",
         ].join('; '),
       },
       {

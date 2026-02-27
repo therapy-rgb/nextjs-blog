@@ -49,16 +49,19 @@ const components = {
         {children}
       </code>
     ),
-    link: ({ children, value }: { children: React.ReactNode; value?: { href?: string } }) => (
-      <a
-        href={value?.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-sdm-primary no-underline hover:text-sdm-accent transition-colors duration-200"
-      >
-        {children}
-      </a>
-    ),
+    link: ({ children, value }: { children: React.ReactNode; value?: { href?: string } }) => {
+      const href = value?.href && /^https?:\/\//i.test(value.href) ? value.href : undefined
+      return (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sdm-primary no-underline hover:text-sdm-accent transition-colors duration-200"
+        >
+          {children}
+        </a>
+      )
+    },
   },
   types: {
     code: ({ value }: { value: { code?: string; language?: string; filename?: string } }) => (

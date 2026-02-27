@@ -1,4 +1,5 @@
 import { revalidatePath } from 'next/cache'
+import { timingSafeEqual } from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
 
 interface SanityWebhookPayload {
@@ -30,7 +31,9 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  if (secret !== expectedSecret) {
+  const secretBuffer = Buffer.from(secret ?? '')
+  const expectedBuffer = Buffer.from(expectedSecret)
+  if (secretBuffer.length !== expectedBuffer.length || !timingSafeEqual(secretBuffer, expectedBuffer)) {
     return NextResponse.json(
       { message: 'Invalid webhook secret' },
       { status: 401 }

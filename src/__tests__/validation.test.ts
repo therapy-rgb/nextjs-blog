@@ -102,4 +102,10 @@ describe('isValidUrl', () => {
     expect(isValidUrl('')).toBe(false)
     expect(isValidUrl('not-a-url')).toBe(false)
   })
+
+  it('rejects javascript: and data: URLs', () => {
+    expect(isValidUrl('javascript:alert(1)')).toBe(false)
+    expect(isValidUrl('data:text/html,<script>alert(1)</script>')).toBe(false)
+    expect(isValidUrl('vbscript:msgbox')).toBe(false)
+  })
 })
