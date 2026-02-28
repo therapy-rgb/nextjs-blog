@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from '@sentry/nextjs';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 const nextConfig: NextConfig = {
   typedRoutes: true,
   typescript: {
@@ -23,7 +25,9 @@ const nextConfig: NextConfig = {
         key: 'Content-Security-Policy',
         value: [
           "default-src 'self'",
-          "script-src 'self' 'sha256-48mwFFjK43z3EoJptu/mGBvcDGMtixXg3mRoZNpHPRQ='",
+          isDev
+            ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+            : "script-src 'self' 'sha256-48mwFFjK43z3EoJptu/mGBvcDGMtixXg3mRoZNpHPRQ='",
           "style-src 'self' 'unsafe-inline'",
           "img-src 'self' data: blob: https://cdn.sanity.io",
           "font-src 'self' data:",

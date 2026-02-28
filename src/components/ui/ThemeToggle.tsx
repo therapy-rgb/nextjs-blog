@@ -125,7 +125,7 @@ export default function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
         >
           <span
             className="w-3.5 h-3.5 rounded-full ring-1 ring-current/30"
-            style={{ backgroundColor: activeScheme?.swatch }}
+            style={{ background: activeScheme?.swatch }}
             aria-hidden="true"
           />
         </button>
@@ -154,7 +154,7 @@ export default function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
                         ? 'opacity-60 hover:opacity-100 hover:scale-110'
                         : 'opacity-50 hover:opacity-100 hover:scale-110'
                   }`}
-                  style={{ backgroundColor: scheme.swatch }}
+                  style={{ background: scheme.swatch }}
                   onClick={() => {
                     setColorScheme(scheme.id)
                     closePalette()

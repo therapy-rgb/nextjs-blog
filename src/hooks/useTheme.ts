@@ -3,7 +3,7 @@
 import { useEffect, useCallback, useSyncExternalStore } from 'react'
 
 export type Theme = 'light' | 'dark' | 'system'
-export type ColorScheme = 'rose' | 'ocean' | 'forest' | 'sunset' | 'midnight'
+export type ColorScheme = 'rose' | 'ocean' | 'forest' | 'sunset' | 'midnight' | 'grayscale'
 type ResolvedTheme = 'light' | 'dark'
 
 const STORAGE_KEY = 'sdm-theme'
@@ -15,6 +15,7 @@ export const COLOR_SCHEMES: { id: ColorScheme; label: string; swatch: string }[]
   { id: 'forest', label: 'Forest', swatch: '#15803D' },
   { id: 'sunset', label: 'Sunset', swatch: '#C2410C' },
   { id: 'midnight', label: 'Midnight', swatch: '#7C3AED' },
+  { id: 'grayscale', label: 'B/W', swatch: 'linear-gradient(135deg, #222 50%, #ddd 50%)' },
 ]
 
 // === Theme (light/dark/system) subscriptions ===
@@ -74,7 +75,7 @@ function subscribeToColorScheme(callback: () => void) {
 function getColorSchemeSnapshot(): ColorScheme {
   try {
     const raw = localStorage.getItem(COLOR_SCHEME_KEY)
-    if (raw === 'ocean' || raw === 'forest' || raw === 'sunset' || raw === 'midnight') return raw
+    if (raw === 'ocean' || raw === 'forest' || raw === 'sunset' || raw === 'midnight' || raw === 'grayscale') return raw
   } catch {
     // Private browsing or storage unavailable
   }
