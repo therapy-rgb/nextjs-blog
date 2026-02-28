@@ -67,6 +67,8 @@ function groupPostsByYearAndMonth(posts: Post[]): YearGroup[] {
 
 // Static images for posts (slug → filename in /images/journal/)
 const postImages: Record<string, string> = {
+  'final-day-of-february': '/images/journal/final-day-of-february.webp',
+  'a-little-too-early': '/images/journal/a-little-too-early.webp',
   'back-in-action': '/images/journal/back-in-action.webp',
   'alternatives-to-consumption': '/images/journal/alternatives-to-consumption.webp',
   'all-caught-up': '/images/journal/all-caught-up.webp',
