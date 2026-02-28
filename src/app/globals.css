@@ -460,6 +460,14 @@
   filter: brightness(0) invert(90%) sepia(5%) saturate(300%) hue-rotate(220deg) brightness(105%) contrast(90%);
 }
 
+:root[data-theme="grayscale"] .footer-squiggle {
+  filter: brightness(0) invert(10%);
+}
+
+:root.dark[data-theme="grayscale"] .footer-squiggle {
+  filter: brightness(0) invert(85%);
+}
+
 /* Prose paragraph spacing */
 .prose p {
   margin-top: 1.25em;
