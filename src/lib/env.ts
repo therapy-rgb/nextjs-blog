@@ -3,6 +3,8 @@
  * Import this module early in your app to validate required env vars at startup
  */
 
+import 'server-only'
+
 interface EnvConfig {
   // Sanity CMS (required for content)
   NEXT_PUBLIC_SANITY_PROJECT_ID: string

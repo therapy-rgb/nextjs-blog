@@ -479,7 +479,7 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
                                 {new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                                 {' · '}
                                 <a
-                                  href={entry.url}
+                                  href={/^https?:\/\//i.test(entry.url) ? entry.url : undefined}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="text-sdm-accent hover:text-sdm-primary transition-colors duration-200"

@@ -28,7 +28,7 @@ export async function GET() {
 
   const items = posts
     .map((post) => {
-      const url = `${SITE_URL}/journal/${post.slug.current}`
+      const url = `${SITE_URL}/journal/${escapeXml(post.slug.current)}`
       const pubDate = new Date(post.publishedAt).toUTCString()
       const description = post.excerpt ? `<description>${escapeXml(post.excerpt)}</description>` : ''
 

@@ -47,7 +47,7 @@ export async function checkRateLimit(ip: string): Promise<RateLimitResult> {
       const result = await ratelimit.limit(ip)
       return { success: result.success, remaining: result.remaining, reset: result.reset }
     } catch (error) {
-      console.error('Redis rate limit error, using fallback:', error)
+      console.error('Redis rate limit error, using fallback:', error instanceof Error ? error.message : 'Unknown error')
     }
   }
 

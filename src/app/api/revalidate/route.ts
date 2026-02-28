@@ -1,11 +1,15 @@
 import { revalidatePath } from 'next/cache'
 import { timingSafeEqual } from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
+import { checkRateLimit, createRateLimitHeaders, getClientIP, isRequestTooLarge } from '@/lib/api-security'
 
 interface SanityWebhookPayload {
   _type: string
   slug?: string
 }
+
+const SLUG_REGEX = /^[a-z0-9][a-z0-9-]*$/
+const VALID_TYPES = new Set(['journalEntry', 'photoGallery', 'putteringPoems', 'documentationSection', 'author', 'project'])
 
 const REVALIDATION_PATHS: Record<string, (slug?: string) => string[]> = {
   journalEntry: (slug) => {
@@ -21,6 +25,24 @@ const REVALIDATION_PATHS: Record<string, (slug?: string) => string[]> = {
 }
 
 export async function POST(request: NextRequest) {
+  // Check request size
+  if (isRequestTooLarge(request)) {
+    return NextResponse.json(
+      { message: 'Request too large' },
+      { status: 413 }
+    )
+  }
+
+  // Rate limit by IP
+  const ip = getClientIP(request)
+  const rateLimitResult = await checkRateLimit(ip)
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { message: 'Too many requests' },
+      { status: 429, headers: createRateLimitHeaders(rateLimitResult) }
+    )
+  }
+
   const secret = request.headers.get('x-sanity-webhook-secret')
   const expectedSecret = process.env.SANITY_REVALIDATION_SECRET
 
@@ -51,16 +73,20 @@ export async function POST(request: NextRequest) {
   }
 
   const { _type, slug } = body
-  const getPathsFn = REVALIDATION_PATHS[_type]
 
-  if (!getPathsFn) {
+  // Validate _type against known types instead of reflecting raw input
+  if (!VALID_TYPES.has(_type)) {
     return NextResponse.json(
-      { message: `No revalidation configured for type: ${_type}` },
+      { message: 'No revalidation configured for this type' },
       { status: 200 }
     )
   }
 
-  const paths = getPathsFn(slug)
+  // Validate slug format
+  const safeSlug = slug && SLUG_REGEX.test(slug) ? slug : undefined
+
+  const getPathsFn = REVALIDATION_PATHS[_type]
+  const paths = getPathsFn(safeSlug)
   paths.forEach((path) => revalidatePath(path))
 
   return NextResponse.json({
