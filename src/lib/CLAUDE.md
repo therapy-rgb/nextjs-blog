@@ -10,6 +10,8 @@
 - **api-security.ts** - Rate limiting (Upstash Redis + fallback), origin validation, honeypot detection, IP extraction
 - **logging.ts** - Structured JSON logging for production debugging
 - **tech-icons.ts** - Maps normalized tech names to react-icons components for ProjectCard
+- **weather.ts** - Open-Meteo API client for Cranston, RI weather data (used by useDateline hook)
+- **github.ts** - GitHub API client for changelog (fetch, filter, clean, group commits)
 
 ## Conventions
 

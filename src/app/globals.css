@@ -43,30 +43,30 @@
   --foreground: #1D3557;
 
   /* Suburban Dad Mode color palette */
-  --sdm-primary: #C44569;
+  --sdm-primary: #B33D5E;
   --sdm-accent: #2EC4B6;
   --sdm-background: #F3EFF5;
   --sdm-text: #1D3557;
-  --sdm-text-light: #457B9D;
+  --sdm-text-light: #3D6F8F;
   --sdm-card: #FFFFFF;
   --sdm-border: #E7E5E4;
   --sdm-surface-subtle: #F5F5F4;
   --sdm-border-input: #D6D3D1;
-  --sdm-primary-subtle: rgba(196, 69, 105, 0.1);
-  --sdm-overlay: rgba(196, 69, 105, 0.8);
+  --sdm-primary-subtle: rgba(179, 61, 94, 0.1);
+  --sdm-overlay: rgba(179, 61, 94, 0.8);
 
   /* Journal alternating row backgrounds */
-  --sdm-journal-1: rgba(196, 69, 105, 0.12);
+  --sdm-journal-1: rgba(179, 61, 94, 0.12);
   --sdm-journal-2: rgba(46, 196, 182, 0.12);
   --sdm-journal-3: rgba(176, 128, 48, 0.14);
 
   /* Scrollbar & UI chrome */
   --scrollbar-track: #E8E4EB;
-  --scrollbar-thumb: #C44569;
-  --scrollbar-thumb-hover: #A33755;
-  --selection-bg: #C44569;
+  --scrollbar-thumb: #B33D5E;
+  --scrollbar-thumb-hover: #943250;
+  --selection-bg: #B33D5E;
   --selection-text: #FFFFFF;
-  --focus-ring: #C44569;
+  --focus-ring: #B33D5E;
 }
 
 :root.dark {

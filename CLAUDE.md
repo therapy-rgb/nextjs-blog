@@ -43,11 +43,12 @@ src/
 │   └── ...
 ├── components/       # React components (organized by category)
 │   ├── layout/       # Header, Footer, PageContainer
-│   ├── ui/           # ArrowLink, ContentCard, ThemeToggle, Typewriter
-│   ├── content/      # PortableText, PostCard, ProjectCard, AuthorAvatar
+│   ├── ui/           # ArrowLink, ContentCard, Dateline, ThemeToggle, Typewriter
+│   ├── content/      # PortableText, PostCard, ProjectCard, AuthorAvatar, TechStackContent
 │   ├── seo/          # JsonLd
 │   └── index.ts      # Root barrel export
 ├── hooks/            # Custom React hooks
+│   ├── useDateline.ts
 │   ├── useMobileMenu.ts
 │   └── useTheme.ts
 ├── lib/
@@ -58,7 +59,8 @@ src/
 │   ├── api-security.ts # Rate limiting, origin validation, honeypot, IP extraction
 │   ├── logging.ts    # Structured JSON logging
 │   ├── navigation.ts # Navigation links
-│   └── tech-icons.ts # Tech name → react-icons mapping for ProjectCard
+│   ├── tech-icons.ts # Tech name → react-icons mapping for ProjectCard
+│   └── weather.ts    # Open-Meteo API client for Cranston, RI weather
 ├── types/
 │   └── sanity.ts     # TypeScript types for Sanity data
 └── __tests__/        # Vitest test files
@@ -80,10 +82,12 @@ vitest.config.ts      # Test configuration
 - `src/lib/validation.ts` - Shared validation/sanitization utilities
 - `src/lib/api-security.ts` - Rate limiting, CSRF protection, bot detection
 - `src/lib/tech-icons.ts` - Maps tech names to react-icons for ProjectCard
+- `src/lib/weather.ts` - Open-Meteo API client for Cranston, RI weather (used by useDateline hook)
 - `src/lib/github.ts` - GitHub API client for changelog (fetch, filter, clean, group commits)
 - `src/app/api/revalidate/route.ts` - Sanity webhook handler for on-demand ISR
 - `src/components/content/PortableText.tsx` - Sanity rich text renderer
 - `src/components/layout/Header.tsx` - Header with focus-trap mobile menu
+- `src/hooks/useDateline.ts` - Live dateline hook (date/time via useSyncExternalStore, weather via Open-Meteo with module cache)
 - `src/hooks/useMobileMenu.ts` - Mobile menu hook (escape, scroll lock, route-close)
 - `src/hooks/useTheme.ts` - Theme toggle hook (light/dark/system, localStorage, OS sync via useSyncExternalStore)
 - `src/app/layout.tsx` - Root layout with Header/Footer
@@ -94,8 +98,8 @@ vitest.config.ts      # Test configuration
 Components are organized by category. Always import from barrel exports:
 ```ts
 import { Header, Footer, PageContainer } from '@/components/layout'
-import { ArrowLink, ContentCard, ThemeToggle, Typewriter } from '@/components/ui'
-import { PortableText, PostCard, ProjectCard } from '@/components/content'
+import { ArrowLink, ContentCard, Dateline, ThemeToggle, Typewriter } from '@/components/ui'
+import { PortableText, PostCard, ProjectCard, AuthorAvatar, TechStackContent } from '@/components/content'
 import { JsonLd } from '@/components/seo'
 ```
 
@@ -142,7 +146,7 @@ GITHUB_TOKEN=<fine-grained-pat>
 ## Styling
 
 - **Tailwind CSS v4** with semantic color tokens prefixed `sdm-` (defined in `globals.css` + `tailwind.config.ts`)
-- Primary: `sdm-primary` (deep rose), Accent: `sdm-accent` (bright teal)
+- Primary: `sdm-primary` (deep rose #B33D5E), Accent: `sdm-accent` (bright teal)
 - Background: `sdm-background` (light lavender), Text: `sdm-text` (navy), Text-light: `sdm-text-light`
 - Card: `sdm-card`, Border: `sdm-border`, Surface-subtle: `sdm-surface-subtle`, Border-input: `sdm-border-input`
 - Primary-subtle: `sdm-primary-subtle` (icon backgrounds), Overlay: `sdm-overlay` (mobile menu)

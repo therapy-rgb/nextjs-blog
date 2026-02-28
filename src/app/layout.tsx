@@ -5,6 +5,7 @@ import { Header } from "@/components/layout";
 import { Footer } from "@/components/layout";
 import { JsonLd } from "@/components/seo";
 import ThemeScript from "@/components/ThemeScript";
+import { SITE_URL } from "@/lib/constants";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,6 +18,10 @@ const inter = Inter({
 const FAVICON_VERSION = "v20260225";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: "/",
+  },
   title: "Suburban Dad Mode",
   description: "Life, parenting, and everything in between from the suburbs",
   keywords: ["suburban", "dad", "family", "parenting", "lifestyle", "blog"],
