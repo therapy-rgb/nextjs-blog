@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { useState, Suspense } from 'react'
+import { useState, useRef, useCallback, Suspense } from 'react'
 import { DocumentationSection, Project, Link, ChangelogMonth, HouseItem, CarItem, FinanceItem, BookGroupItem } from '@/types/sanity'
 import PortableText from '@/components/content/PortableText'
 import { ProjectCard, TechStackContent } from '@/components/content'
@@ -132,7 +132,15 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
   const isChangelogSelected = selectedSlug === CHANGELOG_SLUG
 
   const [open, setOpen] = useState(!!selectedSlug)
+  const contentRef = useRef<HTMLDivElement>(null)
   const sidebarItems = buildSidebarItems(sections, changelog.length > 0)
+
+  const handleSectionSelect = useCallback((slug: string) => {
+    setOpen(true)
+    router.push(`/notes?section=${slug}`, { scroll: false })
+    // On mobile, scroll to the content area
+    contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [router])
   const publicProjects = projects.filter(p => p.category !== 'internal')
   const internalProjects = projects.filter(p => p.category === 'internal')
 
@@ -169,10 +177,7 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
                   {sidebarItems.map(item => (
                     <li key={item.id}>
                       <button
-                        onClick={() => {
-                          setOpen(true)
-                          router.push(`/notes?section=${item.slug}`, { scroll: false })
-                        }}
+                        onClick={() => handleSectionSelect(item.slug)}
                         className={`w-full text-left py-1.5 px-5 font-cooper text-base transition-colors duration-200 ${
                           selectedSlug === item.slug
                             ? 'text-sdm-primary font-semibold'
@@ -190,7 +195,7 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
           </nav>
 
           {/* Main content area */}
-          <div className="flex-1 min-w-0">
+          <div ref={contentRef} className="flex-1 min-w-0">
             {!selectedSection && !isHouseSelected && !isCarsSelected && !isFinancesSelected && !isBookGroupSelected && !isProjectsSelected && !isLinksSelected && !isChangelogSelected && (
               <div className="flex justify-center">
                 <Image
