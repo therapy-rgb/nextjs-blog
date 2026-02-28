@@ -10,7 +10,7 @@ export default function Dateline() {
 
   return (
     <p
-      className="text-sdm-text-light font-cooper text-sm"
+      className="text-sdm-text-light font-cooper text-lg"
       role="status"
       aria-live="polite"
     >

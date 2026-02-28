@@ -501,13 +501,22 @@ function DocumentationInner({ sections, projects, links, changelog, houseItems, 
                 <h2 className="font-cooper text-2xl md:text-3xl text-sdm-text mb-6">
                   {selectedSection.title}
                 </h2>
-                {selectedSection.slug.current === 'now' && (
-                  <div className="mb-6">
-                    <Dateline />
-                  </div>
-                )}
                 {selectedSection.slug.current === 'tech-stack' ? (
                   <TechStackContent content={selectedSection.content} />
+                ) : selectedSection.slug.current === 'now' ? (
+                  (() => {
+                    const imageBlocks = selectedSection.content.filter((b: { _type: string }) => b._type === 'image')
+                    const textBlocks = selectedSection.content.filter((b: { _type: string }) => b._type !== 'image')
+                    return (
+                      <div className="prose prose-xl max-w-none text-xl md:text-2xl font-light">
+                        {imageBlocks.length > 0 && <PortableText content={imageBlocks} />}
+                        <div className="my-6">
+                          <Dateline />
+                        </div>
+                        <PortableText content={textBlocks} />
+                      </div>
+                    )
+                  })()
                 ) : (
                   <div className="prose prose-xl max-w-none text-xl md:text-2xl font-light">
                     <PortableText content={selectedSection.content} />

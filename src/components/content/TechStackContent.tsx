@@ -56,9 +56,25 @@ export default function TechStackContent({ content }: TechStackContentProps) {
                 {section.heading}
               </h3>
               <div className="prose prose-sm max-w-none font-light [&_ul]:list-none [&_ul]:pl-0 [&_ul]:my-0 [&_li]:pl-0 [&_li]:my-1.5 [&_p]:my-2 [&_strong]:text-sdm-text [&_strong]:font-bold text-sdm-text-light">
-                <PortableText content={section.blocks} />
-                {isCredits && (
+                {isCredits ? (
                   <>
+                    {(() => {
+                      const codedIdx = section.blocks.findIndex(b =>
+                        (b.children as Array<{ text: string }>)?.some(c => c.text?.includes('Coded with Claude Code'))
+                      )
+                      const beforeCoded = codedIdx >= 0 ? section.blocks.slice(0, codedIdx) : section.blocks
+                      const fromCoded = codedIdx >= 0 ? section.blocks.slice(codedIdx) : []
+                      return (
+                        <>
+                          <PortableText content={beforeCoded} />
+                          <p className="my-2">
+                            Now page follows the lead of{' '}
+                            <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer" className="text-sdm-primary hover:text-sdm-accent transition-colors duration-200">Derek Sivers</a>.
+                          </p>
+                          {fromCoded.length > 0 && <PortableText content={fromCoded} />}
+                        </>
+                      )
+                    })()}
                     <p className="my-2">
                       &copy; 2025&ndash;{new Date().getFullYear()} Suburban Dad Mode. All content is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.
                     </p>
@@ -74,6 +90,8 @@ export default function TechStackContent({ content }: TechStackContentProps) {
                       <FaCreativeCommonsNc className="w-6 h-6" />
                     </a>
                   </>
+                ) : (
+                  <PortableText content={section.blocks} />
                 )}
               </div>
             </div>
