@@ -7,185 +7,202 @@
 
 ## Executive Summary
 
-Migrate suburbandadmode.com from Next.js/Sanity/Vercel to Astro with local content files on Cloudflare Pages. Based on a thorough audit of the current codebase and owner decisions.
+Migrate suburbandadmode.com from Next.js/Sanity/Vercel to Astro with local content files on Cloudflare Pages. This plan combines the platform migration with a comprehensive simplification pass: flattening SPA-like pages into static routes, eliminating all React islands, removing unnecessary dependencies, and reducing ~2,000 lines of interactive JavaScript to ~30 lines of inline vanilla JS.
 
-**Key constraint: Platform migration, NOT a redesign.** The site must look and feel identical.
+**The site will look and feel identical to users. Only the machinery underneath changes.**
 
 ### Decisions Made
 
 - **Legacy WordPress posts:** Skip entirely (not displayed on current site)
-- **Notes page:** Migrate everything (all 12+ sections including House, Cars, Finances, Book Group)
+- **Notes page sections:** Migrate everything (all 12+ sections)
 - **Project location:** New directory alongside current repo (`suburban-dad-mode/` sibling to `nextjs-blog/`)
-- **Contact page:** Remove entirely (no form, no social links)
-- **Changelog:** Static snapshot of current data, then point to new repo going forward
-- **Typewriter effect:** Pure CSS animation (no React island)
-- **Color themes:** Rose only (default) with light/dark mode — drop Ocean, Forest, Sunset, Midnight, Grayscale
+- **Contact page:** Remove entirely
+- **Changelog:** Static snapshot of current data, point to new repo going forward
+- **Typewriter effect:** Pure CSS animation
+- **Color themes:** Rose only — drop Ocean, Forest, Sunset, Midnight, Grayscale
+
+### Simplifications Applied
+
+| Simplification | What it eliminates | Lines saved |
+|---------------|-------------------|-------------|
+| Flatten Notes into separate routes | `DocumentationContent.tsx` (545 lines), Suspense wrapper, complex data orchestration | ~600 |
+| Flatten Puttering into individual poem pages | `PutteringContent.tsx` (133 lines), Suspense wrapper | ~150 |
+| Drop theme toggle — follow OS preference via CSS | `useTheme.ts` (183), `ThemeToggle.tsx` (174), `ThemeScript.tsx` (15) | ~370 |
+| Static Astro header + inline JS mobile menu | `Header.tsx` (150), `useMobileMenu.ts` (60), `focus-trap-react` dep | ~210 |
+| Drop live dateline — inline script for date only | `useDateline.ts` (109), `Dateline.tsx` (32), `weather.ts` (46) | ~190 |
+| Drop `date-fns` — use `Intl.DateTimeFormat` | `date-fns` dependency | dep removed |
+| Drop `react-icons` — inline SVGs | `react-icons` dependency, `tech-icons.ts` mapping | dep removed |
+| Move post images/excerpts to frontmatter | Hardcoded `postImages` and `fallbackExcerpts` maps in journal page | ~30 |
+| Drop custom scrollbar CSS | WebKit-only cosmetic styling | ~15 |
+| Simplify footer squiggle | Complex CSS filter chains per theme | ~20 |
+| Drop PWA manifest | `site.webmanifest`, icon references | config removed |
+| Simplify JSON-LD | Drop Organization + BreadcrumbList schemas, keep BlogPosting | ~40 |
+| Simplify robots.txt | Remove disallows for nonexistent paths | ~2 |
+| Remove About page dead link | ArrowLink to removed `/contact` | ~5 |
+
+**Result: Zero React. Zero React islands. Zero framework JS shipped to the browser.** The entire site is static HTML + CSS + ~30 lines of vanilla inline JS (mobile menu toggle + date display).
 
 ---
 
-## Current Site Inventory
+## Current → Target Comparison
 
-### Pages (7 routes after removing Contact)
+### Dependency Count
 
-| Route | Type | Data Source | Interactive? |
-|-------|------|-------------|-------------|
-| `/` | Static | None | Typewriter animation (CSS) |
-| `/journal` | ISR (1hr) | Sanity `journalEntry` | Static render |
-| `/journal/[slug]` | ISR (1hr) | Sanity `journalEntry` | Static render |
-| `/about` | Static | Hardcoded | Static render |
-| `/la-familia` | ISR (1hr) | Sanity `photoGallery` (singleton) | Static render |
-| `/puttering` | ISR (1hr) | Sanity `putteringPoems` (singleton) | Client: poem selector, URL params |
-| `/notes` | ISR (1hr) | Sanity (7 queries) + GitHub API | Client: sidebar nav, URL params, live dateline |
+| | Current (Next.js) | Target (Astro) |
+|---|---|---|
+| Production deps | 19 | 0 |
+| Dev/build deps | 18 | 7 |
+| **Total** | **37** | **7** |
 
-Plus: `/feed.xml` (RSS), `/sitemap.xml`, `/robots.txt`, `404`
+Target dependencies:
+```
+astro
+@astrojs/rss
+@astrojs/sitemap
+tailwindcss
+@tailwindcss/postcss
+@tailwindcss/typography
+typescript
+```
 
-### Sanity Content to Migrate
+No React. No react-dom. No focus-trap-react. No react-icons. No date-fns.
 
-| Schema | Migration Target |
-|--------|-----------------|
-| `journalEntry` | Markdown files in `src/content/journal/` |
-| `documentationSection` | Markdown files in `src/content/notes/` |
-| `photoGallery` | Downloaded images + `gallery.json` |
-| `putteringPoems` | `poems.json` |
-| `project` | `projects.json` |
-| `link` | `links.json` |
-| `houseItem` | `house-items.json` |
-| `carItem` | `car-items.json` |
-| `financeItem` | `finance-items.json` |
-| `bookGroupItem` | `book-group-items.json` |
+### Client-Side JavaScript
 
-**Skipped:** `post` (legacy WordPress), `author` (hardcoded), `category` (tags in frontmatter), `blockContent` (becomes standard markdown)
+| | Current | Target |
+|---|---|---|
+| React islands | 5 (Header, ThemeToggle, Dateline, PutteringContent, DocumentationContent) | 0 |
+| Custom hooks | 3 (useTheme, useDateline, useMobileMenu) | 0 |
+| Framework JS shipped | React 19 + island hydration code | None |
+| Inline scripts | 1 (ThemeScript, 200 bytes) | 2 (~30 lines total: mobile menu + date) |
+| External API calls (client) | 1 (Open-Meteo weather) | 0 |
 
-### Interactive Components (4 require Astro React islands)
+### Pages
 
-| Component | Interactivity | Island Strategy |
-|-----------|--------------|-----------------|
-| `Header` + `useMobileMenu` | Mobile menu with focus-trap, active link detection | `client:load` (React) |
-| `ThemeToggle` + `useTheme` | Theme cycling (light/dark/system) — Rose palette only | `client:idle` (React) |
-| `Dateline` + `useDateline` | Live date/time (60s interval) + weather API | `client:idle` (React) |
-| `PutteringContent` | Poem selector, URL params, prev/next nav | `client:load` (React) |
-| `DocumentationContent` | 12+ section sidebar, URL params, complex filtering | `client:load` (React) |
-
-**No longer islands:** Typewriter (pure CSS), ThemeScript (inline `<script>`)
-
-### Design System (Simplified)
-
-| Aspect | Details |
-|--------|---------|
-| CSS Framework | Tailwind CSS v4 with `@theme` directive |
-| Color System | CSS custom properties (`--sdm-*`), Rose palette only, light + dark mode |
-| Typography | Cooper font (3 weights: light/medium/bold), TT Disruptors (poetry), base font size 22px |
-| Dark Mode | Class-based (`:root.dark`), FOUC prevention via blocking `<head>` script |
-
-### Redirects (must preserve)
-
-| From | To | Type |
-|------|-----|------|
-| `/posts/:slug` | `/journal/:slug` | 301 |
-| `/documentation` | `/notes` | 301 |
-| `/category/:slug*` | `/journal` | 301 |
-| `/categories/:slug*` | `/journal` | 301 |
-| `/projects` | `/notes?section=projects` | 301 |
-| `/contact` | `/` | 301 |
-| `www.suburbandadmode.com/*` | `https://suburbandadmode.com/*` | 301 |
+| Current Route | Target Route | Change |
+|---|---|---|
+| `/` | `/` | Same (CSS typewriter instead of JS) |
+| `/journal` | `/journal` | Same (images/excerpts in frontmatter) |
+| `/journal/[slug]` | `/journal/[slug]` | Same |
+| `/about` | `/about` | Same (remove dead /contact link) |
+| `/contact` | Removed | 301 → `/` |
+| `/la-familia` | `/la-familia` | Same |
+| `/puttering` | `/puttering` | Poem index (list of all poems) |
+| — | `/puttering/[slug]` | **New:** individual poem pages |
+| `/notes` (SPA) | `/notes` | Section index (list of all sections) |
+| `/notes?section=about-me` | `/notes/about-me` | **New:** individual section pages |
+| `/notes?section=now` | `/notes/now` | **New:** includes static dateline |
+| `/notes?section=house` | `/notes/house` | **New:** static page |
+| `/notes?section=cars` | `/notes/cars` | **New:** static page |
+| `/notes?section=finances` | `/notes/finances` | **New:** static page |
+| `/notes?section=book-group` | `/notes/book-group` | **New:** static page |
+| `/notes?section=projects` | `/notes/projects` | **New:** static page |
+| `/notes?section=links` | `/notes/links` | **New:** static page |
+| `/notes?section=accessibility` | `/notes/accessibility` | **New:** static page |
+| `/notes?section=tech-stack` | `/notes/tech-stack` | **New:** static page (inline SVGs) |
+| `/notes?section=changelog` | `/notes/changelog` | **New:** static page |
+| `/feed.xml` | `/feed.xml` | Same |
 
 ---
 
-## Phase 1: Project Scaffolding & Configuration
+## Phase 1: Project Scaffolding
 
 ### 1.1 Initialize Astro Project
 
 ```bash
-# Create as sibling directory to nextjs-blog/
 cd ..
 npm create astro@latest suburban-dad-mode
 ```
 
 Configuration:
-- `output: 'static'` (full SSG)
+- `output: 'static'`
 - `site: 'https://suburbandadmode.com'`
 - TypeScript strict mode
-- Install `@astrojs/react` for interactive islands
-- Install `@astrojs/tailwind` for Tailwind v4
+- **No `@astrojs/react`** — zero React islands
+- Install `@astrojs/sitemap` for sitemap
 - Install `@astrojs/rss` for RSS feed
-- Install `@astrojs/sitemap` for sitemap generation
+- Tailwind CSS v4 via `@tailwindcss/postcss`
 
 ### 1.2 Project Structure
 
 ```
-suburban-dad-mode/                 # New repo, sibling to nextjs-blog/
+suburban-dad-mode/
 ├── src/
 │   ├── content/
 │   │   ├── config.ts              # Content collection schemas
 │   │   ├── journal/               # Blog posts (markdown)
 │   │   │   └── {slug}.md
-│   │   └── notes/                 # Documentation sections (markdown)
+│   │   ├── notes/                 # Documentation sections (markdown)
+│   │   │   └── {slug}.md
+│   │   └── poems/                 # Individual poems (markdown or content)
 │   │       └── {slug}.md
-│   ├── data/                      # Structured data (non-markdown content)
-│   │   ├── poems.json
+│   ├── data/                      # Structured data (JSON)
 │   │   ├── projects.json
 │   │   ├── links.json
 │   │   ├── house-items.json
 │   │   ├── car-items.json
 │   │   ├── finance-items.json
 │   │   ├── book-group-items.json
-│   │   ├── gallery.json           # Photo gallery metadata
-│   │   └── changelog.json         # Static snapshot of git changelog
+│   │   ├── gallery.json
+│   │   └── changelog.json         # Static snapshot
 │   ├── layouts/
 │   │   ├── BaseLayout.astro       # HTML shell, fonts, meta, header/footer
-│   │   └── JournalPost.astro      # Single journal post layout
+│   │   ├── JournalPost.astro      # Single journal post layout
+│   │   └── NotesSection.astro     # Single notes section layout (sidebar + content)
 │   ├── pages/
-│   │   ├── index.astro            # Homepage (with pure CSS typewriter)
+│   │   ├── index.astro            # Homepage
 │   │   ├── about.astro            # About page
 │   │   ├── la-familia.astro       # Photo gallery
-│   │   ├── puttering.astro        # Poetry page (loads React island)
-│   │   ├── notes.astro            # Notes page (loads React island)
+│   │   ├── puttering/
+│   │   │   ├── index.astro        # Poem listing (all poems)
+│   │   │   └── [...slug].astro    # Individual poem pages
+│   │   ├── notes/
+│   │   │   ├── index.astro        # Notes index (links to all sections)
+│   │   │   ├── now.astro          # "Now" section (with dateline)
+│   │   │   ├── house.astro        # House items
+│   │   │   ├── cars.astro         # Car items
+│   │   │   ├── finances.astro     # Finance items
+│   │   │   ├── book-group.astro   # Book group
+│   │   │   ├── projects.astro     # Projects (public/internal)
+│   │   │   ├── links.astro        # Curated links
+│   │   │   ├── tech-stack.astro   # Tech stack (inline SVG icons)
+│   │   │   ├── changelog.astro    # Changelog (static snapshot)
+│   │   │   └── [...slug].astro    # CMS-sourced sections (about-me, accessibility, etc.)
 │   │   ├── journal/
 │   │   │   ├── index.astro        # Journal listing
 │   │   │   └── [...slug].astro    # Individual journal posts
 │   │   ├── feed.xml.ts            # RSS feed
 │   │   ├── robots.txt.ts          # Robots.txt
-│   │   └── 404.astro              # Not found page
+│   │   └── 404.astro
 │   ├── components/
-│   │   ├── Header.tsx             # React island (mobile menu + active link)
-│   │   ├── Footer.astro           # Static (squiggle image)
-│   │   ├── ThemeToggle.tsx        # React island (light/dark/system toggle only)
-│   │   ├── ThemeScript.astro      # Blocking inline script for FOUC prevention
+│   │   ├── Header.astro           # Static header + inline JS mobile menu
+│   │   ├── Footer.astro           # Static footer (squiggle image)
 │   │   ├── Typewriter.astro       # Pure CSS typing animation
-│   │   ├── Dateline.tsx           # React island (live date/time/weather)
-│   │   ├── PutteringContent.tsx   # React island (poem viewer)
-│   │   ├── DocumentationContent.tsx # React island (notes sidebar)
-│   │   ├── TechStackContent.tsx   # React (uses react-icons, nested in DocumentationContent)
-│   │   ├── ProjectCard.astro      # Static project card
+│   │   ├── NotesSidebar.astro     # Static sidebar nav for notes pages
+│   │   ├── ProjectCard.astro      # Static project card (inline SVG icons)
 │   │   ├── ArrowLink.astro        # Static link with arrow
 │   │   ├── ContentCard.astro      # Static content container
-│   │   ├── PageContainer.astro    # Static layout container
-│   │   └── JsonLd.astro           # Static JSON-LD renderer
-│   ├── hooks/                     # React hooks (used by islands only)
-│   │   ├── useTheme.ts            # Simplified: light/dark/system only, no color schemes
-│   │   ├── useDateline.ts         # Live date/time/weather (unchanged)
-│   │   └── useMobileMenu.ts       # Mobile menu state (unchanged)
+│   │   ├── PageContainer.astro    # Static layout wrapper
+│   │   └── JsonLd.astro           # JSON-LD renderer
 │   ├── lib/
-│   │   ├── constants.ts           # Site config (simplified)
-│   │   ├── navigation.ts          # Nav links (remove /contact)
-│   │   ├── weather.ts             # Open-Meteo client (unchanged)
-│   │   └── tech-icons.ts          # Tech → icon mapping (unchanged)
+│   │   ├── constants.ts           # Site config
+│   │   └── navigation.ts          # Nav links
 │   ├── styles/
-│   │   └── globals.css            # Simplified: Rose theme only, light/dark
+│   │   └── globals.css            # CSS: Rose palette, light/dark via media query
 │   └── types/
 │       └── content.ts             # TypeScript types for data files
 ├── public/
-│   ├── fonts/                     # Cooper + TT Disruptors font files
+│   ├── fonts/                     # Cooper (3 weights) + TT Disruptors
 │   ├── images/
 │   │   ├── journal/               # Journal post images
-│   │   └── gallery/               # La Familia photos (from Sanity)
+│   │   └── gallery/               # La Familia photos
 │   ├── projects/                  # Project card images
-│   ├── favicon.ico, etc.          # Favicons
-│   ├── squiggle.webp              # Footer art
+│   ├── favicon.ico, etc.
+│   ├── squiggle.webp              # Footer art (single version)
+│   ├── squiggle-dark.webp         # Footer art (dark mode variant)
 │   ├── image.webp                 # Homepage hero
-│   ├── documentation-hero.webp    # Notes hero
-│   ├── puttering-bookshelf.webp   # Puttering default image
-│   └── site.webmanifest           # PWA manifest
+│   ├── documentation-hero.webp    # Notes index hero
+│   └── puttering-bookshelf.webp   # Puttering index image
 ├── scripts/
 │   └── migrate-sanity.ts          # One-time content migration script
 ├── astro.config.mjs
@@ -196,38 +213,27 @@ suburban-dad-mode/                 # New repo, sibling to nextjs-blog/
 └── package.json
 ```
 
-### 1.3 Key Configuration Files
+### 1.3 Configuration
 
 **astro.config.mjs:**
 ```js
 import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
-import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://suburbandadmode.com',
   output: 'static',
   integrations: [
-    react(),
-    tailwind(),
     sitemap(),
   ],
-  vite: {
-    ssr: {
-      noExternal: ['react-icons'],
-    },
-  },
 });
 ```
 
-**Tailwind config:** Port existing `tailwind.config.ts` — same colors, fonts, sizes, typography plugin. Remove unused color scheme mappings (ocean, forest, etc.).
+No React integration. No Vite SSR config. Minimal.
 
-**globals.css:** Copy from current codebase, then strip:
-- All `data-theme="ocean"` / `"forest"` / `"sunset"` / `"midnight"` / `"grayscale"` blocks
-- The `sdm-color-scheme` localStorage handling from ThemeScript
-- The color scheme picker from ThemeToggle
-- Keep: `:root` (Rose light), `:root.dark` (Rose dark), font-faces, scrollbar, selection, focus, prose, reduced motion, footer squiggle filters
+**Tailwind:** Port existing `tailwind.config.ts` — same sdm-* color tokens, Cooper font family, 22px base font size, typography plugin. Remove unused color scheme mappings.
+
+**globals.css:** Rewrite for simplicity (details in Phase 3.4).
 
 ---
 
@@ -235,52 +241,48 @@ export default defineConfig({
 
 ### 2.1 Migration Script (`scripts/migrate-sanity.ts`)
 
-A Node.js script that runs once against the live Sanity dataset:
+One-time Node.js script run against the live Sanity dataset:
 
-1. **Connects to Sanity** using project ID `4qp7h589` and dataset `production`
+1. **Connects to Sanity** using project ID `4qp7h589`, dataset `production`
 
 2. **Exports journal entries** as markdown:
-   - Queries `postsQuery` (all journal entries with body)
-   - For each entry:
-     - Converts Portable Text body → Markdown using `@portabletext/to-markdown`
-     - Custom serializers for: code blocks (with language + filename), images (download + rewrite), links (with target)
-     - Generates frontmatter: `title`, `pubDate` (from `publishedAt`), `excerpt`, `tags`, `draft: false`, `mainImage` (if present)
-     - Saves as `src/content/journal/{slug}.md`
-   - Downloads all Sanity CDN images → `public/images/journal/` or `public/images/posts/`
-   - Rewrites image references in markdown to local paths
+   - Converts Portable Text → Markdown via `@portabletext/to-markdown`
+   - Custom serializers for: code blocks (language + filename), images (download + rewrite to local path), links
+   - Frontmatter includes: `title`, `pubDate`, `excerpt`, `tags`, `draft`, `mainImage` (src + alt), `listImage` (for journal listing — replaces hardcoded `postImages` map)
+   - Downloads Sanity CDN images → `public/images/journal/`
+   - Saves as `src/content/journal/{slug}.md`
 
 3. **Exports documentation sections** as markdown:
-   - Queries `documentationSectionsQuery`
    - Same Portable Text → Markdown conversion
-   - Frontmatter: `title`, `order`
+   - Frontmatter: `title`, `slug`, `order`
    - Saves as `src/content/notes/{slug}.md`
 
-4. **Exports structured data** as JSON:
-   - `poems.json` from `putteringPoemsQuery` — `[{ title, slug, text }]`
-   - `projects.json` from `projectsQuery` — full project objects with local image paths
-   - `links.json` from `linksQuery` — `[{ name, url }]`
-   - `house-items.json` from `houseItemsQuery`
-   - `car-items.json` from `carItemsQuery`
-   - `finance-items.json` from `financeItemsQuery`
-   - `book-group-items.json` from `bookGroupItemsQuery`
-   - `gallery.json` from `photoGalleryQuery` — photo metadata with local paths
+4. **Exports poems** as content files:
+   - Frontmatter: `title`, `slug`, `order`
+   - Body: poem text (preserved with line breaks)
+   - Saves as `src/content/poems/{slug}.md`
 
-5. **Downloads gallery photos** from Sanity CDN → `public/images/gallery/`
+5. **Exports structured data** as JSON:
+   - `projects.json` — full project objects with local image paths
+   - `links.json` — `[{ name, url }]`
+   - `house-items.json` — `[{ title, category, order }]`
+   - `car-items.json` — `[{ title, car, category, order }]`
+   - `finance-items.json` — `[{ title, group, order }]`
+   - `book-group-items.json` — `[{ title, author, year, meetingDate, order }]`
+   - `gallery.json` — `[{ src, alt, caption }]`
 
-6. **Downloads project images** from Sanity CDN → `public/projects/`
+6. **Downloads gallery photos** from Sanity CDN → `public/images/gallery/`
 
-7. **Exports changelog snapshot:**
-   - Calls GitHub API (same as `getChangelog()`)
-   - Saves as `changelog.json`
+7. **Downloads project images** from Sanity CDN → `public/projects/`
+
+8. **Exports changelog snapshot** via GitHub API → `changelog.json`
 
 ### 2.2 Portable Text → Markdown Conversion
-
-Block types to handle:
 
 | Portable Text | Markdown Output |
 |---------------|----------------|
 | Normal text | Paragraph |
-| H1-H4 | `#` - `####` |
+| H1–H4 | `#` – `####` |
 | Strong | `**bold**` |
 | Emphasis | `*italic*` |
 | Code (inline) | `` `code` `` |
@@ -288,10 +290,10 @@ Block types to handle:
 | Bullet list | `- item` |
 | Number list | `1. item` |
 | Blockquote | `> quote` |
-| Code block (custom type) | ````language\ncode\n```` with optional filename comment |
-| Image (custom type) | `![alt](local-path)` + caption if present |
+| Code block (custom type) | ` ```language ` with optional `<!-- filename -->` comment |
+| Image (custom type) | `![alt](/images/journal/filename.webp)` + caption if present |
 
-### 2.3 Content Collection Schema
+### 2.3 Content Collection Schemas
 
 ```typescript
 // src/content/config.ts
@@ -309,6 +311,7 @@ const journal = defineCollection({
       src: z.string(),
       alt: z.string(),
     }).optional(),
+    listImage: z.string().optional(),  // thumbnail for journal listing
   }),
 });
 
@@ -320,19 +323,26 @@ const notes = defineCollection({
   }),
 });
 
-export const collections = { journal, notes };
+const poems = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    order: z.number(),
+  }),
+});
+
+export const collections = { journal, notes, poems };
 ```
 
 ### 2.4 Validation Checklist
 
 - [ ] Journal entry count matches Sanity source
-- [ ] Spot-check 5+ posts for Portable Text → Markdown accuracy
+- [ ] Spot-check 5+ posts for formatting accuracy
 - [ ] All inline images downloaded and referenced correctly
 - [ ] Code blocks preserve language and filename
-- [ ] Links preserved correctly
-- [ ] Blockquotes, lists, headings render correctly
+- [ ] Links, blockquotes, lists, headings render correctly
 - [ ] Gallery photos all downloaded and display correctly
-- [ ] Poems text preserved (including line breaks)
+- [ ] Poems text preserved with line breaks
 - [ ] Documentation sections convert cleanly
 - [ ] Project data complete and images present
 - [ ] Changelog snapshot contains expected data
@@ -344,179 +354,447 @@ export const collections = { journal, notes };
 ### 3.1 Layouts
 
 **BaseLayout.astro:**
-- HTML boilerplate matching current `layout.tsx` exactly
+- HTML boilerplate matching current `layout.tsx`
 - `<head>`:
-  - `ThemeScript.astro` (blocking, first child — simplified for Rose only)
-  - Organization JSON-LD schema
   - RSS feed `<link>`
-  - Creative Commons license link
   - Font preloads (Cooper light/medium/bold)
-  - Favicon links with cache busting (`v20260225`)
+  - Favicon links
   - Theme-color meta tags (light: `#F3EFF5`, dark: `#1B1F2E`)
 - `<body class="font-cooper antialiased min-h-screen flex flex-col text-sdm-text bg-sdm-background">`
-- `<Header client:load />` (React island)
+- `<Header />` (Astro component — static HTML + inline JS)
 - `<main id="main-content" class="flex-grow">{slot}</main>`
 - `<Footer />` (Astro component)
 - Props: `title`, `description`, `canonical`, `ogImage`, `ogType`, `publishedTime`, `twitterCard`
+- **No ThemeScript** — dark mode via CSS `prefers-color-scheme` media query (no JS needed)
+- **No Organization JSON-LD** — marginal SEO value for a personal blog
 
 **JournalPost.astro:**
 - Extends BaseLayout
-- BlogPosting + BreadcrumbList JSON-LD schemas
-- Back-to-journal nav link (arrow + "Journal")
-- Post header: title (text-4xl/5xl bold), date (MM/dd/yyyy), main image (if present)
+- BlogPosting JSON-LD schema
+- Back-to-journal nav link
+- Post header: title, date (formatted via `Intl.DateTimeFormat`), main image
 - `<div class="prose prose-xl max-w-none text-xl md:text-2xl font-light">` wrapper for `<slot />`
-- Previous/next post navigation (computed from sorted collection)
+- Previous/next post navigation (computed at build time)
+
+**NotesSection.astro:**
+- Extends BaseLayout
+- Includes `<NotesSidebar />` component showing all notes sections
+- Active section highlighted at build time (Astro knows which page it's rendering)
+- Content area with `<slot />`
+- Layout: sidebar (sticky on desktop, collapsible on mobile) + content
 
 ### 3.2 Pages
 
 **Homepage (`index.astro`):**
-- Screen-reader-only `<h1>Suburban Dad Mode - A Blog About Life in the Suburbs</h1>`
-- Hero image: `<img src="/image.webp" ...>` (600×600, priority loading)
+- Screen-reader-only `<h1>`
+- Hero image: `<img src="/image.webp" width="600" height="600" />`
 - Pure CSS Typewriter: `<Typewriter text="always classic" />`
 
 **Journal listing (`journal/index.astro`):**
 - `getCollection('journal')` → filter drafts → sort by pubDate desc
-- Group by year and month (port `groupPostsByYearAndMonth` logic)
-- Cycling background colors (`bg-sdm-journal-1/2/3`) with global color index
-- Local image map (`postImages` record — same as current)
-- Fallback excerpts map (same as current)
-- RSS feed link
+- Group by year and month using `Intl.DateTimeFormat`:
+  ```ts
+  const year = new Intl.DateTimeFormat('en-US', { year: 'numeric' }).format(date)
+  const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(date)
+  ```
+- Cycling background colors (`bg-sdm-journal-1/2/3`)
+- Images and excerpts from frontmatter (no hardcoded maps)
+- RSS feed link (inline SVG icon, no react-icons)
 
 **Journal post (`journal/[...slug].astro`):**
 - `getStaticPaths()` from journal collection
-- Compute adjacent posts (newer/older) at build time from sorted collection
+- Adjacent posts computed at build time from sorted collection
 - Render with JournalPost layout
 - `<Content />` for markdown body
+- Date formatted via `Intl.DateTimeFormat`
 
 **About (`about.astro`):**
-- Static content matching current `/about` page
-- Uses ContentCard, ArrowLink components
+- Static content matching current page
+- Remove "Get in touch" ArrowLink (dead link to removed /contact)
+- Replace with link to Notes or email
 
 **La Familia (`la-familia.astro`):**
-- Read `gallery.json` for photo metadata
-- Masonry/columns layout: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`
-- Lazy loading (except first 3 images)
-- Hover scale effect
+- Read `gallery.json`
+- Masonry columns: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`
+- `loading="lazy"` (except first 3)
+- Hover scale effect (CSS only)
 
-**Puttering (`puttering.astro`):**
-- Read `poems.json`
-- `<PutteringContent client:load poems={poems} />`
-- React island handles poem selection, URL params, prev/next
+**Puttering index (`puttering/index.astro`):**
+- `getCollection('poems')` → sort by order
+- List all poem titles as links to `/puttering/{slug}`
+- Bookshelf image when viewing the index
+- No React island — just a static list
 
-**Notes (`notes.astro`):**
-- Read all data at build time:
-  - Documentation sections from content collection (render to HTML strings)
-  - Projects, links, house/car/finance/book items from JSON files
-  - Changelog from static snapshot JSON
-- `<DocumentationContent client:load sections={...} projects={...} ... />`
-- Pass pre-rendered HTML for documentation sections
+**Individual poem (`puttering/[...slug].astro`):**
+- `getStaticPaths()` from poems collection
+- Poem title + text rendered in TT Disruptors font
+- Previous/next poem links computed at build time
+- Styled card container matching current design
+- All static HTML — zero JS
+
+**Notes index (`notes/index.astro`):**
+- Hero image
+- Links to all notes sections (same order as current sidebar)
+- Uses NotesSection layout or standalone layout
+
+**Notes section pages** (individual `.astro` files + `[...slug].astro`):
+
+Each notes section becomes its own static page using `NotesSection.astro` layout:
+
+| Page | Data Source | Rendering |
+|------|-----------|-----------|
+| `/notes/now` | `notes/now.md` content collection | Markdown + inline dateline script |
+| `/notes/house` | `house-items.json` | Static HTML with category grouping |
+| `/notes/cars` | `car-items.json` | Static HTML with vehicle + category grouping |
+| `/notes/finances` | `finance-items.json` | Static HTML with group sections |
+| `/notes/book-group` | `book-group-items.json` | Static HTML with reading list |
+| `/notes/projects` | `projects.json` | Static ProjectCard components (public/internal) |
+| `/notes/links` | `links.json` | Static link pills |
+| `/notes/tech-stack` | Hardcoded + inline SVGs | Static page (no react-icons) |
+| `/notes/changelog` | `changelog.json` | Static timeline |
+| `/notes/[...slug]` | `notes/*.md` content collection | Markdown sections (about-me, accessibility, etc.) |
+
+Each page includes the `NotesSidebar` component with the current section highlighted.
 
 **404 (`404.astro`):**
-- "404" heading in large display font
-- Friendly message
-- Back to home link
-- Uses PageContainer
+- "404" heading, friendly message, back-to-home link
 
 ### 3.3 Component Details
 
-**ThemeScript.astro (simplified):**
+**Header.astro (static + ~20 lines inline JS):**
 ```astro
+---
+import { navigation } from '../lib/navigation';
+const pathname = Astro.url.pathname;
+---
+<header class="border-b border-sdm-border shadow-sm bg-sdm-card">
+  <a href="#main-content" class="sr-only focus:not-sr-only ...">Skip to main content</a>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <a href="/" class="font-display text-xl font-bold text-sdm-primary hover:text-sdm-accent transition-colors">
+        Suburban Dad Mode
+      </a>
+
+      <!-- Desktop nav -->
+      <nav class="hidden md:flex items-center">
+        <ul class="flex space-x-8">
+          {navigation.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class:list={[
+                  'font-cooper text-lg transition-colors',
+                  pathname === item.href || pathname.startsWith(item.href + '/')
+                    ? 'text-sdm-primary font-bold'
+                    : 'text-sdm-text-light hover:text-sdm-primary'
+                ]}
+                aria-current={pathname === item.href ? 'page' : undefined}
+              >
+                {item.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <!-- Mobile menu button -->
+      <button
+        type="button"
+        id="menu-toggle"
+        class="md:hidden inline-flex items-center gap-2 p-3 min-w-[44px] min-h-[44px] rounded-md text-sdm-text-light hover:text-sdm-primary"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Open main menu"
+      >
+        <span class="text-sm font-semibold tracking-wide uppercase">Menu</span>
+        <!-- hamburger SVG inline -->
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile drawer -->
+  <div id="mobile-backdrop" class="fixed inset-0 bg-black/30 z-40 hidden" aria-hidden="true"></div>
+  <nav id="mobile-menu" class="fixed top-0 right-0 w-48 bg-sdm-overlay backdrop-blur-sm shadow-xl rounded-bl-2xl z-50 translate-x-full transition-transform" aria-label="Mobile navigation">
+    <button id="menu-close" class="p-2 min-w-[44px] min-h-[44px] text-white/70 hover:text-white" aria-label="Close menu">
+      <!-- X SVG inline -->
+    </button>
+    <div class="px-4 pb-4 space-y-0.5">
+      {navigation.map((item) => (
+        <a
+          href={item.href}
+          class:list={[
+            'block px-3 py-2.5 min-h-[44px] rounded-lg text-lg font-cooper transition-colors',
+            pathname === item.href ? 'text-white font-bold bg-white/20' : 'text-white/85 hover:text-white hover:bg-white/10'
+          ]}
+          aria-current={pathname === item.href ? 'page' : undefined}
+        >
+          {item.name}
+        </a>
+      ))}
+    </div>
+  </nav>
+</header>
+
 <script is:inline>
-(function(){try{var t=localStorage.getItem('sdm-theme');var d=t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches);if(d){document.documentElement.classList.add('dark')}document.documentElement.style.colorScheme=d?'dark':'light'}catch(e){}})();
+(function() {
+  const toggle = document.getElementById('menu-toggle');
+  const close = document.getElementById('menu-close');
+  const menu = document.getElementById('mobile-menu');
+  const backdrop = document.getElementById('mobile-backdrop');
+  function open() {
+    menu.classList.remove('translate-x-full');
+    backdrop.classList.remove('hidden');
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    close.focus();
+  }
+  function shut() {
+    menu.classList.add('translate-x-full');
+    backdrop.classList.add('hidden');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    toggle.focus();
+  }
+  toggle.addEventListener('click', open);
+  close.addEventListener('click', shut);
+  backdrop.addEventListener('click', shut);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && !menu.classList.contains('translate-x-full')) shut();
+  });
+})();
 </script>
 ```
-No color scheme handling — Rose only.
+
+~20 lines of inline JS replaces: `Header.tsx` (150 lines) + `useMobileMenu.ts` (60 lines) + `focus-trap-react` dependency. Provides: toggle, close, backdrop click, Escape key, scroll lock, focus return. The only trade-off vs. `focus-trap-react` is that Tab doesn't cycle within the menu — acceptable for a 4-link nav.
+
+Active link highlighting is computed at build time by Astro (`Astro.url.pathname`), not at runtime via `usePathname()`.
+
+**Footer.astro (simplified squiggle):**
+```astro
+<footer class="mt-20">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-12 flex justify-center md:justify-start">
+    <picture aria-hidden="true">
+      <source srcset="/squiggle-dark.webp" media="(prefers-color-scheme: dark)" />
+      <img src="/squiggle.webp" alt="" width="800" height="252" class="w-64 md:w-80 opacity-90" />
+    </picture>
+  </div>
+</footer>
+```
+
+Two image variants (light/dark) via `<picture>` + `<source media>`. Replaces the complex CSS filter chains that varied by theme and mode. Create `squiggle-dark.webp` during migration (apply the dark filter once, save the result).
 
 **Typewriter.astro (pure CSS):**
 ```astro
 ---
-interface Props {
-  text: string;
-  class?: string;
-}
+interface Props { text: string; class?: string; }
 const { text, class: className } = Astro.props;
-const charCount = text.length;
 ---
-<p class:list={['typewriter', className]}
-   style={`--chars: ${charCount}`}>
-  {text}
-</p>
+<p class:list={['typewriter', className]} style={`--chars: ${text.length}`}>{text}</p>
 <style>
   .typewriter {
     overflow: hidden;
     white-space: nowrap;
     border-right: 2px solid var(--sdm-text);
     width: 0;
-    animation:
-      typing 1.4s steps(var(--chars)) forwards,
-      blink 0.7s step-end infinite;
+    animation: typing 1.4s steps(var(--chars)) forwards, blink 0.7s step-end infinite;
   }
-  @keyframes typing {
-    to { width: 100%; }
-  }
-  @keyframes blink {
-    50% { border-color: transparent; }
-  }
+  @keyframes typing { to { width: 100%; } }
+  @keyframes blink { 50% { border-color: transparent; } }
   @media (prefers-reduced-motion: reduce) {
-    .typewriter {
-      width: 100%;
-      animation: none;
-      border-right: none;
-    }
+    .typewriter { width: 100%; animation: none; border-right: none; }
   }
 </style>
 ```
 
-**ThemeToggle.tsx (simplified):**
-- Remove color scheme picker (no dropdown palette)
-- Keep theme cycle button: system → light → dark → system
-- Remove `setColorScheme`, `colorScheme`, `COLOR_SCHEMES`
-- Icons: Sun (light), Moon (dark), Computer (system)
+**NotesSidebar.astro:**
+```astro
+---
+interface Props { current?: string; }
+const { current } = Astro.props;
+const sections = [
+  { slug: 'about-me', title: 'About Me' },
+  { slug: 'now', title: 'Now' },
+  { slug: 'house', title: 'House' },
+  { slug: 'cars', title: 'Cars' },
+  { slug: 'finances', title: 'Finances' },
+  { slug: 'book-group', title: 'Book Group' },
+  { slug: 'projects', title: 'Projects' },
+  { slug: 'links', title: 'Links' },
+  { slug: 'accessibility', title: 'Accessibility' },
+  { slug: 'tech-stack', title: 'Tech Stack' },
+  { slug: 'changelog', title: 'Changelog' },
+];
+---
+<nav class="md:w-56 shrink-0 md:sticky md:top-24 md:self-start" aria-label="Notes sections">
+  <details class="md:[&>summary]:hidden md:open" open>
+    <summary class="w-full flex items-center justify-between py-2.5 px-3 text-left font-cooper text-lg font-semibold text-sdm-text border-b border-sdm-text/20 cursor-pointer md:cursor-default">
+      Notes
+      <span class="text-sdm-text-light md:hidden">&#9662;</span>
+    </summary>
+    <ul class="py-1">
+      {sections.map(s => (
+        <li>
+          <a
+            href={`/notes/${s.slug}`}
+            class:list={[
+              'block w-full text-left py-1.5 px-5 font-cooper text-base transition-colors',
+              current === s.slug ? 'text-sdm-primary font-semibold' : 'text-sdm-text-light hover:text-sdm-primary'
+            ]}
+            aria-current={current === s.slug ? 'page' : undefined}
+          >
+            {s.title}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </details>
+</nav>
+```
 
-**useTheme.ts (simplified):**
-- Remove `ColorScheme` type, `COLOR_SCHEME_KEY`, color scheme store
-- Remove `applyColorScheme()`, `updateMetaThemeColor()`
-- Keep: `Theme`, `ResolvedTheme`, `setTheme()`, `applyTheme()`
-- Return: `{ theme, resolvedTheme, systemPref, setTheme }`
+Uses `<details>/<summary>` for mobile collapsibility — zero JS. On desktop, the `md:[&>summary]:hidden md:open` classes hide the summary and keep the list always open.
 
-**Header.tsx:**
-- Port directly from current codebase
-- Replace `usePathname()` with `window.location.pathname`
-- Keep `focus-trap-react` for mobile menu
-- Keep `useMobileMenu` hook
-- Include simplified `ThemeToggle` (no color picker)
+**Dateline replacement (inline script in `notes/now.astro`):**
+```astro
+<p class="text-sdm-text-light font-cooper text-lg" role="status">
+  <span id="dateline-date"></span>
+  <span class="mx-1.5" aria-hidden="true">&middot;</span>
+  <span id="dateline-time"></span>
+  <span class="mx-1.5 hidden sm:inline" aria-hidden="true">&middot;</span>
+  <br class="sm:hidden" />
+  <span>Cranston, RI</span>
+</p>
+<script is:inline>
+(function() {
+  var tz = 'America/New_York';
+  var d = document.getElementById('dateline-date');
+  var t = document.getElementById('dateline-time');
+  function tick() {
+    var now = new Date();
+    d.textContent = new Intl.DateTimeFormat('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:tz }).format(now);
+    t.textContent = new Intl.DateTimeFormat('en-US', { hour:'numeric', minute:'2-digit', timeZone:tz }).format(now);
+  }
+  tick();
+  setInterval(tick, 60000);
+})();
+</script>
+```
 
-**DocumentationContent.tsx:**
-- Port from current codebase
-- Replace `useRouter()` → `history.pushState()`
-- Replace `useSearchParams()` → `new URLSearchParams(window.location.search)`
-- Receive documentation section HTML as `Record<string, string>` (pre-rendered by Astro)
-- Render section HTML via `dangerouslySetInnerHTML`
-- Everything else (house, cars, finances, book group, projects, links, changelog) works as-is with JSON data props
+~10 lines replaces: `useDateline.ts` (109 lines) + `Dateline.tsx` (32 lines) + `weather.ts` (46 lines) + Open-Meteo API dependency. Drops the weather display (users have weather apps). Keeps live date/time updating every minute.
 
-**PutteringContent.tsx:**
-- Port from current codebase
-- Same router replacements as DocumentationContent
-- Receives poems array as prop
+**ProjectCard.astro (inline SVG icons):**
+- Port current ProjectCard design
+- Replace `react-icons` tech stack icons with inline SVGs
+- Extract the ~15 specific SVG paths used in `tech-icons.ts` into a simple Astro helper or inline them directly
+- Static component, zero JS
 
-### 3.4 Styling — Pixel-Perfect Port
+**JsonLd.astro:**
+```astro
+---
+interface Props { data: Record<string, unknown>; }
+const { data } = Astro.props;
+const json = JSON.stringify(data).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026');
+---
+<script type="application/ld+json" set:html={json} />
+```
 
-1. **Copy `globals.css`** and strip non-Rose theme variants:
-   - Keep: `@font-face` declarations (all 4 fonts)
-   - Keep: `:root` (Rose light mode custom properties)
-   - Keep: `:root.dark` (Rose dark mode custom properties)
-   - Keep: journal alternating row colors
-   - Keep: scrollbar, selection, focus ring, footer squiggle filters
-   - Keep: prose spacing, reduced motion media query
-   - Keep: `@theme inline` block (Tailwind v4)
-   - **Remove:** `:root[data-theme="ocean"]` and all other theme variants (~200 lines removed)
-   - **Remove:** `:root[data-theme="grayscale"] img { filter: grayscale(1) }` rule
+### 3.4 Styling — Simplified
 
-2. **Port `tailwind.config.ts`** — same colors, font sizes (base 22px), typography plugin config
+**Dark mode approach change:** Replace class-based toggling (`:root.dark`) with CSS `prefers-color-scheme` media query. This eliminates:
+- `ThemeScript.tsx` (no FOUC prevention needed — media queries apply instantly)
+- `useTheme.ts` hook (183 lines)
+- `ThemeToggle.tsx` component (174 lines)
+- `sdm-theme` localStorage key
+- The React island required to host ThemeToggle
+- `suppressHydrationWarning` on `<html>`
 
-3. **Copy all font files** from `public/fonts/` verbatim
+**globals.css rewrite:**
+```css
+/* Font faces — same 4 fonts */
+@font-face { font-family: 'Cooper'; src: url('/fonts/cooper_light.woff2') ...; font-weight: 300; }
+@font-face { font-family: 'Cooper'; src: url('/fonts/cooper_medium.woff2') ...; font-weight: normal; }
+@font-face { font-family: 'Cooper'; src: url('/fonts/cooper_bold.woff2') ...; font-weight: bold; }
+@font-face { font-family: 'TT Disruptors'; src: url('/fonts/TT_Disruptors_Regular.woff2') ...; }
 
-4. **Verification:** Screenshot comparison at 1440px and 375px for every page
+/* Rose palette — light (default) */
+:root {
+  --sdm-primary: #B33D5E;
+  --sdm-accent: #2EC4B6;
+  --sdm-background: #F3EFF5;
+  --sdm-text: #1D3557;
+  --sdm-text-light: #3D6F8F;
+  --sdm-card: #FFFFFF;
+  --sdm-border: #E7E5E4;
+  --sdm-surface-subtle: #F5F5F4;
+  --sdm-border-input: #D6D3D1;
+  --sdm-primary-subtle: rgba(179, 61, 94, 0.1);
+  --sdm-overlay: rgba(179, 61, 94, 0.8);
+  --sdm-journal-1: rgba(179, 61, 94, 0.12);
+  --sdm-journal-2: rgba(46, 196, 182, 0.12);
+  --sdm-journal-3: rgba(176, 128, 48, 0.14);
+}
+
+/* Rose palette — dark (auto via OS preference) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sdm-primary: #D4597D;
+    --sdm-accent: #38D4C6;
+    --sdm-background: #1B1F2E;
+    --sdm-text: #E2DFE4;
+    --sdm-text-light: #9EADC0;
+    --sdm-card: #252A3B;
+    --sdm-border: #333847;
+    --sdm-surface-subtle: #262B38;
+    --sdm-border-input: #414756;
+    --sdm-primary-subtle: rgba(212, 89, 125, 0.15);
+    --sdm-overlay: rgba(212, 89, 125, 0.85);
+    --sdm-journal-1: rgba(212, 89, 125, 0.15);
+    --sdm-journal-2: rgba(56, 212, 198, 0.15);
+    --sdm-journal-3: rgba(212, 168, 74, 0.15);
+  }
+}
+
+/* Tailwind v4 theme bridge */
+@theme inline {
+  --font-cooper: 'Cooper', serif;
+  --font-display: 'Cooper', serif;
+  --color-sdm-primary: var(--sdm-primary);
+  --color-sdm-accent: var(--sdm-accent);
+  /* ... all sdm-* tokens ... */
+}
+
+/* Selection */
+::selection { background-color: var(--sdm-primary); color: white; }
+
+/* Focus */
+:focus-visible { outline: 2px solid var(--sdm-primary); outline-offset: 2px; }
+
+/* Prose spacing */
+.prose p { margin-top: 1.25em; margin-bottom: 1.25em; }
+.prose p:first-child { margin-top: 0; }
+.prose p:last-child { margin-bottom: 0; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+```
+
+**What's removed from current globals.css:**
+- `:root.dark` block (replaced by `@media (prefers-color-scheme: dark)`)
+- All `data-theme` variants (~200 lines: ocean, forest, sunset, midnight, grayscale)
+- Custom scrollbar styling (~15 lines — WebKit-only, cosmetic)
+- Footer squiggle filter chains (~20 lines — replaced by `<picture>` element)
+- `--scrollbar-*` custom properties
+- `color-scheme` property (browser handles this automatically with media query)
+
+**Estimated globals.css:** ~150 lines (down from 495).
 
 ### 3.5 RSS Feed
 
@@ -545,12 +823,11 @@ export async function GET(context) {
 
 ### 3.6 Sitemap & Robots.txt
 
-Sitemap auto-generated by `@astrojs/sitemap`. Robots.txt:
+Sitemap auto-generated by `@astrojs/sitemap`.
+
 ```
 User-agent: *
 Allow: /
-Disallow: /private/
-Disallow: /admin/
 Sitemap: https://suburbandadmode.com/sitemap-index.xml
 ```
 
@@ -561,44 +838,58 @@ Sitemap: https://suburbandadmode.com/sitemap-index.xml
 ### 4.1 URL Parity
 
 | Current URL | Astro URL | Status |
-|-------------|-----------|--------|
+|---|---|---|
 | `/` | `/` | Match |
 | `/journal` | `/journal` | Match |
 | `/journal/{slug}` | `/journal/{slug}` | Match |
 | `/about` | `/about` | Match |
-| `/contact` | Removed → redirect to `/` | 301 |
+| `/contact` | `/` | 301 redirect |
 | `/la-familia` | `/la-familia` | Match |
-| `/puttering` | `/puttering` | Match |
-| `/notes` | `/notes` | Match |
+| `/puttering` | `/puttering` | Match (now a listing page) |
+| `/puttering?poem={slug}` | `/puttering/{slug}` | 301 redirect |
+| `/notes` | `/notes` | Match (now an index page) |
+| `/notes?section={slug}` | `/notes/{slug}` | 301 redirect |
 | `/feed.xml` | `/feed.xml` | Match |
 
-Configure Astro's `trailingSlash` to match current Next.js behavior (no trailing slash by default).
+Configure Astro `trailingSlash` to match current behavior.
 
 ### 4.2 Cloudflare `_redirects`
 
 ```
+# WordPress migration
 /posts/:slug  /journal/:slug  301
 /documentation  /notes  301
 /category/*  /journal  301
 /categories/*  /journal  301
-/projects  /notes?section=projects  301
+
+# Removed pages
 /contact  /  301
+
+# Old query-param routes → new clean routes
+/projects  /notes/projects  301
+/notes?section=:slug  /notes/:slug  301
+/puttering?poem=:slug  /puttering/:slug  301
+```
+
+Note: Cloudflare Pages `_redirects` may not support query param matching. If not, add a small inline script on `/notes` and `/puttering` index pages that checks for the old query param and redirects client-side:
+```js
+const p = new URLSearchParams(location.search).get('section');
+if (p) location.replace('/notes/' + p);
 ```
 
 WWW → non-WWW handled at Cloudflare DNS level.
 
 ### 4.3 Meta Tags
 
-Port all metadata from current pages:
-- Global: title template `{page} | Suburban Dad Mode`, Organization JSON-LD
-- Per-page: canonical URL, OpenGraph (type, title, description, image, url), Twitter cards
-- Journal posts: BlogPosting JSON-LD, BreadcrumbList JSON-LD, `article` og:type, `summary_large_image` Twitter card
+- Global title template: `{page} | Suburban Dad Mode`
+- Per-page: canonical URL, OpenGraph, Twitter cards
+- Journal posts: `article` og:type, `summary_large_image` Twitter card, dynamic og:image from mainImage
 
 ### 4.4 Structured Data
 
-- Organization schema on every page (BaseLayout)
-- BlogPosting schema on journal posts (JournalPost layout)
-- BreadcrumbList schema on journal posts (JournalPost layout)
+- **BlogPosting** JSON-LD on journal posts (keep — good SEO value)
+- **Organization** JSON-LD: drop (marginal value for personal blog)
+- **BreadcrumbList** JSON-LD: drop (marginal value, one less thing to maintain)
 
 ---
 
@@ -611,7 +902,7 @@ Port all metadata from current pages:
 | Build command | `npm run build` |
 | Output directory | `dist` |
 | Node.js version | 20+ |
-| Env vars needed | None (all content local) |
+| Env vars needed | None |
 
 ### 5.2 Security Headers (`_headers`)
 
@@ -621,9 +912,8 @@ Port all metadata from current pages:
   X-Content-Type-Options: nosniff
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
-  Cross-Origin-Opener-Policy: same-origin
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://api.open-meteo.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; frame-ancestors 'none'; object-src 'none'
 
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
@@ -632,6 +922,8 @@ Port all metadata from current pages:
   Cache-Control: public, max-age=31536000, immutable
 ```
 
+Simplified vs. current: removed Sanity CDN, Sentry, Open-Meteo, GitHub API from CSP `connect-src`. Removed unused permissions (payment, usb, browsing-topics). Removed `blob:` from img-src (no longer used).
+
 ### 5.3 Custom Domain Cutover
 
 1. Push Astro project to new GitHub repo
@@ -639,7 +931,7 @@ Port all metadata from current pages:
 3. Add custom domain `suburbandadmode.com`
 4. Update DNS (remove Vercel CNAME → add CF Pages CNAME)
 5. SSL provisions automatically
-6. Monitor 24-48 hours for DNS propagation
+6. Monitor 24-48 hours
 
 ---
 
@@ -647,27 +939,33 @@ Port all metadata from current pages:
 
 | Removed | Reason |
 |---------|--------|
-| Sanity CMS + Studio | Content now in git |
-| `/api/revalidate` webhook | No ISR — deploys on push |
-| Sentry error tracking | No server-side code |
-| Upstash Redis rate limiting | No API routes |
+| **React** (react, react-dom) | Zero islands — all pages static |
+| **Sanity** (client, studio, next-sanity, image-url, vision, color-input, hotspot-array) | Content in git |
+| **Sentry** (nextjs integration) | No server code |
+| **Upstash** (ratelimit, redis) | No API routes |
+| **focus-trap-react** | Simple inline JS menu |
+| **react-icons** | Inline SVGs |
+| **date-fns** | `Intl.DateTimeFormat` |
+| **server-only** | No server components |
 | Contact page | Owner decision |
-| 5 color themes | Simplified to Rose only |
-| Color scheme picker UI | No longer needed |
-| `@sanity/client`, `next-sanity` | No CMS |
-| `@sentry/nextjs` | No error tracking |
-| `@upstash/ratelimit`, `@upstash/redis` | No rate limiting |
-| `server-only` | No server components |
-| `src/lib/sanity.ts` | No CMS queries |
-| `src/lib/api-security.ts` | No API security |
-| `src/lib/env.ts` | No env validation needed |
-| `src/lib/validation.ts` | No user input |
-| `src/lib/logging.ts` | No structured logging |
-| `src/lib/github.ts` | Changelog is static snapshot |
-| `PortableText.tsx` | Markdown rendering built into Astro |
+| 5 color themes | Rose only |
+| Theme toggle UI | OS preference via CSS |
+| ThemeScript (FOUC prevention) | Not needed with CSS media query |
+| Live weather dateline | Inline date script, no weather |
+| DocumentationContent.tsx (545 lines) | Separate static pages |
+| PutteringContent.tsx (133 lines) | Separate static pages |
+| useTheme.ts (183 lines) | CSS handles it |
+| ThemeToggle.tsx (174 lines) | Removed |
+| Header.tsx (150 lines) | Astro component + 20-line script |
+| useDateline.ts (109 lines) | 10-line inline script |
+| useMobileMenu.ts (60 lines) | Part of header script |
+| weather.ts (46 lines) | Removed |
+| PortableText.tsx | Astro markdown rendering |
+| All `src/lib/` except constants + navigation | No CMS, no API security, no validation, no logging |
 | `sentry.*.config.ts` | No Sentry |
 | `vercel.json`, `.vercelignore` | No Vercel |
 | `next.config.ts` | Replaced by `astro.config.mjs` |
+| `site.webmanifest` | Blog doesn't need PWA |
 
 ---
 
@@ -675,43 +973,49 @@ Port all metadata from current pages:
 
 ### Functional
 - [ ] All journal entries render with correct formatting
-- [ ] Journal listing groups by year/month correctly
+- [ ] Journal listing groups by year/month, images + excerpts from frontmatter
 - [ ] Journal post prev/next navigation works
-- [ ] Homepage hero image and CSS typewriter work
-- [ ] About page content matches current site
-- [ ] La Familia gallery displays all photos in masonry layout
-- [ ] Puttering poem selector works (URL params, prev/next)
-- [ ] Notes page all 12+ sections work
-- [ ] Notes sidebar navigation works on mobile and desktop
-- [ ] Notes Dateline shows live date/time/weather
-- [ ] Notes Changelog section shows static snapshot
-- [ ] Notes Projects shows public/internal tabs
-- [ ] Notes House/Cars/Finances/Book Group render correctly
+- [ ] Homepage hero image + CSS typewriter work
+- [ ] About page content matches (dead /contact link removed)
+- [ ] La Familia gallery displays all photos
+- [ ] Puttering index lists all poems
+- [ ] Each poem page renders correctly with TT Disruptors font
+- [ ] Poem prev/next links work
+- [ ] Notes index links to all sections
+- [ ] Each notes section page renders correctly
+- [ ] Notes sidebar highlights current section
+- [ ] Notes sidebar collapses on mobile (details/summary)
+- [ ] Now page dateline shows live date/time
+- [ ] House/Cars/Finances/Book Group pages render data
+- [ ] Projects page shows public/internal groups
+- [ ] Links page shows curated links
+- [ ] Tech Stack page renders with inline SVG icons
+- [ ] Changelog page shows static snapshot timeline
 - [ ] RSS feed validates
-- [ ] Sitemap generates with all routes
+- [ ] Sitemap generates with all routes (including new /notes/* and /puttering/* routes)
 - [ ] 404 page works
-- [ ] `/contact` redirects to `/`
+- [ ] All redirects work (/contact, /posts/*, /notes?section=*, /puttering?poem=*)
 
 ### Visual
 - [ ] Screenshot comparison: every page at 1440px
 - [ ] Screenshot comparison: every page at 375px
-- [ ] Dark mode renders correctly (Rose palette)
-- [ ] Theme toggle cycles light/dark/system correctly
-- [ ] Mobile menu opens/closes with focus trap
-- [ ] Footer squiggle renders correctly in light + dark
-- [ ] Custom scrollbar styling works
-- [ ] Selection colors match
+- [ ] Dark mode renders correctly via OS preference
+- [ ] No FOUC (CSS media query applies instantly)
+- [ ] Mobile menu opens/closes correctly
+- [ ] Escape key closes mobile menu
+- [ ] Footer squiggle shows correct variant per color scheme
+- [ ] Selection colors work in light + dark
 
 ### SEO
-- [ ] All URLs match (no broken links)
-- [ ] All redirects work
+- [ ] All existing URLs either match or redirect
 - [ ] Canonical URLs on every page
 - [ ] OG + Twitter metadata correct per page
-- [ ] JSON-LD schemas valid
-- [ ] Trailing slash behavior matches
+- [ ] BlogPosting JSON-LD valid on journal posts
+- [ ] Trailing slash behavior consistent
 
 ### Performance
 - [ ] Lighthouse ≥ 95 across all categories
+- [ ] Zero framework JS in network tab
 - [ ] Font preloading works
 - [ ] Images lazy-load
 - [ ] No layout shifts
@@ -723,78 +1027,72 @@ Port all metadata from current pages:
 ### Writing a New Post
 
 ```bash
-# 1. Create markdown file
 cat > src/content/journal/my-new-post.md << 'EOF'
 ---
 title: "My New Post"
 pubDate: 2026-03-15
 excerpt: "A brief description"
 tags: ["life"]
+listImage: "/images/journal/my-new-post.webp"
 ---
 
 Post content in standard markdown...
 EOF
 
-# 2. Add any images to public/images/journal/
-
-# 3. Commit and push
-git add . && git commit -m "New post: My New Post" && git push
-
-# Cloudflare auto-deploys in ~1-2 minutes
+# Add images, commit, push — Cloudflare auto-deploys in ~1-2 min
 ```
 
-### Updating Notes/Data
+### Adding a Poem
 
-Edit JSON files in `src/data/` or markdown in `src/content/notes/`. Commit and push.
+Create `src/content/poems/new-poem.md` with title, order, and poem text. Commit and push.
+
+### Updating Notes Data
+
+Edit JSON files in `src/data/`. Commit and push.
+
+### Adding a Notes Section
+
+Create `src/content/notes/new-section.md`. Add an entry to the `sections` array in `NotesSidebar.astro`. Commit and push.
 
 ### Optional Post-Launch Enhancements
 
 - **Pagefind** — static client-side search (zero server cost)
 - **Cloudflare Web Analytics** — free, privacy-respecting
 - **Keystatic** — visual editor UI on top of existing markdown files
-- **Image optimization** — Cloudflare's built-in image resizing
 
 ---
 
 ## Risk Mitigation
 
-1. **Keep Vercel running** until Cloudflare is fully verified — don't tear down until confident
-2. **Migration script is idempotent** — safe to re-run if Sanity content changes during migration
-3. **All content in git** — full version history, zero data loss risk
-4. **Cloudflare instant rollbacks** — one click to revert a bad deploy
+1. **Keep Vercel running** until Cloudflare is fully verified
+2. **Migration script is idempotent** — safe to re-run
+3. **All content in git** — full version history, zero data loss
+4. **Cloudflare instant rollbacks** — one click to revert
 5. **URL parity verification** — automated crawl comparison before cutover
-6. **Screenshot comparison** — visual regression testing at two viewport widths
-7. **DNS propagation** — use low TTL on DNS records before cutover, monitor for 48 hours after
+6. **Screenshot comparison** — visual regression testing at two viewports
+7. **DNS propagation** — low TTL before cutover, monitor 48 hours after
 
 ---
 
-## Dependencies to Install
+## Final Dependency List
 
 ```json
 {
-  "dependencies": {
+  "devDependencies": {
     "astro": "^5.x",
-    "@astrojs/react": "^4.x",
-    "@astrojs/tailwind": "^6.x",
     "@astrojs/rss": "^4.x",
     "@astrojs/sitemap": "^3.x",
-    "react": "^19.x",
-    "react-dom": "^19.x",
-    "react-icons": "^5.x",
-    "focus-trap-react": "^12.x",
-    "date-fns": "^4.x",
     "tailwindcss": "^4.x",
-    "@tailwindcss/typography": "^0.5.x"
-  },
-  "devDependencies": {
-    "typescript": "^5.x",
-    "@types/react": "^19.x",
-    "@types/react-dom": "^19.x"
+    "@tailwindcss/postcss": "^4.x",
+    "@tailwindcss/typography": "^0.5.x",
+    "typescript": "^5.x"
   }
 }
 ```
 
-**Migration script (one-time, dev only):**
+**7 dependencies.** Down from 37. Zero production dependencies.
+
+**Migration script (one-time, not shipped):**
 ```json
 {
   "@sanity/client": "^7.x",
